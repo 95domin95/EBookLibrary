@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace EBookLibraryData.Models
 {
@@ -11,5 +9,6 @@ namespace EBookLibraryData.Models
         public string City { get; set; }
         public string Country { get; set; }
         public string PostalCode { get; set; }
+        public List<Loan> Loans { get; set; }
     }
 }

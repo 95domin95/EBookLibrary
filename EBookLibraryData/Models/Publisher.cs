@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace EBookLibraryData.Models
 {
@@ -9,7 +7,6 @@ namespace EBookLibraryData.Models
         public int PublisherId { get; set; }
         public string Name { get; set; }
         public string City { get; set; }
-        public int BookId { get; set; }
-        public Book Book { get; set; }
+        public List<Book> Books { get; set; }
     }
 }
