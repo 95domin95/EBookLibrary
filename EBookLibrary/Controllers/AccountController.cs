@@ -28,16 +28,20 @@ namespace EBookLibrary.Controllers
             _signInManager = signInManager;
             _logger = logger;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
 
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            _logger.LogInformation("User logged out.");
+
+            return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
         [HttpPost]
@@ -67,6 +71,8 @@ namespace EBookLibrary.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
