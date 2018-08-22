@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EBookLibraryData.Models
 {
-    public class Patron : IdentityUser
+    public class ApplicationUser : IdentityUser
     {
         public string Adress { get; set; }
         public string City { get; set; }

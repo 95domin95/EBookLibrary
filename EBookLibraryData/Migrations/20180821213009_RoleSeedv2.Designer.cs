@@ -4,14 +4,16 @@ using EBookLibraryData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EBookLibraryData.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20180821213009_RoleSeedv2")]
+    partial class RoleSeedv2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,10 +78,6 @@ namespace EBookLibraryData.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasData(
-                        new { Id = "admin", AccessFailedCount = 0, ConcurrencyStamp = "83d31de7-2234-43fc-b9ab-3af0db621550", Email = "admin@admin.com", EmailConfirmed = true, LockoutEnabled = false, NormalizedEmail = "ADMIN@ADMIN.COM", NormalizedUserName = "ADMIN", PhoneNumberConfirmed = false, SecurityStamp = "2ac56b91-fff8-43a2-918a-9af1d1417431", TwoFactorEnabled = false, UserName = "admin" }
-                    );
                 });
 
             modelBuilder.Entity("EBookLibraryData.Models.Author", b =>
@@ -250,8 +248,8 @@ namespace EBookLibraryData.Migrations
                     b.ToTable("AspNetRoles");
 
                     b.HasData(
-                        new { Id = "admin", ConcurrencyStamp = "09260e22-36c1-4726-972e-07a1ea2e662f", Name = "admin", NormalizedName = "admin" },
-                        new { Id = "4d1da35f-9789-4363-afd2-e2a2d80a19f9", ConcurrencyStamp = "cc40d227-3a1c-4701-b2a4-3335e66ee0eb", Name = "user", NormalizedName = "user" }
+                        new { Id = "d2770c9b-33eb-4e4c-8528-c4e600212589", ConcurrencyStamp = "7f13dc3d-e515-4954-80b9-083eb16688a9", Name = "admin", NormalizedName = "admin" },
+                        new { Id = "35365d8c-430e-4d9a-8fe7-041c6237c331", ConcurrencyStamp = "bdb737e9-d26b-43a1-a574-c1f12f150747", Name = "user", NormalizedName = "user" }
                     );
                 });
 
@@ -324,10 +322,6 @@ namespace EBookLibraryData.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
-
-                    b.HasData(
-                        new { UserId = "admin", RoleId = "admin" }
-                    );
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

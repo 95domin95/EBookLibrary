@@ -15,13 +15,13 @@ namespace EBookLibrary.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private readonly UserManager<Patron> _userManager;
-        private readonly SignInManager<Patron> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger _logger;
 
         public AccountController(
-            UserManager<Patron> userManager,
-            SignInManager<Patron> signInManager,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
             ILogger<AccountController> logger)
         {
             _userManager = userManager;
@@ -31,7 +31,7 @@ namespace EBookLibrary.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Register()
+        public async Task<IActionResult> Register()
         {
             return View();
         }
@@ -52,7 +52,7 @@ namespace EBookLibrary.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new Patron { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using EBookLibraryData;
 using EBookLibraryData.Models;
+using EBookLibraryData.Models.Identity;
+using EBookLibraryData.Models.Seeders;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -30,7 +32,7 @@ namespace EBookLibrary
         {
             services.AddDbContext<Context>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<Patron, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<Context>()
             .AddDefaultTokenProviders();
 
@@ -67,6 +69,8 @@ namespace EBookLibrary
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.Configure<AdminAccountOptions>(Configuration.GetSection("AdminAccount"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -86,6 +90,9 @@ namespace EBookLibrary
             app.UseAuthentication();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            RoleSeeder.SeedAsync(app.ApplicationServices).Wait();
+            AdminAccountSeeder.SeedAsync(app.ApplicationServices).Wait();
 
             app.UseMvc(routes =>
             {
