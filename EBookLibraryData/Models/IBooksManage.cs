@@ -6,16 +6,16 @@ namespace EBookLibraryData.Models
 {
     public interface IBooksManage
     {
-        IEnumerable<Book> GetBooks(string title, int? ISBN, Author author, int? pagesMin,
-            int? pagesMax, Publisher publisher, Category category);
+        IEnumerable<Book> GetBooks(string title, int? ISBN, string author, int? pagesMin,
+            int? pagesMax, string publisher, string category);
         Book GetById(int id);
         Category GetCategory(int id);
-        Author GetAuthor(int id);
-        Publisher GetPublisher(int id);
+        Author GetAuthorById(int id);
+        Publisher GetPublisher(string name);
         void Add(Book book);
         void DeleteById(int id);
-        void UpdateById(int id, string newTitle, int? newISBN, IEnumerable<Author> newAuthor,
-            int? newPages, Publisher newPublisher, IEnumerable<Category> newCategory);
+        void UpdateById(int id, string newTitle, int? newISBN, string newAuthor,
+            int? newPages, string newPublisher, string newCategory);
         int GetISBN(int id);
         string GetTitle(int id);
         int GetPages(int id);
