@@ -1,21 +1,9 @@
-﻿@model EBookLibraryData.Models.ViewModels.BooksManage.ManagePanelViewModel
+﻿@model EBookLibraryData.Models.ViewModels.BooksManage.AddBookViewModel
 
 <div class="row text-center">
     <div class="col-xs-12 col-sm-10 col-md-6 col-lg-4 col-sm-offset-1 col-md-offset-3 col-lg-offset-4">
-        <form asp-controller="BooksManage" asp-action="ManagePanel" method="post">
-            <h4>Zarządzaj</h4>
-            <div class="form-group">
-                <label asp-for="OperationType"></label>
-                <select asp-for="OperationType" class="form-control">
-                    @{ int count = 0;}
-                    @foreach (var i in Model.Operations)
-                    {
-                        <option value="@count">@i</option>
-                        { count++; }
-                    }
-                </select>
-                <span asp-validation-for="OperationType" class="text-danger"></span>
-            </div>
+        <form asp-controller="BooksManage" asp-action="AddBook" method="post">
+            <h4>Dodaj</h4>
             <div class="form-group">
                 <label asp-for="ISBN"></label>
                 <input asp-for="ISBN" class="form-control" />
@@ -50,14 +38,14 @@
                     }
                 </select>
                 <span asp-validation-for="Category" class="text-danger"></span>
-            </div>           
+            </div>
             <div class="form-group">
                 <label asp-for="Author"></label>
                 <input asp-for="Author" class="form-control" />
                 <span asp-validation-for="Author" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <button class="btn btn-primary" type="submit">Zatwierdź</button>
+                <button class="btn btn-primary" type="submit">Dodaj</button>
             </div>
         </form>
     </div>

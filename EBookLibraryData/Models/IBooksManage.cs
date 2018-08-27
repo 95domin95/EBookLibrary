@@ -8,6 +8,7 @@ namespace EBookLibraryData.Models
     {
         IEnumerable<Book> GetBooks(string title, int? ISBN, string author, int? pagesMin,
             int? pagesMax, string publisher, string category);
+        IEnumerable<Category> GetAllCategories();
         Book GetById(int id);
         Category GetCategory(int id);
         Author GetAuthorById(int id);

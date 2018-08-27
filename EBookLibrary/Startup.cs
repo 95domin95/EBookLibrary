@@ -6,6 +6,7 @@ using EBookLibraryData;
 using EBookLibraryData.Models;
 using EBookLibraryData.Models.Identity;
 using EBookLibraryData.Models.Seeders;
+using EBookLibraryServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -69,7 +70,8 @@ namespace EBookLibrary
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
+            services.AddTransient<IBooksManage, BooksManageService>();
+            //services.AddSingleton<IBooksManage, BooksManageService>();
             services.Configure<AdminAccountOptions>(Configuration.GetSection("AdminAccount"));
         }
 

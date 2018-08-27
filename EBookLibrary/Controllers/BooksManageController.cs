@@ -30,7 +30,16 @@ namespace EBookLibrary.Controllers
         [HttpGet]
         public IActionResult ManagePanel()
         {
-            return View();
+            return View(new ManagePanelViewModel {
+                Categories = _manage.GetAllCategories(),
+                Operations = new List<string>()
+                {
+                    "Dodaj nową książkę",
+                    "Modyfikuj dane książki",
+                    "Usuń książkę",
+                    "Wyszukaj książki"
+                }
+            });
         }
 
         [HttpPost]
@@ -55,7 +64,7 @@ namespace EBookLibrary.Controllers
                     _manage.DeleteById((int)model.Id);
                     break;
                 case (int)OperationType.select:
-                    if (model.Id != null)
+                    if (model.Id == null)
                     {
                         _manage.GetBooks(model.Title, model.ISBN, model.Author,
                             model.PagesMin, model.PagesMax, model.Publisher, model.Category);
@@ -66,6 +75,55 @@ namespace EBookLibrary.Controllers
                     break;
             }
             return View(model);
+        }
+        [HttpPost]
+        public IActionResult AddBook(AddBookViewModel model)
+        {
+            return View(model);
+        }
+        [HttpGet]
+        public IActionResult AddBook()
+        {
+            return View(new AddBookViewModel { Categories = _manage.GetAllCategories() });
+        }
+        [HttpPost]
+        public IActionResult SelectBook(SelectBookViewModel model)
+        {
+            if (!model.ById)
+            {
+                _manage.GetBooks(model.Title, model.ISBN, model.Author,
+                    model.PagesMin, model.PagesMax, model.Publisher, model.Category);
+            }
+            else _manage.GetById((int)model.Id);
+            return View(model);
+        }
+        [HttpGet]
+        public IActionResult SelectBook()
+        {
+            return View(new SelectBookViewModel { Categories = _manage.GetAllCategories() });
+        }
+        [HttpPost]
+        public IActionResult UpdateBook(UpdateBookViewModelcs model)
+        {
+            _manage.UpdateById((int)model.Id, model.Title, model.ISBN,
+            model.Author, model.Pages, model.Publisher, model.Category);
+            return View(model);
+        }
+        [HttpGet]
+        public IActionResult UpdateBook()
+        {
+            return View(new UpdateBookViewModelcs { Categories = _manage.GetAllCategories() });
+        }
+        [HttpPost]
+        public IActionResult DeleteBook(DeleteBookViewModel model)
+        {
+            _manage.DeleteById((int)model.Id);
+            return View(model);
+        }
+        [HttpGet]
+        public IActionResult DeleteBook()
+        {
+            return View();
         }
     }
 }

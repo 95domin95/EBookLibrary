@@ -43,6 +43,10 @@ namespace EBookLibraryServices
         {
             return _context.Publishers.Where(p => p.Name.Equals(name)).FirstOrDefault();
         }
+        public IEnumerable<Category> GetAllCategories()
+        {
+            return _context.Categories;
+        }
 
         public IEnumerable<Book> GetBooks(string title="", int? ISBN = null,
             string author = "", int? pagesMin = null, int? pagesMax=null,

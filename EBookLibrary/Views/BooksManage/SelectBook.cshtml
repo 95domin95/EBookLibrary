@@ -1,20 +1,13 @@
-﻿@model EBookLibraryData.Models.ViewModels.BooksManage.ManagePanelViewModel
+﻿@model EBookLibraryData.Models.ViewModels.BooksManage.SelectBookViewModel
 
 <div class="row text-center">
     <div class="col-xs-12 col-sm-10 col-md-6 col-lg-4 col-sm-offset-1 col-md-offset-3 col-lg-offset-4">
         <form asp-controller="BooksManage" asp-action="ManagePanel" method="post">
-            <h4>Zarządzaj</h4>
+            <h4>Wyszukaj</h4>
             <div class="form-group">
-                <label asp-for="OperationType"></label>
-                <select asp-for="OperationType" class="form-control">
-                    @{ int count = 0;}
-                    @foreach (var i in Model.Operations)
-                    {
-                        <option value="@count">@i</option>
-                        { count++; }
-                    }
-                </select>
-                <span asp-validation-for="OperationType" class="text-danger"></span>
+                <label asp-for="Id"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ISBN"></label>
@@ -27,14 +20,14 @@
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Pages"></label>
-                <input asp-for="Pages" class="form-control" />
-                <span asp-validation-for="Pages" class="text-danger"></span>
+                <label asp-for="PagesMin"></label>
+                <input asp-for="PagesMin" class="form-control" />
+                <span asp-validation-for="PagesMin" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Path"></label>
-                <input asp-for="Path" class="form-control" />
-                <span asp-validation-for="Path" class="text-danger"></span>
+                <label asp-for="PagesMax"></label>
+                <input asp-for="PagesMax" class="form-control" />
+                <span asp-validation-for="PagesMax" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Publisher"></label>
@@ -50,19 +43,20 @@
                     }
                 </select>
                 <span asp-validation-for="Category" class="text-danger"></span>
-            </div>           
+            </div>
             <div class="form-group">
                 <label asp-for="Author"></label>
                 <input asp-for="Author" class="form-control" />
                 <span asp-validation-for="Author" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <button class="btn btn-primary" type="submit">Zatwierdź</button>
+                <label asp-for="ById"></label>
+                <input asp-for="ById" class="form-control" />
+                <span asp-validation-for="ById" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" type="submit">Wyszukaj</button>
             </div>
         </form>
     </div>
 </div>
-
-@section Scripts {
-    @await Html.PartialAsync("_ValidationScriptsPartial")
-}
