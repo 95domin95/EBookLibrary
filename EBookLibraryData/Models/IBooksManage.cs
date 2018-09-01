@@ -13,13 +13,14 @@ namespace EBookLibraryData.Models
         Category GetCategory(int id);
         Author GetAuthorById(int id);
         Publisher GetPublisher(string name);
-        void Add(Book book);
+        void Add(string Title, string path, int? ISBN, int? Pages,
+            string Author, string Publisher, string Category);
         void DeleteById(int id);
         void UpdateById(int id, string newTitle, int? newISBN, string newAuthor,
             int? newPages, string newPublisher, string newCategory);
-        int GetISBN(int id);
+        int? GetISBN(int id);
         string GetTitle(int id);
-        int GetPages(int id);
+        int? GetPages(int id);
         string GetPath(int id);
     }
 }

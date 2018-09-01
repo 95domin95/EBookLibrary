@@ -14,9 +14,24 @@ namespace EBookLibraryServices
         {
             _context = context;
         }
-        public void Add(Book book)
+        public void Add(string title, string path, int? ISBN, int? pages,
+            string author, string publisher, string category)
         {
-            _context.Books.Add(book);
+            var bookAuthor = _context.BookAuthors.Where(ba => ba.Author.Name.Equals(author)).FirstOrDefault();
+            var bookPublisher = _context.Publishers.Where(p => p.Name.Equals(publisher)).FirstOrDefault();
+            var bookCategory = _context.BookCategories.Where(c => c.Category.Name.Equals(category)).FirstOrDefault();
+
+            _context.Books.Add(new Book
+            {
+                Title = title,
+                BookAuthors = new List<BookAuthor>() { bookAuthor },
+                Publisher = bookPublisher,
+                ISBN = ISBN,
+                Path = path,
+                Pages = pages,
+                BookCategory = new List<BookCategory>() { bookCategory }
+
+            });
             _context.SaveChanges();
         }
 
@@ -108,7 +123,7 @@ namespace EBookLibraryServices
             return _context.Books.Where(b => b.BookId.Equals(id)).Select(b => b.ISBN).FirstOrDefault();
         }
 
-        public int GetPages(int id)
+        public int? GetPages(int id)
         {
             return _context.Books.Where(b => b.BookId.Equals(id)).Select(b => b.Pages).FirstOrDefault();
         }

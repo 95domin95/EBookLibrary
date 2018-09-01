@@ -48,13 +48,8 @@ namespace EBookLibrary.Controllers
             switch(model.OperationType)
             {
                 case (int)OperationType.add:
-                    _manage.Add(new Book {
-                        ISBN = model.ISBN,
-                        Pages = model.Pages,
-                        Title = model.Title,
-                        Path = model.Path,
-                        Publisher = _manage.GetPublisher(model.Publisher)
-                    });
+                    _manage.Add(model.Title, model.Path, model.ISBN, model.Pages,
+                        model.Author, model.Publisher, model.Category);
                     break;
                 case (int)OperationType.modify:
                     _manage.UpdateById((int)model.Id, model.Title, model.ISBN, 
@@ -89,7 +84,7 @@ namespace EBookLibrary.Controllers
         [HttpPost]
         public IActionResult SelectBook(SelectBookViewModel model)
         {
-            if (!model.ById)
+            if (model.Id == null)
             {
                 _manage.GetBooks(model.Title, model.ISBN, model.Author,
                     model.PagesMin, model.PagesMax, model.Publisher, model.Category);
@@ -117,7 +112,7 @@ namespace EBookLibrary.Controllers
         [HttpPost]
         public IActionResult DeleteBook(DeleteBookViewModel model)
         {
-            _manage.DeleteById((int)model.Id);
+            _manage.DeleteById(model.Id);
             return View(model);
         }
         [HttpGet]
