@@ -1,65 +1,122 @@
 ﻿@model EBookLibraryData.Models.ViewModels.BooksManage.ManagePanelViewModel
-
-<div class="row text-center">
-    <div class="col-xs-12 col-sm-10 col-md-6 col-lg-4 col-sm-offset-1 col-md-offset-3 col-lg-offset-4">
-        <form asp-controller="BooksManage" asp-action="ManagePanel" method="post">
+<script src="~/js/managePanel.js"></script>
+<div class="row">
+    <div class="col-xs-12 col-md-6 col-lg-8">
+        <form enctype="multipart/form-data" asp-controller="BooksManage" asp-action="ManagePanel" method="post">
             <h4>Zarządzaj</h4>
-            <div class="form-group">
-                <label asp-for="OperationType"></label>
-                <select asp-for="OperationType" class="form-control">
-                    @{ int count = 0;}
-                    @foreach (var i in Model.Operations)
-                    {
-                        <option value="@count">@i</option>
-                        { count++; }
-                    }
-                </select>
-                <span asp-validation-for="OperationType" class="text-danger"></span>
+            <div class="form-row">
+                <div class="col-xs-12 col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="BookCovering"></label>
+                        <br />
+                        <img class="img-fluid p-2" id="book-covering-image"
+                             src="~/images/Icons-master/picol_latest_prerelease_svg/document_image_add.svg" />
+                        <input asp-for="BookCovering" class="form-control-file" id="book-covering" accept="image/*" />
+                        <span asp-validation-for="BookCovering" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="Book"></label>
+                        <br />
+                        <img class="img-fluid p-2" id="book-image"
+                             src="~/images/Icons-master/picol_latest_prerelease_svg/book_text_add.svg" />
+                        <input asp-for="Book" class="form-control-file" id="book" accept=".pdf"/>
+                        <span asp-validation-for="Book" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="Title"></label>
+                        <input asp-for="Title" class="form-control" id="title" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="OperationType"></label>
+                        <select asp-for="OperationType" class="form-control" id="operation-types">
+                            @foreach (var i in Model.Operations)
+                            {
+                                <option value="@i[1]" selected>@i[0]</option>
+                            }
+                        </select>
+                        <span asp-validation-for="OperationType" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="Id"></label>
+                        <input asp-for="Id" class="form-control" id="id" />
+                        <span asp-validation-for="Id" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="ISBN"></label>
+                        <input asp-for="ISBN" class="form-control" id="isbn" />
+                        <span asp-validation-for="ISBN" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="Pages"></label>
+                        <input asp-for="Pages" class="form-control" id="pages" />
+                        <span asp-validation-for="Pages" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="Pages"></label>
+                        <input asp-for="Pages" class="form-control" id="pages-max" />
+                        <span asp-validation-for="Pages" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="Pages"></label>
+                        <input asp-for="Pages" class="form-control" id="pages-min" />
+                        <span asp-validation-for="Pages" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="Publisher"></label>
+                        <input asp-for="Publisher" class="form-control" id="publisher" />
+                        <span asp-validation-for="Publisher" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="Category"></label>
+                        <select asp-for="Category" class="form-control" id="category">
+                            @foreach (var i in Model.Categories)
+                            {
+                                <option value="@i.Name">@i.Name</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Category" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="Author"></label>
+                        <input asp-for="Author" class="form-control" id="author" />
+                        <span asp-validation-for="Author" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="ISBN"></label>
-                <input asp-for="ISBN" class="form-control" />
-                <span asp-validation-for="ISBN" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Title"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Pages"></label>
-                <input asp-for="Pages" class="form-control" />
-                <span asp-validation-for="Pages" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Path"></label>
-                <input asp-for="Path" class="form-control" />
-                <span asp-validation-for="Path" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Publisher"></label>
-                <input asp-for="Publisher" class="form-control" />
-                <span asp-validation-for="Publisher" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Category"></label>
-                <select asp-for="Category" class="form-control">
-                    @foreach (var i in Model.Categories)
-                    {
-                        <option value="@i.Name">@i.Name</option>
-                    }
-                </select>
-                <span asp-validation-for="Category" class="text-danger"></span>
-            </div>           
-            <div class="form-group">
-                <label asp-for="Author"></label>
-                <input asp-for="Author" class="form-control" />
-                <span asp-validation-for="Author" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-primary" type="submit">Zatwierdź</button>
+            <div class="form-row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">Zatwierdź</button>
+                    </div>
+                </div>
             </div>
         </form>
+    </div>
+    <div class="col-xs-12 col-md-6 col-lg-4">
+        <h4>Lista książek</h4>
     </div>
 </div>
 

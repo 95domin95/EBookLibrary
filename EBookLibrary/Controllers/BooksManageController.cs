@@ -10,14 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EBookLibrary.Controllers
 {
-    public enum OperationType : int
-    {
-        add,
-        modify,
-        remove,
-        select
-    }
-
     [Authorize(Roles = "Admin")]
     public class BooksManageController : Controller
     {
@@ -32,34 +24,38 @@ namespace EBookLibrary.Controllers
         {
             return View(new ManagePanelViewModel {
                 Categories = _manage.GetAllCategories(),
-                Operations = new List<string>()
+                Operations = new List<string[]>()
                 {
-                    "Dodaj nową książkę",
-                    "Modyfikuj dane książki",
-                    "Usuń książkę",
-                    "Wyszukaj książki"
+                    new string[]{ "Dodaj nową książkę", "add" },
+                    new string[]{ "Modyfikuj dane książki", "update" },
+                    new string[]{ "Usuń książkę", "delete" },
+                    new string[]{ "Wyszukaj książki", "select" }
                 }
             });
         }
 
         [HttpPost]
+        //[ValidateAntiForgeryToken]
         public IActionResult ManagePanel(ManagePanelViewModel model)
         {
             switch(model.OperationType)
             {
-                case (int)OperationType.add:
-                    _manage.Add(model.Title, model.Path, model.ISBN, model.Pages,
+                case "add":
+                    _manage.Add(model.Title, model.ISBN, model.Pages,
                         model.Author, model.Publisher, model.Category);
                     break;
-                case (int)OperationType.modify:
-                    _manage.UpdateById((int)model.Id, model.Title, model.ISBN, 
+                case "update":
+                    _manage.UpdateById(model.Id, model.Title, model.ISBN, 
                         model.Author, model.Pages, model.Publisher, model.Category);
                     break;
-                case (int)OperationType.remove:
-                    _manage.DeleteById((int)model.Id);
+                case "delete":
+                    if(!(model.Id == null||model.Id.Equals(String.Empty)))
+                    {
+                        _manage.DeleteById((int)model.Id);
+                    }
                     break;
-                case (int)OperationType.select:
-                    if (model.Id == null)
+                case "select":
+                    if (model.Id == null|| model.Id.Equals(String.Empty))
                     {
                         _manage.GetBooks(model.Title, model.ISBN, model.Author,
                             model.PagesMin, model.PagesMax, model.Publisher, model.Category);
@@ -69,56 +65,7 @@ namespace EBookLibrary.Controllers
                 default:
                     break;
             }
-            return View(model);
-        }
-        [HttpPost]
-        public IActionResult AddBook(AddBookViewModel model)
-        {
-            return View(model);
-        }
-        [HttpGet]
-        public IActionResult AddBook()
-        {
-            return View(new AddBookViewModel { Categories = _manage.GetAllCategories() });
-        }
-        [HttpPost]
-        public IActionResult SelectBook(SelectBookViewModel model)
-        {
-            if (model.Id == null)
-            {
-                _manage.GetBooks(model.Title, model.ISBN, model.Author,
-                    model.PagesMin, model.PagesMax, model.Publisher, model.Category);
-            }
-            else _manage.GetById((int)model.Id);
-            return View(model);
-        }
-        [HttpGet]
-        public IActionResult SelectBook()
-        {
-            return View(new SelectBookViewModel { Categories = _manage.GetAllCategories() });
-        }
-        [HttpPost]
-        public IActionResult UpdateBook(UpdateBookViewModelcs model)
-        {
-            _manage.UpdateById((int)model.Id, model.Title, model.ISBN,
-            model.Author, model.Pages, model.Publisher, model.Category);
-            return View(model);
-        }
-        [HttpGet]
-        public IActionResult UpdateBook()
-        {
-            return View(new UpdateBookViewModelcs { Categories = _manage.GetAllCategories() });
-        }
-        [HttpPost]
-        public IActionResult DeleteBook(DeleteBookViewModel model)
-        {
-            _manage.DeleteById(model.Id);
-            return View(model);
-        }
-        [HttpGet]
-        public IActionResult DeleteBook()
-        {
-            return View();
+            return RedirectToAction("ManagePanel");
         }
     }
 }

@@ -1,4 +1,17 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿window.addEventListener("scroll", () => {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        document.getElementById("top-btn").style.display = "block";
+    } else {
+        document.getElementById("top-btn").style.display = "none";
+    }
+}, false);
 
-// Write your JavaScript code.
+window.addEventListener("load", () => {
+    var topBtn = document.getElementById("top-btn");
+
+    topBtn.addEventListener("click", () => {
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }, false);
+
+}, false);

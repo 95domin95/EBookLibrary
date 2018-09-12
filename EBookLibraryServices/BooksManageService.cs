@@ -14,25 +14,27 @@ namespace EBookLibraryServices
         {
             _context = context;
         }
-        public void Add(string title, string path, int? ISBN, int? pages,
+        public void Add(string title, int? ISBN, int? pages,
             string author, string publisher, string category)
         {
-            var bookAuthor = _context.BookAuthors.Where(ba => ba.Author.Name.Equals(author)).FirstOrDefault();
-            var bookPublisher = _context.Publishers.Where(p => p.Name.Equals(publisher)).FirstOrDefault();
-            var bookCategory = _context.BookCategories.Where(c => c.Category.Name.Equals(category)).FirstOrDefault();
-
-            _context.Books.Add(new Book
+            if(title != null && !title.Equals(String.Empty))
             {
-                Title = title,
-                BookAuthors = new List<BookAuthor>() { bookAuthor },
-                Publisher = bookPublisher,
-                ISBN = ISBN,
-                Path = path,
-                Pages = pages,
-                BookCategory = new List<BookCategory>() { bookCategory }
+                var bookAuthor = _context.BookAuthors.Where(ba => ba.Author.Name.Equals(author)).FirstOrDefault();
+                var bookPublisher = _context.Publishers.Where(p => p.Name.Equals(publisher)).FirstOrDefault();
+                var bookCategory = _context.BookCategories.Where(c => c.Category.Name.Equals(category)).FirstOrDefault();
 
-            });
-            _context.SaveChanges();
+                _context.Books.Add(new Book
+                {
+                    Title = title,
+                    BookAuthors = new List<BookAuthor>() { bookAuthor },
+                    Publisher = bookPublisher,
+                    ISBN = ISBN,
+                    Pages = pages,
+                    BookCategory = new List<BookCategory>() { bookCategory }
+
+                });
+                _context.SaveChanges();
+            }
         }
 
         public void DeleteById(int id)
@@ -118,7 +120,7 @@ namespace EBookLibraryServices
             .FirstOrDefault())).FirstOrDefault();
         }
 
-        public int GetISBN(int id)
+        public int? GetISBN(int id)
         {
             return _context.Books.Where(b => b.BookId.Equals(id)).Select(b => b.ISBN).FirstOrDefault();
         }
@@ -145,56 +147,75 @@ namespace EBookLibraryServices
             return _context.Books.Where(b => b.BookId.Equals(id)).Select(b => b.Title).FirstOrDefault();
         }
 
-        public void UpdateById(int id, string newTitle="", int? newISBN=null,
+        public void UpdateById(int? id, string newTitle="", int? newISBN=null,
             string newAuthor="", int? newPages = null,
             string newPublisher="", string newCategory="")
         {
-            var book = GetById(id);
+            //wypierdala sie tutaj bo GetBooks chyba nulla zwraca
 
-            var bookAuthor = default(BookAuthor);
+            IEnumerable<Book> foundBooks = null;
 
-            var bookCategory = default(BookCategory);
+            int? bookId = id;
 
-            var author = _context.Authors.Where(a => a.Name.Equals(newAuthor)).FirstOrDefault();
-
-            if (author != default(Author))
+            if (id == null)
             {
-                bookAuthor = new BookAuthor
+                foundBooks = GetBooks(newTitle, newISBN, newAuthor, null,
+                null, newPublisher, newCategory);
+
+                //ogarnąć tu...
+
+                bookId = foundBooks == null ? null : (int?)foundBooks.FirstOrDefault().BookId;
+            }
+
+            if(bookId != null)
+            {
+                var book = GetById((int)bookId);
+
+                var bookAuthor = default(BookAuthor);
+
+                var bookCategory = default(BookCategory);
+
+                var author = _context.Authors.Where(a => a.Name.Equals(newAuthor)).FirstOrDefault();
+
+                if (author != default(Author))
                 {
-                    BookId = id,
-                    Book = book,
-                    AuthorId = author.AuthorId,
-                    Author = author
-                };
-            }
+                    bookAuthor = new BookAuthor
+                    {
+                        BookId = (int)bookId,
+                        Book = book,
+                        AuthorId = author.AuthorId,
+                        Author = author
+                    };
+                }
 
-            var category = _context.Categories.Where(c => c.Name.Equals(newCategory)).FirstOrDefault();
+                var category = _context.Categories.Where(c => c.Name.Equals(newCategory)).FirstOrDefault();
 
-            if(category != default(Category))
-            {
-                bookCategory = new BookCategory
+                if (category != default(Category))
                 {
-                    BookId = id,
-                    Book = book,
-                    Category = category,
-                    CategoryId = category.CategoryId
-                };
-            }
+                    bookCategory = new BookCategory
+                    {
+                        BookId = (int)id,
+                        Book = book,
+                        Category = category,
+                        CategoryId = category.CategoryId
+                    };
+                }
 
-            var bookPublisher = _context.Publishers.Where(p => p.Name.Equals(newPublisher)).FirstOrDefault();
-            
-            if(book != default(Book))
-            {
-                book.BookId = id;
-                book.Title = newTitle.Equals("") ? book.Title : newTitle;
-                book.ISBN = newISBN == null ? book.ISBN : (int)newISBN;
-                book.Pages = newPages == null ? book.Pages : (int)newPages;
-                book.Publisher = newPublisher == "" ? book.Publisher : bookPublisher;
-                book.BookAuthors = newAuthor == "" ? book.BookAuthors : new List<BookAuthor> { bookAuthor };
-                book.BookCategory = newCategory == "" ? book.BookCategory : new List<BookCategory> { bookCategory };
+                var bookPublisher = _context.Publishers.Where(p => p.Name.Equals(newPublisher)).FirstOrDefault();
+
+                if (book != default(Book))
+                {
+                    book.BookId = (int)id;
+                    book.Title = newTitle.Equals("") ? book.Title : newTitle;
+                    book.ISBN = newISBN == null ? book.ISBN : (int)newISBN;
+                    book.Pages = newPages == null ? book.Pages : (int)newPages;
+                    book.Publisher = newPublisher == "" ? book.Publisher : bookPublisher;
+                    book.BookAuthors = newAuthor == "" ? book.BookAuthors : new List<BookAuthor> { bookAuthor };
+                    book.BookCategory = newCategory == "" ? book.BookCategory : new List<BookCategory> { bookCategory };
+                }
+
+                _context.SaveChanges();
             }
-   
-            _context.SaveChanges();
         }
     }
 }

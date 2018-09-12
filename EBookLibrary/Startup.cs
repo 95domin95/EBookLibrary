@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using EBookLibraryData;
@@ -16,6 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 
 namespace EBookLibrary
 {
@@ -69,6 +71,10 @@ namespace EBookLibrary
                 options.SlidingExpiration = true;
             });
 
+            services.AddSingleton<IFileProvider>(
+                new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddTransient<IBooksManage, BooksManageService>();
             //services.AddSingleton<IBooksManage, BooksManageService>();
@@ -93,8 +99,8 @@ namespace EBookLibrary
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            RoleSeeder.SeedAsync(app.ApplicationServices).Wait();
-            AdminAccountSeeder.SeedAsync(app.ApplicationServices).Wait();
+            //RoleSeeder.SeedAsync(app.ApplicationServices).Wait();
+            //AdminAccountSeeder.SeedAsync(app.ApplicationServices).Wait();
 
             app.UseMvc(routes =>
             {

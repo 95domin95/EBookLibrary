@@ -76,10 +76,6 @@ namespace EBookLibraryData.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasData(
-                        new { Id = "admin", AccessFailedCount = 0, ConcurrencyStamp = "83d31de7-2234-43fc-b9ab-3af0db621550", Email = "admin@admin.com", EmailConfirmed = true, LockoutEnabled = false, NormalizedEmail = "ADMIN@ADMIN.COM", NormalizedUserName = "ADMIN", PhoneNumberConfirmed = false, SecurityStamp = "2ac56b91-fff8-43a2-918a-9af1d1417431", TwoFactorEnabled = false, UserName = "admin" }
-                    );
                 });
 
             modelBuilder.Entity("EBookLibraryData.Models.Author", b =>
@@ -101,9 +97,11 @@ namespace EBookLibraryData.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ISBN");
+                    b.Property<string>("BookCoverPath");
 
-                    b.Property<int>("Pages");
+                    b.Property<int?>("ISBN");
+
+                    b.Property<int?>("Pages");
 
                     b.Property<string>("Path");
 
@@ -167,6 +165,14 @@ namespace EBookLibraryData.Migrations
                     b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new { CategoryId = 1, Name = "Science fiction" },
+                        new { CategoryId = 2, Name = "Satyry" },
+                        new { CategoryId = 3, Name = "Horrory" },
+                        new { CategoryId = 4, Name = "Przygodowe" },
+                        new { CategoryId = 5, Name = "Inne" }
+                    );
                 });
 
             modelBuilder.Entity("EBookLibraryData.Models.Copy", b =>
@@ -248,11 +254,6 @@ namespace EBookLibraryData.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new { Id = "admin", ConcurrencyStamp = "09260e22-36c1-4726-972e-07a1ea2e662f", Name = "admin", NormalizedName = "admin" },
-                        new { Id = "4d1da35f-9789-4363-afd2-e2a2d80a19f9", ConcurrencyStamp = "cc40d227-3a1c-4701-b2a4-3335e66ee0eb", Name = "user", NormalizedName = "user" }
-                    );
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -324,10 +325,6 @@ namespace EBookLibraryData.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
-
-                    b.HasData(
-                        new { UserId = "admin", RoleId = "admin" }
-                    );
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
