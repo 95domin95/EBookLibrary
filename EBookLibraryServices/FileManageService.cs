@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace EBookLibraryServices
 {
-    public class FileManageService
+    public class FileManageService : IFileManage
     {
-        public async Task<bool> UploadFile(IFormFile file)
+        public async Task<bool> UploadFile(IFormFile file, string fileName)
         {
             if (file == null || file.Length.Equals(0))
             {
@@ -19,9 +19,16 @@ namespace EBookLibraryServices
             }
             else
             {
-                var path = Path.Combine(
-                Directory.GetCurrentDirectory(), "wwwroot",
-                file.GetFilename());
+                var directory = Path.Combine(
+                Directory.GetCurrentDirectory(), "wwwroot\\images",
+                file.Name);
+
+                var path = directory +"\\" + fileName;
+
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
 
                 using (var stream = new FileStream(path, FileMode.Create))
                 {
@@ -30,24 +37,6 @@ namespace EBookLibraryServices
 
                 return true;
             }
-        }
-        private Dictionary<string, string> GetMimeTypes()
-        {
-            return new Dictionary<string, string>
-            {
-                {".txt", "text/plain"},
-                {".pdf", "application/pdf"},
-                {".doc", "application/vnd.ms-word"},
-                {".docx", "application/vnd.ms-word"},
-                {".xls", "application/vnd.ms-excel"},
-                {".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
-                {".png", "image/png"},
-                {".jpg", "image/jpeg"},
-                {".jpeg", "image/jpeg"},
-                {".gif", "image/gif"},
-                {".csv", "text/csv"},
-                {".pdf", "application/pdf"}
-            };
         }
     }
 }

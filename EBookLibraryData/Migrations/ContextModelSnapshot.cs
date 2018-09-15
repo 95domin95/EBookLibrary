@@ -78,26 +78,19 @@ namespace EBookLibraryData.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("EBookLibraryData.Models.Author", b =>
-                {
-                    b.Property<int>("AuthorId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("AuthorId");
-
-                    b.ToTable("Authors");
-                });
-
             modelBuilder.Entity("EBookLibraryData.Models.Book", b =>
                 {
                     b.Property<int>("BookId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Author");
+
                     b.Property<string>("BookCoverPath");
+
+                    b.Property<int>("CategoryId");
+
+                    b.Property<string>("CoveringPath");
 
                     b.Property<int?>("ISBN");
 
@@ -105,53 +98,17 @@ namespace EBookLibraryData.Migrations
 
                     b.Property<string>("Path");
 
-                    b.Property<int>("PublisherId");
+                    b.Property<int?>("PublisherId");
 
                     b.Property<string>("Title");
 
                     b.HasKey("BookId");
 
+                    b.HasIndex("CategoryId");
+
                     b.HasIndex("PublisherId");
 
                     b.ToTable("Books");
-                });
-
-            modelBuilder.Entity("EBookLibraryData.Models.BookAuthor", b =>
-                {
-                    b.Property<int>("BookAuthorId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AuthorId");
-
-                    b.Property<int>("BookId");
-
-                    b.HasKey("BookAuthorId");
-
-                    b.HasIndex("AuthorId");
-
-                    b.HasIndex("BookId");
-
-                    b.ToTable("BookAuthors");
-                });
-
-            modelBuilder.Entity("EBookLibraryData.Models.BookCategory", b =>
-                {
-                    b.Property<int>("BookCategoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("BookId");
-
-                    b.Property<int>("CategoryId");
-
-                    b.HasKey("BookCategoryId");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("BookCategories");
                 });
 
             modelBuilder.Entity("EBookLibraryData.Models.Category", b =>
@@ -344,36 +301,14 @@ namespace EBookLibraryData.Migrations
 
             modelBuilder.Entity("EBookLibraryData.Models.Book", b =>
                 {
-                    b.HasOne("EBookLibraryData.Models.Publisher", "Publisher")
-                        .WithMany("Books")
-                        .HasForeignKey("PublisherId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("EBookLibraryData.Models.BookAuthor", b =>
-                {
-                    b.HasOne("EBookLibraryData.Models.Author", "Author")
-                        .WithMany("BookAuthors")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("EBookLibraryData.Models.Book", "Book")
-                        .WithMany("BookAuthors")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("EBookLibraryData.Models.BookCategory", b =>
-                {
-                    b.HasOne("EBookLibraryData.Models.Book", "Book")
-                        .WithMany("BookCategory")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("EBookLibraryData.Models.Category", "Category")
-                        .WithMany("BookCategory")
+                        .WithMany("Books")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EBookLibraryData.Models.Publisher", "Publisher")
+                        .WithMany("Books")
+                        .HasForeignKey("PublisherId");
                 });
 
             modelBuilder.Entity("EBookLibraryData.Models.Copy", b =>

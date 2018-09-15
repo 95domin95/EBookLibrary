@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\images\Books\**" />
+    <Content Remove="wwwroot\images\Books\**" />
+    <EmbeddedResource Remove="wwwroot\images\Books\**" />
+    <None Remove="wwwroot\images\Books\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.1.2" />
@@ -18,13 +25,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\images\Books\" />
-    <Folder Include="wwwroot\images\BookCovers\" />
+    <ProjectReference Include="..\EBookLibraryData\EBookLibraryData.csproj" />
+    <ProjectReference Include="..\EBookLibraryServices\EBookLibraryServices.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EBookLibraryData\EBookLibraryData.csproj" />
-    <ProjectReference Include="..\EBookLibraryServices\EBookLibraryServices.csproj" />
+    <Folder Include="wwwroot\images\BookCovering\" />
+    <Folder Include="wwwroot\images\Book\" />
   </ItemGroup>
 
 </Project>

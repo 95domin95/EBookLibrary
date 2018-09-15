@@ -1,59 +1,100 @@
 ﻿using EBookLibraryData;
 using EBookLibraryData.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace EBookLibraryServices
 {
     public class BooksManageService : IBooksManage
     {
         private Context _context;
-        public BooksManageService(Context context)
+        private IFileManage _file;
+        public BooksManageService(Context context, IFileManage file)
         {
             _context = context;
+            _file = file;
         }
-        public void Add(string title, int? ISBN, int? pages,
-            string author, string publisher, string category)
+        public async Task<bool> Add(string title, int? ISBN, int? pages,
+            string author, string publisher, string category,
+            IFormFile book, IFormFile bookCovering)
         {
-            if(title != null && !title.Equals(String.Empty))
+            if (title != "" && category != "" && book != default(IFormFile))
             {
-                var bookAuthor = _context.BookAuthors.Where(ba => ba.Author.Name.Equals(author)).FirstOrDefault();
-                var bookPublisher = _context.Publishers.Where(p => p.Name.Equals(publisher)).FirstOrDefault();
-                var bookCategory = _context.BookCategories.Where(c => c.Category.Name.Equals(category)).FirstOrDefault();
+                var publisherResult = _context.Publishers.Where(p => p.Name.Contains(publisher)).FirstOrDefault();
 
-                _context.Books.Add(new Book
+                var categoryResult = _context.Categories.Where(c => c.Name.Contains(category)).FirstOrDefault();
+
+                var bookToAdd = new Book
                 {
                     Title = title,
-                    BookAuthors = new List<BookAuthor>() { bookAuthor },
-                    Publisher = bookPublisher,
                     ISBN = ISBN,
                     Pages = pages,
-                    BookCategory = new List<BookCategory>() { bookCategory }
+                    Author = author
+                };
 
-                });
+                if(publisherResult != default(Publisher))
+                {
+                    bookToAdd.Publisher = publisherResult;
+                }
+
+                if(categoryResult != default(Category))
+                {
+                    bookToAdd.Category = categoryResult;
+                }
+
+                _context.Books.Add(bookToAdd);
                 _context.SaveChanges();
+
+                var bookId = bookToAdd.BookId;
+
+                var bookFileName = bookId.ToString() + "_book" + Path.GetExtension(book.GetFilename());
+
+                var bookCoveringFileName = bookId.ToString() + "_covering" + Path.GetExtension(bookCovering.GetFilename());
+
+                var savedBook = _context.Books.Where(b => b.BookId.Equals(bookId)).FirstOrDefault();
+
+                savedBook.Path = bookFileName;
+                savedBook.CoveringPath = bookCoveringFileName;
+
+                await _context.SaveChangesAsync();
+
+                if (!(await _file.UploadFile(book, bookFileName) && await _file.UploadFile(bookCovering, bookCoveringFileName)))
+                {
+                    var bookToDelete = _context.Books.Where(b => b.BookId.Equals(bookId)).FirstOrDefault();
+
+                    if(bookToDelete != default(Book))
+                    {
+                        _context.Books.Remove(bookToDelete);
+                        _context.SaveChanges();
+                    }
+
+                    return false;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
             }
         }
 
         public void DeleteById(int id)
         {
-            _context.Books.Remove(GetById(id));
-            _context.SaveChanges();
-        }
+            var count = _context.Books.Where(b => b.BookId.Equals(id)).Count();
 
-        public Author GetAuthorById(int id)
-        {
-            return _context.Authors.Where(a => a.Name.Equals
-            (a.BookAuthors.Where(ba => ba.BookId.Equals(id))
-                .FirstOrDefault())).FirstOrDefault();
-        }
-
-        public Author GetAuthor(string name)
-        {
-            return (from bookAuthor in _context.BookAuthors where 
-                    bookAuthor.Author.Name.Equals(name) select bookAuthor.Author).FirstOrDefault();
+            if(count > 0)
+            {
+                _context.Books.Remove(GetById(id));
+                _context.SaveChanges();
+            }
         }
 
         public Publisher GetPublisher(string name)
@@ -69,55 +110,37 @@ namespace EBookLibraryServices
             string author = "", int? pagesMin = null, int? pagesMax=null,
             string publisher = "", string category = "")
         {
-            var resultBookAuthor = _context.BookAuthors.Take(100000).ToList();
+            List<Book> result = new List<Book>();
+            if(_context.Books.Count() > 0)
+            {
+                result = _context.Books.ToList();
+            }
+            if (ISBN != null) result = result.Where(b => b.ISBN.Equals(ISBN)).ToList();
+            if (title != "" && title != null) result = result.Where(b => b.Title.Contains(title)).ToList();
+            if (author != "" && author != null) result = result.Where(b => b.Author.Contains(author)).ToList();
+            if (pagesMax != null) result = result.Where(b => b.Pages < pagesMax).ToList();
+            if (pagesMin != null) result = result.Where(b => b.Pages > pagesMin).ToList();
+            if (publisher != "" && publisher != null)
+            {
+                var publisherId = _context.Publishers.Where(p => p.Name.Equals(publisher))
+                    .Select(p => p.PublisherId).FirstOrDefault();
 
-            if(title != "")
-            {
-                resultBookAuthor = resultBookAuthor.Where(b => b.Book.Title.Contains(title)).ToList();
+                result = result.Where(b => b.PublisherId.Equals(publisherId)).ToList();
             }
-            if(ISBN != null)
+            if (category != "" && category != null)
             {
-                resultBookAuthor = resultBookAuthor.Where(b => b.Book.ISBN.Equals(ISBN)).ToList();
-            }
-            if (pagesMin != null)
-            {
-                resultBookAuthor = resultBookAuthor.Where(b => b.Book.Pages >= pagesMin).ToList();
-            }
-            if (pagesMax != null)
-            {
-                resultBookAuthor = resultBookAuthor.Where(b => b.Book.Pages <= pagesMax).ToList();
-            }
-            if(author != "")
-            {
-                var authorResult = _context.Authors.Where(a => a.Name.Equals(author)).FirstOrDefault();
-                resultBookAuthor = resultBookAuthor.Where(b => b.Author.Equals(author)).ToList();
-            }
-            if (publisher != "")
-            {
-                var publisherResult = _context.Publishers.Where(p => p.Name.Equals(publisher)).FirstOrDefault();
-                resultBookAuthor = resultBookAuthor.Where(b => b.Book.Publisher.Equals(publisher)).ToList();
+                var categoryId = _context.Categories.Where(c => c.Name.Equals(category))
+                    .Select(c => c.CategoryId).FirstOrDefault();
+
+                result = result.Where(b => b.CategoryId.Equals(categoryId)).ToList();
             }
 
-            var result = resultBookAuthor.Select(b => b.Book);
-
-            if(category != "")
-            {
-                result = from book in result from bookCategory in _context.BookCategories where bookCategory.Category.Equals(category) select book;
-            }
-
-            return result;
+            return result.Count() > 0 ? result : default(List<Book>);
         }
 
         public Book GetById(int id)
         {
             return _context.Books.Where(b => b.BookId.Equals(id)).FirstOrDefault();
-        }
-
-        public Category GetCategory(int id)
-        {
-            return _context.Categories.Where(c => c.Name.Equals
-            (c.BookCategory.Where(bc => bc.Book.BookId.Equals(id))
-            .FirstOrDefault())).FirstOrDefault();
         }
 
         public int? GetISBN(int id)
@@ -151,70 +174,37 @@ namespace EBookLibraryServices
             string newAuthor="", int? newPages = null,
             string newPublisher="", string newCategory="")
         {
-            //wypierdala sie tutaj bo GetBooks chyba nulla zwraca
-
-            IEnumerable<Book> foundBooks = null;
-
-            int? bookId = id;
-
-            if (id == null)
+            if(id != null)
             {
-                foundBooks = GetBooks(newTitle, newISBN, newAuthor, null,
-                null, newPublisher, newCategory);
-
-                //ogarnąć tu...
-
-                bookId = foundBooks == null ? null : (int?)foundBooks.FirstOrDefault().BookId;
-            }
-
-            if(bookId != null)
-            {
-                var book = GetById((int)bookId);
-
-                var bookAuthor = default(BookAuthor);
-
-                var bookCategory = default(BookCategory);
-
-                var author = _context.Authors.Where(a => a.Name.Equals(newAuthor)).FirstOrDefault();
-
-                if (author != default(Author))
+                var book = _context.Books.Where(b => b.BookId.Equals(id)).FirstOrDefault();
+                
+                if(book != default(Book))
                 {
-                    bookAuthor = new BookAuthor
+                    if (newTitle != "") book.Title = newTitle;
+                    if (newISBN != null) book.ISBN = newISBN;
+                    if (newAuthor != "") book.Author = newAuthor;
+                    if (newPages != null) book.Pages = newPages;
+                    if (newPublisher != "")
                     {
-                        BookId = (int)bookId,
-                        Book = book,
-                        AuthorId = author.AuthorId,
-                        Author = author
-                    };
-                }
+                        var publisher = _context.Publishers.Where(p => p.Name.Contains(newPublisher)).FirstOrDefault();
 
-                var category = _context.Categories.Where(c => c.Name.Equals(newCategory)).FirstOrDefault();
-
-                if (category != default(Category))
-                {
-                    bookCategory = new BookCategory
+                        if(publisher != default(Publisher))
+                        {
+                            book.Publisher = publisher;
+                        }
+                    }
+                    if(newCategory != "")
                     {
-                        BookId = (int)id,
-                        Book = book,
-                        Category = category,
-                        CategoryId = category.CategoryId
-                    };
+                        var category = _context.Categories.Where(c => c.Name.Contains(newCategory)).FirstOrDefault();
+
+                        if (category != default(Category))
+                        {
+                            book.Category = category;
+                        }
+                    }
+                    _context.Update(book);
+                    _context.SaveChanges();
                 }
-
-                var bookPublisher = _context.Publishers.Where(p => p.Name.Equals(newPublisher)).FirstOrDefault();
-
-                if (book != default(Book))
-                {
-                    book.BookId = (int)id;
-                    book.Title = newTitle.Equals("") ? book.Title : newTitle;
-                    book.ISBN = newISBN == null ? book.ISBN : (int)newISBN;
-                    book.Pages = newPages == null ? book.Pages : (int)newPages;
-                    book.Publisher = newPublisher == "" ? book.Publisher : bookPublisher;
-                    book.BookAuthors = newAuthor == "" ? book.BookAuthors : new List<BookAuthor> { bookAuthor };
-                    book.BookCategory = newCategory == "" ? book.BookCategory : new List<BookCategory> { bookCategory };
-                }
-
-                _context.SaveChanges();
             }
         }
     }

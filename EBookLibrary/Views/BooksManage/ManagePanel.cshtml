@@ -67,16 +67,16 @@
                 </div>
                 <div class="col-xs-12 col-lg-6">
                     <div class="form-group">
-                        <label asp-for="Pages"></label>
-                        <input asp-for="Pages" class="form-control" id="pages-max" />
-                        <span asp-validation-for="Pages" class="text-danger"></span>
+                        <label asp-for="PagesMax"></label>
+                        <input asp-for="PagesMax" class="form-control" id="pages-max" />
+                        <span asp-validation-for="PagesMax" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-lg-6">
                     <div class="form-group">
-                        <label asp-for="Pages"></label>
-                        <input asp-for="Pages" class="form-control" id="pages-min" />
-                        <span asp-validation-for="Pages" class="text-danger"></span>
+                        <label asp-for="PagesMin"></label>
+                        <input asp-for="PagesMin" class="form-control" id="pages-min" />
+                        <span asp-validation-for="PagesMin" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-lg-6">
@@ -117,6 +117,23 @@
     </div>
     <div class="col-xs-12 col-md-6 col-lg-4">
         <h4>Lista książek</h4>
+        @if (Model.Books != null)
+        {
+            @if (Model.Books.Count() > 0)
+            {
+                @foreach (var i in Model.Books)
+                {
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="~/images/BookCovering/@i.CoveringPath" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">@i.Title</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <a href="#" class="btn btn-primary">Szczegóły</a>
+                        </div>
+                    </div>
+                }
+            }
+        }
     </div>
 </div>
 

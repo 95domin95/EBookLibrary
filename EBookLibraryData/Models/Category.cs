@@ -10,6 +10,6 @@ namespace EBookLibraryData.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CategoryId { get; set; }
         public string Name { get; set; }
-        public List<BookCategory> BookCategory { get; set; }
+        public IEnumerable<Book> Books { get; set; }
     }
 }

@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace EBookLibraryData.Models
 {
@@ -10,11 +12,10 @@ namespace EBookLibraryData.Models
             int? pagesMax, string publisher, string category);
         IEnumerable<Category> GetAllCategories();
         Book GetById(int id);
-        Category GetCategory(int id);
-        Author GetAuthorById(int id);
         Publisher GetPublisher(string name);
-        void Add(string Title, int? ISBN, int? Pages,
-            string Author, string Publisher, string Category);
+        Task<bool> Add(string Title, int? ISBN, int? Pages,
+            string Author, string Publisher, string Category,
+            IFormFile book, IFormFile bookCovering);
         void DeleteById(int id);
         void UpdateById(int? id, string newTitle, int? newISBN, string newAuthor,
             int? newPages, string newPublisher, string newCategory);

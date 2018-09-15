@@ -11,6 +11,6 @@ namespace EBookLibraryData.Models
         public int PublisherId { get; set; }
         public string Name { get; set; }
         public string City { get; set; }
-        public List<Book> Books { get; set; }
+        public IEnumerable<Book> Books { get; set; }
     }
 }

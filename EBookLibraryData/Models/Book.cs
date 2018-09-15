@@ -13,10 +13,11 @@ namespace EBookLibraryData.Models
         public string Title { get; set; }
         public int? Pages { get; set; }
         public string Path { get; set; }
-        public int PublisherId { get; set; }
-        public string BookCoverPath { get; set; }
+        public string CoveringPath { get; set; }
+        public string Author { get; set; }
+        public int? PublisherId { get; set; }
         public Publisher Publisher { get; set; }
-        public List<BookCategory> BookCategory { get; set; }
-        public List<BookAuthor> BookAuthors { get; set; }
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
     }
 }
