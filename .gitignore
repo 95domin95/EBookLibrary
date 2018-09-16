@@ -259,3 +259,5 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/EBookLibrary/wwwroot/images/Book
+/EBookLibrary/wwwroot/images/BookCovering
