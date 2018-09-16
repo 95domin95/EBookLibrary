@@ -23,5 +23,6 @@ namespace EBookLibraryData.Models
         string GetTitle(int id);
         int? GetPages(int id);
         string GetPath(int id);
+        Publisher AddPublisher(string name, string city);
     }
 }

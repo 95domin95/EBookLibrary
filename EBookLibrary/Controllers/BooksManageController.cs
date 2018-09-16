@@ -37,6 +37,16 @@ namespace EBookLibrary.Controllers
         }
 
         [HttpPost]
+        public IActionResult DeleteBook(string id, ManagePanelViewModel model)
+        {
+            int convertedId;
+            if(Int32.TryParse(id, out convertedId))
+            _manage.DeleteById(convertedId);
+
+            return RedirectToAction("ManagePanel", model);
+        }
+
+        [HttpPost]
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> ManagePanel(ManagePanelViewModel model)
         {

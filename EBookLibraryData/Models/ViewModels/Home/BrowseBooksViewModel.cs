@@ -1,18 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace EBookLibraryData.Models.ViewModels.BooksManage
+namespace EBookLibraryData.Models.ViewModels.Home
 {
-    public class ManagePanelViewModel
+    public class BrowseBooksViewModel
     {
-        [RegularExpression("([0-9]+)")]
-        [Display(Name = "Id Książki")]
-        public int? Id { get; set; }
-        [Display(Name = "Typ Operacji")]
-        public string OperationType { get; set; }
         [Display(Name = "ISBN")]
         [RegularExpression("([0-9]+)")]
         public int? ISBN { get; set; }
@@ -35,12 +29,7 @@ namespace EBookLibraryData.Models.ViewModels.BooksManage
         public string Category { get; set; }
         [Display(Name = "Autor")]
         public string Author { get; set; }
-        [Display(Name = "Okładka")]
-        public IFormFile BookCovering { get; set; }
-        [Display(Name = "Książka")]
-        public IFormFile Book { get; set; }
         public IEnumerable<Book> Books { get; set; }
         public IEnumerable<Category> Categories { get; set; }
-        public IEnumerable<string[]> Operations { get; set; }
     }
 }

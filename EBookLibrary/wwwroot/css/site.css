@@ -23,3 +23,11 @@ body > .container{
     max-height: 250px;
     max-width: 250px;
 }
+
+#book-image {
+    max-width: 35%;
+}
+
+#book-covering-image {
+    max-width: 35%;
+}

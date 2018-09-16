@@ -41,6 +41,10 @@ namespace EBookLibraryServices
                 {
                     bookToAdd.Publisher = publisherResult;
                 }
+                else
+                {
+                    bookToAdd.Publisher = AddPublisher(publisher, "");
+                }
 
                 if(categoryResult != default(Category))
                 {
@@ -168,6 +172,27 @@ namespace EBookLibraryServices
         public string GetTitle(int id)
         {
             return _context.Books.Where(b => b.BookId.Equals(id)).Select(b => b.Title).FirstOrDefault();
+        }
+
+        public Publisher AddPublisher(string name, string city)
+        {
+            if(name != "" && name != null)
+            {
+                var publisher = _context.Publishers.Where(p => p.Name.Contains(name)).FirstOrDefault();
+
+                if (publisher == default(Publisher))
+                {
+                    publisher = new Publisher {Name = name };
+                    if(city != "" && city != null)
+                    {
+                        publisher.City = city;
+                    }
+                    _context.Publishers.Add(publisher);
+                    _context.SaveChanges();
+                    return publisher;
+                }
+            }
+            return default(Publisher);
         }
 
         public void UpdateById(int? id, string newTitle="", int? newISBN=null,

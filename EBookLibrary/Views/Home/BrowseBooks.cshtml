@@ -1,0 +1,114 @@
+﻿@model EBookLibraryData.Models.ViewModels.Home.BrowseBooksViewModel
+
+<script src="~/js/browseBooks.js"></script>
+<div class="row">
+    <div class="col-xs-12">
+        <form asp-controller="Home" asp-action="BrowseBooks" method="get">
+            <p>
+                <a style="color: inherit" data-toggle="collapse" href="#menu" aria-expanded="false" aria-controls="menu">
+                    <h4>Filtruj <span id="collapse-icon" class="fa fa-ellipsis-h"></span></h4>
+                </a>
+            </p>
+            <div class="collapse" id="menu">
+                <div class="form-row">
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <label asp-for="Title"></label>
+                            <input asp-for="Title" class="form-control" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <label asp-for="PagesMin"></label>
+                            <input asp-for="PagesMin" class="form-control" />
+                            <span asp-validation-for="PagesMin" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <label asp-for="PagesMax"></label>
+                            <input asp-for="PagesMax" class="form-control" />
+                            <span asp-validation-for="PagesMax" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <label asp-for="Author"></label>
+                            <input asp-for="Author" class="form-control" />
+                            <span asp-validation-for="Author" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <label asp-for="Publisher"></label>
+                            <input asp-for="Publisher" class="form-control" />
+                            <span asp-validation-for="Publisher" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <label asp-for="ISBN"></label>
+                            <input asp-for="ISBN" class="form-control" />
+                            <span asp-validation-for="ISBN" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <label asp-for="Category"></label>
+                            <select asp-for="Category" class="form-control" id="category">
+                                @foreach (var i in Model.Categories)
+                                {
+                                    <option value="@i.Name">@i.Name</option>
+                                }
+                            </select>
+                            <span asp-validation-for="Category" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <label asp-for="Title"></label>
+                            <input asp-for="Title" class="form-control" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <button class="btn btn-primary" type="submit">Filtruj</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <h4>Lista książek</h4>
+    </div>
+</div>
+<div class="row justify-content-center">
+    @if (Model.Books != null)
+    {
+        @if (Model.Books.Count() > 0)
+        {
+            @foreach (var i in Model.Books)
+            {
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                    <div class="card" style="width: 100%">
+                        <img class="card-img-top" src="~/images/BookCovering/@i.CoveringPath" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">@i.Title</h5>
+                            <p class="card-text">Autor: @i.Author</p>
+                            <p class="card-text">Katgoria: @i.Category.Name</p>
+                            <a href="#" class="btn btn-primary">Szczegóły</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    }
+</div>
