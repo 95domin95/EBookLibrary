@@ -1,6 +1,7 @@
 ﻿using EBookLibraryData;
 using EBookLibraryData.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -144,7 +145,8 @@ namespace EBookLibraryServices
 
         public Book GetById(int id)
         {
-            return _context.Books.Where(b => b.BookId.Equals(id)).FirstOrDefault();
+            return _context.Books.Where(b => b.BookId.Equals(id))
+                .Include(b => b.Category).Include(b => b.Publisher).FirstOrDefault();
         }
 
         public int? GetISBN(int id)

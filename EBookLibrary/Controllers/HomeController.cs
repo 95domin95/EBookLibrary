@@ -17,6 +17,7 @@ namespace EBookLibrary.Controllers
         {
             _manage = manage;
         }
+
         public IActionResult Index()
         {
             return View();
@@ -28,6 +29,21 @@ namespace EBookLibrary.Controllers
             {
                 Categories = _manage.GetAllCategories()
             });
+        }
+
+        [HttpPost]
+        public IActionResult BookPreview(int id)
+        {
+            var book = _manage.GetById(id);
+
+            if (book != default(Book))
+            {
+                return View(new BookPreviewViewModel
+                {
+                    Book = book
+                });
+            }
+            else return new NotFoundResult();
         }
 
         [HttpGet]

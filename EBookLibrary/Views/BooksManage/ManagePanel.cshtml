@@ -136,10 +136,10 @@
                             <p class="card-text">Autor: @i.Author</p>
                             <p class="card-text">Katgoria: @i.Category.Name</p>
                             <div class="float-left pl-1">
-                                <form asp-controller="Home" asp-action="BookView" method="post">
-                                    <button class="btn btn-info" name="id" value="@i.BookId">
+                                <form asp-controller="Home" asp-action="BookPreview" method="post">
+                                    <Button type="submit" class="btn btn-primary" name="id" value="@i.BookId">
                                         <span class="fa fa-info"></span>
-                                    </button>
+                                    </Button>
                                 </form>
                             </div>
                             <div class="float-left pl-1">

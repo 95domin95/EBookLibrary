@@ -1,0 +1,17 @@
+﻿@model EBookLibraryData.Models.ViewModels.Home.BookPreviewViewModel
+
+<div class="row">
+    <div class="col-xs-12 col-sm-6">
+        <img class="card-img-top" src="~/images/BookCovering/@Model.Book.CoveringPath" alt="Okładka"/>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+        <h4>@Model.Book.Title</h4>
+        <p>Autor: @Model.Book.Author</p>
+        <p>Kategoria: @Model.Book.Category.Name</p>
+        @if (Model.Book.Publisher != null)
+        {
+            <p>Wydawca: @Model.Book.Publisher.Name</p>
+        }
+        <p>Ilość stron: @Model.Book.Pages</p>
+    </div>
+</div>
