@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using EBookLibraryData.Models.ViewModels.Shared;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,9 +7,8 @@ using System.Text;
 
 namespace EBookLibraryData.Models.ViewModels.BooksManage
 {
-    public class ManagePanelViewModel
+    public class ManagePanelViewModel : Pagination
     {
-        [RegularExpression("([0-9]+)")]
         [Display(Name = "Id Książki")]
         public int? Id { get; set; }
         [Display(Name = "Typ Operacji")]

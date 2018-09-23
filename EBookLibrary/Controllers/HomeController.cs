@@ -54,6 +54,26 @@ namespace EBookLibrary.Controllers
 
             model.Categories = _manage.GetAllCategories();
 
+            var elementsCount = model.Books.Count();
+
+            var allPagesCount = elementsCount / model.ElementsOnPage;
+
+            var elementsToTake = model.ElementsOnPage;
+
+            if (elementsCount % model.ElementsOnPage !=0) allPagesCount++;
+            if (model.Page < 1) model.Page = 1;
+            if (model.Page > allPagesCount) model.Page = model.AllPagesCount;
+            model.AllPagesCount = allPagesCount;
+            if (model.Page.Equals(model.AllPagesCount))
+            {
+                elementsToTake = elementsCount - ((model.AllPagesCount - 1) * model.ElementsOnPage);
+            }
+            if(elementsCount > 0)
+            {
+                model.Books = model.Books.Skip((model.Page - 1) * model.ElementsOnPage).Take(elementsToTake);
+            }
+            else model.AnyElements = false;
+
             return View(model);
         }
 

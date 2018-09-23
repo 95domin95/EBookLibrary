@@ -1,9 +1,10 @@
 ﻿@model EBookLibraryData.Models.ViewModels.Home.BrowseBooksViewModel
 
 <script src="~/js/browseBooks.js"></script>
+<script src="~/js/pagination.js"></script>
 <div class="row">
     <div class="col-xs-12">
-        <form asp-controller="Home" asp-action="BrowseBooks" method="get">
+        <form asp-controller="Home" asp-action="BrowseBooks" method="get" id="browse-books-form">
             <p>
                 <a style="color: inherit" data-toggle="collapse" href="#menu" aria-expanded="false" aria-controls="menu">
                     <h4>Filtruj <span id="collapse-icon" class="fa fa-ellipsis-h"></span></h4>
@@ -20,9 +21,9 @@
                     </div>
                     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
                         <div class="form-group">
-                            <label asp-for="PagesMin"></label>
-                            <input asp-for="PagesMin" class="form-control" />
-                            <span asp-validation-for="PagesMin" class="text-danger"></span>
+                            <label asp-for="ElementsOnPage"></label>
+                            <input asp-for="ElementsOnPage" class="form-control" />
+                            <span asp-validation-for="ElementsOnPage" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
@@ -113,4 +114,34 @@
             }
         }
     }
+</div>
+<div class="row justify-content-center mt-4">
+    <div class="col-xs-12">
+        @{
+            var next = Model.Page + 1;
+            var prev = Model.Page - 1;
+            if (next > Model.AllPagesCount)
+            {
+                next = Model.AllPagesCount;
+            }
+            if (prev < 1)
+            {
+                prev = 1;
+            }
+        }
+        <ul class="pagination">
+            <li>
+                <button class="btn btn-default" id="prev-btn" value="@prev" form="browse-books-form">
+                    <span class="fa fa-angle-left"></span> Poprzednia
+                </button>
+            </li>
+            <li class="pl-1 pr-2"><input asp-for="Page" class="form-control" style="width: 96px" id="page-input" step="1" form="browse-books-form" /></li>
+            <li>z<button class="btn btn-link" id="max-page" value="@Model.AllPagesCount" form="browse-books-form">@Model.AllPagesCount</button></li>
+            <li>
+                <button class="btn btn-default" id="next-btn" value="@next" form="browse-books-form">
+                    Następna <span class="fa fa-angle-right"></span>
+                </button>
+            </li>
+        </ul>
+    </div>
 </div>
