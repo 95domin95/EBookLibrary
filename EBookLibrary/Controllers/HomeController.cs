@@ -54,7 +54,12 @@ namespace EBookLibrary.Controllers
 
             model.Categories = _manage.GetAllCategories();
 
-            var elementsCount = model.Books.Count();
+            var elementsCount = 0;
+
+            if (!(model.Books is null))
+            {
+                elementsCount = model.Books.Count();
+            }
 
             var allPagesCount = elementsCount / model.ElementsOnPage;
 
@@ -73,7 +78,10 @@ namespace EBookLibrary.Controllers
                 model.Books = model.Books.Skip((model.Page - 1) * model.ElementsOnPage).Take(elementsToTake);
             }
             else model.AnyElements = false;
-
+            if(elementsCount <= model.ElementsOnPage)
+            {
+                model.MoreThanOnePage = false;
+            }
             return View(model);
         }
 

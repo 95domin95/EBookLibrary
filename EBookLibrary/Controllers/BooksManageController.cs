@@ -75,10 +75,16 @@ namespace EBookLibrary.Controllers
                 case "select":
                     if (model.Id == null||model.Id.Equals(String.Empty))
                     {
+                        model.BookSearched = true;
                         model.Books = _manage.GetBooks(model.Title, model.ISBN, model.Author,
                             model.PagesMin, model.PagesMax, model.Publisher, model.Category);
 
-                        var elementsCount = model.Books.Count();
+                        var elementsCount = 0;
+
+                        if (!(model.Books is null))
+                        {
+                            elementsCount = model.Books.Count();
+                        }
 
                         var allPagesCount = elementsCount / model.ElementsOnPage;
 
@@ -95,6 +101,11 @@ namespace EBookLibrary.Controllers
                         if (elementsCount > 0)
                         {
                             model.Books = model.Books.Skip((model.Page - 1) * model.ElementsOnPage).Take(elementsToTake);
+                        }
+                        else model.AnyElements = false;
+                        if (elementsCount <= model.ElementsOnPage)
+                        {
+                            model.MoreThanOnePage = false;
                         }
                         else model.AnyElements = false;
                     }

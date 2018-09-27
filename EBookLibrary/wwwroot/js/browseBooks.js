@@ -5,7 +5,7 @@
     var menu = $("#menu");
 
     menu.on("show.bs.collapse", () => {
-        collapseIcon.style.visibility  = "hidden";
+        collapseIcon.style.visibility = "hidden";
     });
 
     menu.on("hide.bs.collapse", () => {

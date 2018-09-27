@@ -38,6 +38,7 @@ namespace EBookLibraryData.Models.ViewModels.BooksManage
         [Display(Name = "Okładka")]
         public IFormFile BookCovering { get; set; }
         [Display(Name = "Książka")]
+        public bool BookSearched { get; set; } = false;
         public IFormFile Book { get; set; }
         public IEnumerable<Book> Books { get; set; }
         public IEnumerable<Category> Categories { get; set; }

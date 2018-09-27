@@ -6,11 +6,11 @@
     <div class="col-xs-12">
         <form asp-controller="Home" asp-action="BrowseBooks" method="get" id="browse-books-form">
             <p>
-                <a style="color: inherit" data-toggle="collapse" href="#menu" aria-expanded="false" aria-controls="menu">
-                    <h4>Filtruj <span id="collapse-icon" class="fa fa-ellipsis-h"></span></h4>
+                <a style="color: inherit" data-toggle="collapse" href="#menu" aria-expanded="true" aria-controls="menu">
+                    <h4>Filtruj <span id="collapse-icon" class="fa fa-ellipsis-h" style="visibility: hidden"></span></h4>
                 </a>
             </p>
-            <div class="collapse" id="menu">
+            <div class="collapse show" id="menu">
                 <div class="form-row">
                     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
                         <div class="form-group">
@@ -24,13 +24,6 @@
                             <label asp-for="ElementsOnPage"></label>
                             <input asp-for="ElementsOnPage" class="form-control" />
                             <span asp-validation-for="ElementsOnPage" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                        <div class="form-group">
-                            <label asp-for="PagesMax"></label>
-                            <input asp-for="PagesMax" class="form-control" />
-                            <span asp-validation-for="PagesMax" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
@@ -71,6 +64,20 @@
                             <label asp-for="Title"></label>
                             <input asp-for="Title" class="form-control" />
                             <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <label>Ilość stron</label>
+                        <div class="form-group">
+                            <div class='multi-range' data-lbound='0' data-ubound='10000'>
+                                <hr />
+                                <input type='range'
+                                       min='0' max='9999' step='1' value='1' class="double-input"
+                                       oninput='this.parentNode.dataset.lbound=this.value;' asp-for="PagesMin" />
+                                <input type='range'
+                                       min='1' max='10000' step='1' value='10000' class="double-input"
+                                       oninput='this.parentNode.dataset.ubound=this.value;' asp-for="PagesMax" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -115,33 +122,50 @@
         }
     }
 </div>
-<div class="row justify-content-center mt-4">
-    <div class="col-xs-12">
-        @{
-            var next = Model.Page + 1;
-            var prev = Model.Page - 1;
-            if (next > Model.AllPagesCount)
-            {
-                next = Model.AllPagesCount;
-            }
-            if (prev < 1)
-            {
-                prev = 1;
-            }
-        }
-        <ul class="pagination">
-            <li>
-                <button class="btn btn-default" id="prev-btn" value="@prev" form="browse-books-form">
-                    <span class="fa fa-angle-left"></span> Poprzednia
-                </button>
-            </li>
-            <li class="pl-1 pr-2"><input asp-for="Page" class="form-control" style="width: 96px" id="page-input" step="1" form="browse-books-form" /></li>
-            <li>z<button class="btn btn-link" id="max-page" value="@Model.AllPagesCount" form="browse-books-form">@Model.AllPagesCount</button></li>
-            <li>
-                <button class="btn btn-default" id="next-btn" value="@next" form="browse-books-form">
-                    Następna <span class="fa fa-angle-right"></span>
-                </button>
-            </li>
-        </ul>
+@if (Model.AnyElements)
+{
+    @if (Model.MoreThanOnePage)
+    {
+        <div class="row justify-content-center mt-4">
+            <div class="col-xs-12">
+                @{
+                    var next = Model.Page + 1;
+                    var prev = Model.Page - 1;
+                    if (next > Model.AllPagesCount)
+                    {
+                        next = Model.AllPagesCount;
+                    }
+                    if (prev < 1)
+                    {
+                        prev = 1;
+                    }
+                }
+                <ul class="pagination">
+                    <li>
+                        <button class="btn btn-default" id="prev-btn" value="@prev" form="browse-books-form">
+                            <span class="fa fa-angle-left"></span> Poprzednia
+                        </button>
+                    </li>
+                    <li class="pl-1 pr-2"><input asp-for="Page" class="form-control" style="width: 96px" id="page-input" step="1" form="browse-books-form" /></li>
+                    <li>z<button class="btn btn-link" id="max-page" value="@Model.AllPagesCount" form="browse-books-form">@Model.AllPagesCount</button></li>
+                    <li>
+                        <button class="btn btn-default" id="next-btn" value="@next" form="browse-books-form">
+                            Następna <span class="fa fa-angle-right"></span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="alert alert-info" role="alert">
+        @Model.NoElementsMessage
     </div>
-</div>
+}
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+
