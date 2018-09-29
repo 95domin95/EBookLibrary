@@ -1,8 +1,9 @@
 ﻿@model EBookLibraryData.Models.ViewModels.BooksManage.ManagePanelViewModel
 <script src="~/js/managePanel.js"></script>
+<script src="~/js/pagination.js"></script>
 <div class="row">
     <div class="col-xs-12">
-        <form enctype="multipart/form-data" asp-controller="BooksManage" asp-action="ManagePanel" method="post">
+        <form enctype="multipart/form-data" asp-controller="BooksManage" asp-action="ManagePanel" method="post" id="manage-books-form">
             <h4>Zarządzaj</h4>
             <div class="form-row">
                 <div class="col-xs-12 col-sm-6">
@@ -178,14 +179,14 @@
                     }
                     <ul class="pagination">
                         <li>
-                            <button class="btn btn-default" id="prev-btn" value="@prev" form="browse-books-form">
+                            <button class="btn btn-default" id="prev-btn" value="@prev" form="manage-books-form">
                                 <span class="fa fa-angle-left"></span> Poprzednia
                             </button>
                         </li>
-                        <li class="pl-1 pr-2"><input asp-for="Page" class="form-control" style="width: 96px" id="page-input" step="1" form="browse-books-form" /></li>
-                        <li>z<button class="btn btn-link" id="max-page" value="@Model.AllPagesCount" form="browse-books-form">@Model.AllPagesCount</button></li>
+                        <li class="pl-1 pr-2"><input asp-for="Page" class="form-control" style="width: 96px" id="page-input" step="1" form="manage-books-form" /></li>
+                        <li>z<button class="btn btn-link" id="max-page" value="@Model.AllPagesCount" form="manage-books-form">@Model.AllPagesCount</button></li>
                         <li>
-                            <button class="btn btn-default" id="next-btn" value="@next" form="browse-books-form">
+                            <button class="btn btn-default" id="next-btn" value="@next" form="manage-books-form">
                                 Następna <span class="fa fa-angle-right"></span>
                             </button>
                         </li>

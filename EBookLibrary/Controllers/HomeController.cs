@@ -76,6 +76,7 @@ namespace EBookLibrary.Controllers
             if(elementsCount > 0)
             {
                 model.Books = model.Books.Skip((model.Page - 1) * model.ElementsOnPage).Take(elementsToTake);
+                model.AnyElements = true;
             }
             else model.AnyElements = false;
             if(elementsCount <= model.ElementsOnPage)
