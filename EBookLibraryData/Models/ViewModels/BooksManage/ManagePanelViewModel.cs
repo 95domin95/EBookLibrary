@@ -9,6 +9,12 @@ namespace EBookLibraryData.Models.ViewModels.BooksManage
 {
     public class ManagePanelViewModel : Pagination
     {
+        public List<string> Errors = new List<string>
+        {
+            "add",
+            "remove",
+            "modify"
+        };
         [Display(Name = "Id Książki")]
         public int? Id { get; set; }
         [Display(Name = "Typ Operacji")]
@@ -39,6 +45,16 @@ namespace EBookLibraryData.Models.ViewModels.BooksManage
         public IFormFile BookCovering { get; set; }
         [Display(Name = "Książka")]
         public bool BookSearched { get; set; } = false;
+        public bool BookModified { get; set; } = false;
+        public bool BookRemoved { get; set; } = false;
+        public bool BookAdded { get; set; } = false;
+        public string OperationErrorName { get; set; } = string.Empty;
+        public string BookAddedMessageSuccess { get; set; } = "Nowa książka została dodana.";
+        public string BookRemovedMessageSuccess { get; set; } = "Książka została usunięta";
+        public string BookModifiedMessageSuccess { get; set; } = "Dane książki zostały zmienione.";
+        public string BookAddedMessageError { get; set; } = "Nie udało się dodać książki o podanych paramaterach.";
+        public string BookRemovedMessageError { get; set; } = "Nie udało się usunąć książki.";
+        public string BookModifiedMessageError { get; set; } = "Dane książki nie zostały zmienione.";
         public IFormFile Book { get; set; }
         public IEnumerable<Book> Books { get; set; }
         public IEnumerable<Category> Categories { get; set; }

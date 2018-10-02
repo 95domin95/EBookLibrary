@@ -27,6 +27,13 @@ namespace EBookLibrary.Controllers
             new string[]{ "Wyszukaj książki", "select" }
         };
 
+        public enum OperationError
+        {
+            add = 0,
+            remove = 1,
+            modify = 2
+        };
+
         [HttpGet]
         public IActionResult ManagePanel()
         {
@@ -39,9 +46,18 @@ namespace EBookLibrary.Controllers
         [HttpPost]
         public IActionResult DeleteBook(string id, ManagePanelViewModel model)
         {
-            int convertedId;
-            if(Int32.TryParse(id, out convertedId))
-            _manage.DeleteById(convertedId);
+            if (!(model.Id == null || model.Id.Equals(string.Empty)))
+            {
+                if (!_manage.DeleteById((int)model.Id))
+                {
+                    model.OperationErrorName = model.Errors.ElementAt((int)OperationError.remove);
+                }
+            }
+            else model.OperationErrorName = model.Errors.ElementAt((int)OperationError.remove);
+            model.BookRemoved = true;
+            //int convertedId;
+            //if(Int32.TryParse(id, out convertedId))
+            //_manage.DeleteById(convertedId);
 
             return RedirectToAction("ManagePanel", model);
         }
@@ -50,7 +66,11 @@ namespace EBookLibrary.Controllers
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> ManagePanel(ManagePanelViewModel model)
         {
-            ViewData["message"] = String.Empty;
+            model.BookAdded = false;
+            model.BookModified = false;
+            model.BookRemoved = false;
+            model.BookSearched = false;
+            model.OperationErrorName = string.Empty;
 
             switch(model.OperationType)
             {
@@ -59,21 +79,31 @@ namespace EBookLibrary.Controllers
                         model.Author, model.Publisher, model.Category,
                         model.Book, model.BookCovering))
                     {
-                        ViewData["message"] = "Nie udało się dodać książki.";
+                        model.OperationErrorName = model.Errors.ElementAt((int)OperationError.add);
                     }
+                    model.BookAdded = true;
                     break;
                 case "update":
-                    _manage.UpdateById(model.Id, model.Title, model.ISBN, 
-                        model.Author, model.Pages, model.Publisher, model.Category);
+                    if(!_manage.UpdateById(model.Id, model.Title, model.ISBN, 
+                        model.Author, model.Pages, model.Publisher, model.Category))
+                    {
+                        model.OperationErrorName = model.Errors.ElementAt((int)OperationError.modify);
+                    }
+                    model.BookModified = true;
                     break;
                 case "delete":
-                    if(!(model.Id == null||model.Id.Equals(String.Empty)))
+                    if(!(model.Id == null||model.Id.Equals(string.Empty)))
                     {
-                        _manage.DeleteById((int)model.Id);
+                        if(!_manage.DeleteById((int)model.Id))
+                        {
+                            model.OperationErrorName = model.Errors.ElementAt((int)OperationError.remove);
+                        }
                     }
+                    else model.OperationErrorName = model.Errors.ElementAt((int)OperationError.remove);
+                    model.BookRemoved = true;
                     break;
                 case "select":
-                    if (model.Id == null||model.Id.Equals(String.Empty))
+                    if (model.Id == null||model.Id.Equals(string.Empty))
                     {
                         model.BookSearched = true;
                         model.Books = _manage.GetBooks(model.Title, model.ISBN, model.Author,
@@ -81,7 +111,7 @@ namespace EBookLibrary.Controllers
 
                         var elementsCount = 0;
 
-                        if (!(model.Books is null))
+                        if (!(model.Books == null))
                         {
                             elementsCount = model.Books.Count();
                         }
@@ -111,6 +141,7 @@ namespace EBookLibrary.Controllers
                     }
                     else
                     {
+                        model.BookSearched = true;
                         var book = _manage.GetById((int)model.Id);
                         if(book != null)
                         {
@@ -118,6 +149,7 @@ namespace EBookLibrary.Controllers
                             {
                                 book
                             };
+                            model.AnyElements = true;
                         }
                     }
                     break;

@@ -1,5 +1,7 @@
 ﻿window.addEventListener("load", () => {
 
+    //TODO: Podpiąc funckje wyszarzającą inputy do windows load
+
     var book = document.getElementById("book");
 
     var bookCovering = document.getElementById("book-covering");

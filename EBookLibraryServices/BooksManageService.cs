@@ -82,7 +82,7 @@ namespace EBookLibraryServices
                 }
                 else
                 {
-                    return false;
+                    return true;
                 }
             }
             else
@@ -91,15 +91,24 @@ namespace EBookLibraryServices
             }
         }
 
-        public void DeleteById(int id)
+        public bool DeleteById(int id)
         {
-            var count = _context.Books.Where(b => b.BookId.Equals(id)).Count();
-
-            if(count > 0)
+            try
             {
-                _context.Books.Remove(GetById(id));
-                _context.SaveChanges();
+                var count = _context.Books.Where(b => b.BookId.Equals(id)).Count();
+
+                if (count > 0)
+                {
+                    _context.Books.Remove(GetById(id));
+                    _context.SaveChanges();
+                }
+                else return false;
             }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
         }
 
         public Publisher GetPublisher(string name)
@@ -197,41 +206,51 @@ namespace EBookLibraryServices
             return default(Publisher);
         }
 
-        public void UpdateById(int? id, string newTitle="", int? newISBN=null,
+        public bool UpdateById(int? id, string newTitle="", int? newISBN=null,
             string newAuthor="", int? newPages = null,
             string newPublisher="", string newCategory="")
         {
-            if(id != null)
+            try
             {
-                var book = _context.Books.Where(b => b.BookId.Equals(id)).FirstOrDefault();
-                
-                if(book != default(Book))
+                if (id != null)
                 {
-                    if (newTitle != "") book.Title = newTitle;
-                    if (newISBN != null) book.ISBN = newISBN;
-                    if (newAuthor != "") book.Author = newAuthor;
-                    if (newPages != null) book.Pages = newPages;
-                    if (newPublisher != "")
-                    {
-                        var publisher = _context.Publishers.Where(p => p.Name.Contains(newPublisher)).FirstOrDefault();
+                    var book = _context.Books.Where(b => b.BookId.Equals(id)).FirstOrDefault();
 
-                        if(publisher != default(Publisher))
-                        {
-                            book.Publisher = publisher;
-                        }
-                    }
-                    if(newCategory != "")
+                    if (book != default(Book))
                     {
-                        var category = _context.Categories.Where(c => c.Name.Contains(newCategory)).FirstOrDefault();
-
-                        if (category != default(Category))
+                        if (newTitle != "") book.Title = newTitle;
+                        if (newISBN != null) book.ISBN = newISBN;
+                        if (newAuthor != "") book.Author = newAuthor;
+                        if (newPages != null) book.Pages = newPages;
+                        if (newPublisher != "")
                         {
-                            book.Category = category;
+                            var publisher = _context.Publishers.Where(p => p.Name.Contains(newPublisher)).FirstOrDefault();
+
+                            if (publisher != default(Publisher))
+                            {
+                                book.Publisher = publisher;
+                            }
                         }
+                        if (newCategory != "")
+                        {
+                            var category = _context.Categories.Where(c => c.Name.Contains(newCategory)).FirstOrDefault();
+
+                            if (category != default(Category))
+                            {
+                                book.Category = category;
+                            }
+                        }
+                        _context.Update(book);
+                        _context.SaveChanges();
+                        return true;
                     }
-                    _context.Update(book);
-                    _context.SaveChanges();
+                    else return false;
                 }
+                else return false;
+            }
+            catch(Exception)
+            {
+                return false;
             }
         }
     }

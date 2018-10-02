@@ -49,6 +49,11 @@ namespace EBookLibrary.Controllers
         [HttpGet]
         public IActionResult BrowseBooks(BrowseBooksViewModel model)
         {
+            if(!model.PagesRangeSelected)
+            {
+                model.PagesMin = null;
+                model.PagesMax = null;
+            }
             model.Books = _manage.GetBooks(model.Title, model.ISBN, model.Author, model.PagesMin,
                 model.PagesMax, model.Publisher, model.Category);
 

@@ -16,8 +16,8 @@ namespace EBookLibraryData.Models
         Task<bool> Add(string Title, int? ISBN, int? Pages,
             string Author, string Publisher, string Category,
             IFormFile book, IFormFile bookCovering);
-        void DeleteById(int id);
-        void UpdateById(int? id, string newTitle, int? newISBN, string newAuthor,
+        bool DeleteById(int id);
+        bool UpdateById(int? id, string newTitle, int? newISBN, string newAuthor,
             int? newPages, string newPublisher, string newCategory);
         int? GetISBN(int id);
         string GetTitle(int id);

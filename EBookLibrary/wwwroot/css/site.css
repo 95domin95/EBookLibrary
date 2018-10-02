@@ -56,6 +56,7 @@ body > .container{
     position: absolute;
     bottom: 6px;
     left: 0;
+    opacity: 0.5;
 }
 
 .multi-range > input[type=range]:last-of-type {

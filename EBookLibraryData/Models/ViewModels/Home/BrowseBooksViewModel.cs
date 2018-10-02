@@ -29,6 +29,7 @@ namespace EBookLibraryData.Models.ViewModels.Home
         [Display(Name = "Kategoria")]
         public string Category { get; set; }
         [Display(Name = "Autor")]
+        public bool PagesRangeSelected { get; set; } = false;
         public string Author { get; set; }
         public IEnumerable<Book> Books { get; set; }
         public IEnumerable<Category> Categories { get; set; }
