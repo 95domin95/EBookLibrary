@@ -1,6 +1,8 @@
 ﻿@model EBookLibraryData.Models.ViewModels.BooksManage.ManagePanelViewModel
+
 <script src="~/js/managePanel.js"></script>
 <script src="~/js/pagination.js"></script>
+<script src="~/js/doubleInput.js"></script>
 <div class="row">
     <div class="col-xs-12">
         <form enctype="multipart/form-data" asp-controller="BooksManage" asp-action="ManagePanel" method="post" id="manage-books-form">
@@ -26,14 +28,14 @@
                         <span asp-validation-for="Book" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
                     <div class="form-group">
                         <label asp-for="Title"></label>
                         <input asp-for="Title" class="form-control" id="title" />
                         <span asp-validation-for="Title" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
                     <div class="form-group">
                         <label asp-for="OperationType"></label>
                         <select asp-for="OperationType" class="form-control" id="operation-types">
@@ -45,49 +47,35 @@
                         <span asp-validation-for="OperationType" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
                     <div class="form-group">
                         <label asp-for="Id"></label>
                         <input asp-for="Id" class="form-control" id="id" />
                         <span asp-validation-for="Id" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
                     <div class="form-group">
                         <label asp-for="ISBN"></label>
                         <input asp-for="ISBN" class="form-control" id="isbn" />
                         <span asp-validation-for="ISBN" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
                     <div class="form-group">
                         <label asp-for="Pages"></label>
                         <input asp-for="Pages" class="form-control" id="pages" />
                         <span asp-validation-for="Pages" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                    <div class="form-group">
-                        <label asp-for="PagesMax"></label>
-                        <input asp-for="PagesMax" class="form-control" id="pages-max" />
-                        <span asp-validation-for="PagesMax" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                    <div class="form-group">
-                        <label asp-for="PagesMin"></label>
-                        <input asp-for="PagesMin" class="form-control" id="pages-min" />
-                        <span asp-validation-for="PagesMin" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
                     <div class="form-group">
                         <label asp-for="Publisher"></label>
                         <input asp-for="Publisher" class="form-control" id="publisher" />
                         <span asp-validation-for="Publisher" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
                     <div class="form-group">
                         <label asp-for="Category"></label>
                         <select asp-for="Category" class="form-control" id="category">
@@ -99,11 +87,28 @@
                         <span asp-validation-for="Category" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
                     <div class="form-group">
                         <label asp-for="Author"></label>
                         <input asp-for="Author" class="form-control" id="author" />
                         <span asp-validation-for="Author" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                    <div>
+                        <label>Ilość stron</label>
+                        <input asp-for="PagesRangeSelected" id="page-range-checked" />
+                    </div>
+                    <div class="form-group">
+                        <div class='multi-range' data-lbound='0' data-ubound='10000'>
+                            <hr />
+                            <input type='range'
+                                   min='0' max='9999' step='1' value='1' class="double-input"
+                                   oninput='this.parentNode.dataset.lbound=this.value;' asp-for="PagesMin" id="double-input-min" disabled />
+                            <input type='range'
+                                   min='1' max='10000' step='1' value='10000' class="double-input"
+                                   oninput='this.parentNode.dataset.ubound=this.value;' asp-for="PagesMax" id="double-input-max" disabled />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -127,23 +132,23 @@
     {
         @if (Model.Books.Count() > 0)
         {
-            @foreach (var i in Model.Books)
-            {
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+            <div class="card-columns">
+                @foreach (var i in Model.Books)
+                {
                     <div class="card" style="width: 100%">
                         <img class="card-img-top" src="~/images/BookCovering/@i.CoveringPath" alt="Card image cap">
                         <div class="card-body">
                             <h5 class="card-title">@i.Title</h5>
                             <p class="card-text">Autor: @i.Author</p>
                             <p class="card-text">Katgoria: @i.Category.Name</p>
-                            <div class="float-left pl-1">
+                            <div class="float-left pl-1 pb-3">
                                 <form asp-controller="Home" asp-action="BookPreview" method="post">
                                     <Button type="submit" class="btn btn-primary" name="id" value="@i.BookId">
                                         <span class="fa fa-info"></span>
                                     </Button>
                                 </form>
                             </div>
-                            <div class="float-left pl-1">
+                            <div class="float-left pl-1 pb-3">
                                 <form asp-controller="BooksManage" asp-action="DeleteBook" method="post">
                                     <button class="btn btn-danger" name="id" value="@i.BookId">
                                         <span class="fa fa-trash"></span>
@@ -152,8 +157,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            }
+                }
+            </div>
         }
     }
 </div>

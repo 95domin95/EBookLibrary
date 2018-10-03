@@ -1,15 +1,30 @@
-﻿window.addEventListener("load", () => {
+﻿function disableRangeInput(doubleInputMin, doubleInputMax, pageRangeSelector) {
+    if (!pageRangeSelector.checked) {
+        doubleInputMin.disabled = true;
+        doubleInputMax.disabled = true;
+        doubleInputMin.style.opacity = "0.5";
+        doubleInputMax.style.opacity = "0.5";
+    }
+    else {
+        doubleInputMin.disabled = false;
+        doubleInputMax.disabled = false;
+        doubleInputMin.style.opacity = "1";
+        doubleInputMax.style.opacity = "1";
+    }
+}
 
-    //var doubleInput = document.getElementsByClassName("double-input");
+window.addEventListener("load", () => {
 
-    //doubleInput[0].addEventListener("input", () => {
-    //    doubleInput[0].parentNode.dataset.lbound = doubleInput[0].value;
-    //    alert(doubleInput[0].id);
-    //});
+    var doubleInputMin = document.getElementById("double-input-min");
 
-    //doubleInput[1].addEventListener("input", () => {
-    //    doubleInput[1].parentNode.dataset.lbound = doubleInput[1].value;
-    //    alert(doubleInput[1].id);
-    //});
+    var doubleInputMax = document.getElementById("double-input-max");
+
+    var pageRangeSelector = document.getElementById("page-range-checked");
+
+    disableRangeInput(doubleInputMin, doubleInputMax, pageRangeSelector);
+
+    pageRangeSelector.addEventListener("change", () => {
+        disableRangeInput(doubleInputMin, doubleInputMax, pageRangeSelector);
+    }, false);
 
 }, false);

@@ -48,6 +48,7 @@ namespace EBookLibraryData.Models.ViewModels.BooksManage
         public bool BookModified { get; set; } = false;
         public bool BookRemoved { get; set; } = false;
         public bool BookAdded { get; set; } = false;
+        public bool PagesRangeSelected { get; set; } = false;
         public string OperationErrorName { get; set; } = string.Empty;
         public string BookAddedMessageSuccess { get; set; } = "Nowa książka została dodana.";
         public string BookRemovedMessageSuccess { get; set; } = "Książka została usunięta";

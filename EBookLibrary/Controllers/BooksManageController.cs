@@ -71,8 +71,13 @@ namespace EBookLibrary.Controllers
             model.BookRemoved = false;
             model.BookSearched = false;
             model.OperationErrorName = string.Empty;
+            if (!model.PagesRangeSelected)
+            {
+                model.PagesMin = null;
+                model.PagesMax = null;
+            }
 
-            switch(model.OperationType)
+            switch (model.OperationType)
             {
                 case "add":
                     if (!await _manage.Add(model.Title, model.ISBN, model.Pages,
