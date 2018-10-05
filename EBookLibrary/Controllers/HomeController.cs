@@ -20,7 +20,12 @@ namespace EBookLibrary.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(new IndexViewModel());
+        }
+        [HttpGet]
+        public IActionResult Index(IndexViewModel model)
+        {
+            return View(model);
         }
 
         public IActionResult BrowseBooks()
@@ -53,6 +58,14 @@ namespace EBookLibrary.Controllers
             {
                 model.PagesMin = null;
                 model.PagesMax = null;
+            }
+            if (model.Category == null)
+            {
+                var firstCategory = _manage.GetAllCategories().FirstOrDefault();
+                if (firstCategory != default(Category))
+                {
+                    model.Category = firstCategory.Name;
+                }
             }
             model.Books = _manage.GetBooks(model.Title, model.ISBN, model.Author, model.PagesMin,
                 model.PagesMax, model.Publisher, model.Category);

@@ -111,6 +111,16 @@ namespace EBookLibrary.Controllers
                     if (model.Id == null||model.Id.Equals(string.Empty))
                     {
                         model.BookSearched = true;
+
+                        if (model.Category == null)
+                        {
+                            var firstCategory = _manage.GetAllCategories().FirstOrDefault();
+                            if (firstCategory != default(Category))
+                            {
+                                model.Category = firstCategory.Name;
+                            }
+                        }
+
                         model.Books = _manage.GetBooks(model.Title, model.ISBN, model.Author,
                             model.PagesMin, model.PagesMax, model.Publisher, model.Category);
 

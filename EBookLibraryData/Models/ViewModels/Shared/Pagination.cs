@@ -9,6 +9,7 @@ namespace EBookLibraryData.Models.ViewModels.Shared
     {
         [RegularExpression("([0-9]+)")]
         public int Page { get; set; } = 1;
+        [Display(Name = "Ilość elementów na stronie")]
         public int ElementsOnPage { get; set; } = 12;
         public int AllPagesCount { get; set; } = 0;
         public bool AnyElements { get; set; } = false;

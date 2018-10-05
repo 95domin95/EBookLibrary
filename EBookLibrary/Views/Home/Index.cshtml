@@ -1,1 +1,13 @@
-﻿
+﻿@model EBookLibraryData.Models.ViewModels.Home.IndexViewModel
+
+<div class="row">
+    @if (Model.LoggedOut)
+    {
+        <div class="col">
+            <div class="alert alert-success" role="alert">
+                Zostałeś wylogowany
+            </div>
+        </div>
+        Model.LoggedOut = false;
+    }
+</div>

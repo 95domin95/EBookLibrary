@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EBookLibraryData.Models;
 using EBookLibraryData.Models.ViewModels.Account;
+using EBookLibraryData.Models.ViewModels.Home;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -41,7 +42,11 @@ namespace EBookLibrary.Controllers
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
 
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            return RedirectToAction(nameof(HomeController.Index),
+                "Home",
+                new IndexViewModel {
+                    LoggedOut = true
+                });
         }
 
         [HttpPost]

@@ -1,24 +1,28 @@
 ﻿@model EBookLibraryData.Models.ViewModels.Home.BookPreviewViewModel
 
-<script src="~/js/test.js"></script>
-
-<div class="row">
-    <div class="col-xs-12 col-sm-6">
-        <img class="card-img-top" src="~/images/BookCovering/@Model.Book.CoveringPath" alt="Okładka"/>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-        <h4>@Model.Book.Title</h4>
-        <p>Autor: @Model.Book.Author</p>
-        <p>Kategoria: @Model.Book.Category.Name</p>
-        @if (Model.Book.Publisher != null)
-        {
-            <p>Wydawca: @Model.Book.Publisher.Name</p>
-        }
-        <p>Ilość stron: @Model.Book.Pages</p>
-        <a class="btn btn-success" href="~/lib/pdfjs-1.9.426-dist/web/viewer.html?file=/images/Book/@Model.Book.Path">
-            Czytaj 
-            <span class="fa fa-book-open">
-            </span>
-        </a>
+<div class="card">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <div class="card-img-top">
+                <img class="card-img-top" src="~/images/BookCovering/@Model.Book.CoveringPath" alt="Okładka" />
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="card-img-bottom">
+                <h4>@Model.Book.Title</h4>
+                <p>Autor: @Model.Book.Author</p>
+                <p>Kategoria: @Model.Book.Category.Name</p>
+                @if (Model.Book.Publisher != null)
+                {
+                    <p>Wydawca: @Model.Book.Publisher.Name</p>
+                }
+                <p>Ilość stron: @Model.Book.Pages</p>
+                <a class="btn btn-success" href="~/lib/pdfjs-1.9.426-dist/web/viewer.html?file=/images/Book/@Model.Book.Path">
+                    Czytaj
+                    <span class="fa fa-book-open">
+                    </span>
+                </a>
+            </div>
+        </div>
     </div>
 </div>

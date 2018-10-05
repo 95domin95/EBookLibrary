@@ -11,15 +11,15 @@
             @if (User.IsInRole("Admin"))
             {
                 <li role="separator" class="divider"></li>
-                <li><a class="dropdown-item" asp-controller="BooksManage" asp-action="ManagePanel">Zarzadzaj książkami</a></li>
+                <li><a class="dropdown-item" asp-controller="BooksManage" asp-action="ManagePanel"><i class="fa fa-cog"></i> Zarzadzaj książkami</a></li>
             }
             <li class="dropdown-divider"></li>
-            <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">Wyloguj</a></li>
+            <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout"><i class="fa fa-power-off"></i> Wyloguj</a></li>
         </ul>
     </li>
 }
 else
 {
-    <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Login">Zaloguj</a></li>
-    <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Register">Rejestracja</a></li>
+    <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Login"><i class="fa fa-sign-in-alt"></i> Zaloguj</a></li>
+    <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Register"><i class="fa fa-user-plus"></i> Rejestracja</a></li>
 }
