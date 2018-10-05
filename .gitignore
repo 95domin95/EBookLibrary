@@ -261,3 +261,5 @@ __pycache__/
 *.pyc
 /EBookLibrary/wwwroot/images/Book
 /EBookLibrary/wwwroot/images/BookCovering
+/EBookLibrary/wwwroot/lib/pdfjs-1.9.426-dist
+/EBookLibrary/wwwroot/lib/vue

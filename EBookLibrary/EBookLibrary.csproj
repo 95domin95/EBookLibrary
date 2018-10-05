@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\js\test.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\images\Icons-master\LICENSE" />
     <None Include="wwwroot\images\Icons-master\picol_latest_prerelease_svg\accept.svg" />
     <None Include="wwwroot\images\Icons-master\picol_latest_prerelease_svg\adressbook.svg" />
@@ -584,11 +580,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\Book\" />
-    <Folder Include="wwwroot\lib\vue\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <TypeScriptCompile Include="wwwroot\js\test.ts" />
   </ItemGroup>
 
 </Project>

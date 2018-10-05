@@ -15,10 +15,10 @@
             <p>Wydawca: @Model.Book.Publisher.Name</p>
         }
         <p>Ilość stron: @Model.Book.Pages</p>
-        <button class="btn btn-success">
+        <a class="btn btn-success" href="~/lib/pdfjs-1.9.426-dist/web/viewer.html?file=/images/Book/@Model.Book.Path">
             Czytaj 
             <span class="fa fa-book-open">
             </span>
-        </button>
+        </a>
     </div>
 </div>
