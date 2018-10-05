@@ -1,5 +1,7 @@
 ﻿@model EBookLibraryData.Models.ViewModels.Home.BookPreviewViewModel
 
+<script src="~/js/test.js"></script>
+
 <div class="row">
     <div class="col-xs-12 col-sm-6">
         <img class="card-img-top" src="~/images/BookCovering/@Model.Book.CoveringPath" alt="Okładka"/>
@@ -13,5 +15,10 @@
             <p>Wydawca: @Model.Book.Publisher.Name</p>
         }
         <p>Ilość stron: @Model.Book.Pages</p>
+        <button class="btn btn-success">
+            Czytaj 
+            <span class="fa fa-book-open">
+            </span>
+        </button>
     </div>
 </div>

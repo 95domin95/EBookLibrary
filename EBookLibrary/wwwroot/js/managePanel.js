@@ -15,19 +15,19 @@
     var operation = {
         "add": [
             "id",
-            "pages-min",
-            "pages-max"
+            "double-input-min",
+            "double-input-max"
         ],
         "update": [
-            "pages-min",
-            "pages-max"
+            "double-input-min",
+            "double-input-max"
         ],
         "delete": [
             "isbn",
             "title",
             "pages",
-            "pages-min",
-            "pages-max",
+            "double-input-min",
+            "double-input-max",
             "publisher",
             "category",
             "author",
@@ -45,8 +45,8 @@
         "isbn",
         "title",
         "pages",
-        "pages-min",
-        "pages-max",
+        "double-input-min",
+        "double-input-max",
         "publisher",
         "category",
         "author",
@@ -56,6 +56,8 @@
 
     operationSelect.addEventListener("change", () => {
         for (i in formField) {
+            var test = document.getElementById(formField[i]);
+            console.log(test);
             document.getElementById(formField[i]).disabled = false;
         }
         for (i in operation[operationSelect.value]) {
@@ -81,7 +83,7 @@
     }, false);
 
     book.addEventListener("change", e => {
-        var preview = document.getElementById("book-image");
+        var previev = document.getElementById("book-image");
         var file = e.target.files[0];
         var reader = new FileReader();
 
