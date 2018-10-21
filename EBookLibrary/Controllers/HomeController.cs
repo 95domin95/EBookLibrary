@@ -42,6 +42,18 @@ namespace EBookLibrary.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> ReturnBook(LoanViewModel model)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            model.BookRented = false;
+            _manage.RemoveUserLoan(user, _manage.GetById((int)model.BookId));
+            return RedirectToAction("BookPreview", new BookPreviewViewModel {
+                BookRented = false,
+                BookRent = false
+            });
+        }
+
+        [HttpPost]
         public async Task<IActionResult> LoanBook(LoanViewModel model)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
@@ -66,12 +78,15 @@ namespace EBookLibrary.Controllers
                     };
                     if (_manage.AddLoan(loan))
                     {
-                        return RedirectToAction("BookPreview", new BookPreviewViewModel
+                        if(_manage.DecrementBookCopy(book))
                         {
-                            BookId = model.BookId,
-                            BookRented = true,
-                            LoanError = true
-                        });
+                            return RedirectToAction("BookPreview", new BookPreviewViewModel
+                            {
+                                BookId = model.BookId,
+                                BookRented = true,
+                                LoanError = true
+                            });
+                        }
                     }
                 }
                 return RedirectToAction("BookPreview", new BookPreviewViewModel

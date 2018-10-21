@@ -99,8 +99,8 @@ namespace EBookLibrary
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            //RoleSeeder.SeedAsync(app.ApplicationServices).Wait();
-            //AdminAccountSeeder.SeedAsync(app.ApplicationServices).Wait();
+            RoleSeeder.SeedAsync(app.ApplicationServices).Wait();
+            AdminAccountSeeder.SeedAsync(app.ApplicationServices).Wait();
 
             app.UseMvc(routes =>
             {

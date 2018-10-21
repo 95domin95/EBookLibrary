@@ -23,6 +23,9 @@ namespace EBookLibraryData.Models
         bool AddLoan(Loan loan);
         bool UpdateById(int? id, string newTitle, int? newISBN, string newAuthor,
             int? newPages, string newPublisher, string newCategory);
+        bool DecrementBookCopy(Book book);
+        bool IncrementBookCopy(Book book);
+        bool RemoveUserLoan(ApplicationUser applicationUser, Book loanBook);
         int? GetISBN(int id);
         string GetTitle(int id);
         int? GetPages(int id);

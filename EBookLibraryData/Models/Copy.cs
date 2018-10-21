@@ -6,10 +6,11 @@ namespace EBookLibraryData.Models
 {
     public class Copy
     {
-        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public int CopyId { get; set; }
         public int BookId { get; set; }
+        [ForeignKey("BookId")]
         public Book Book { get; set; }
         public bool IsRented { get; set; } = false;
     }

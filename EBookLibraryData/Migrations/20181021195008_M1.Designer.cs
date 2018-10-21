@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EBookLibraryData.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20180821220118_RoleSeedv3")]
-    partial class RoleSeedv3
+    [Migration("20181021195008_M1")]
+    partial class M1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -78,23 +78,6 @@ namespace EBookLibraryData.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasData(
-                        new { Id = "admin", AccessFailedCount = 0, ConcurrencyStamp = "83d31de7-2234-43fc-b9ab-3af0db621550", Email = "admin@admin.com", EmailConfirmed = true, LockoutEnabled = false, NormalizedEmail = "ADMIN@ADMIN.COM", NormalizedUserName = "ADMIN", PhoneNumberConfirmed = false, SecurityStamp = "2ac56b91-fff8-43a2-918a-9af1d1417431", TwoFactorEnabled = false, UserName = "admin" }
-                    );
-                });
-
-            modelBuilder.Entity("EBookLibraryData.Models.Author", b =>
-                {
-                    b.Property<int>("AuthorId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("AuthorId");
-
-                    b.ToTable("Authors");
                 });
 
             modelBuilder.Entity("EBookLibraryData.Models.Book", b =>
@@ -103,59 +86,31 @@ namespace EBookLibraryData.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ISBN");
+                    b.Property<string>("Author");
 
-                    b.Property<int>("Pages");
+                    b.Property<int>("CategoryId");
+
+                    b.Property<int>("CopiesCount");
+
+                    b.Property<string>("CoveringPath");
+
+                    b.Property<int?>("ISBN");
+
+                    b.Property<int?>("Pages");
 
                     b.Property<string>("Path");
 
-                    b.Property<int>("PublisherId");
+                    b.Property<int?>("PublisherId");
 
                     b.Property<string>("Title");
 
                     b.HasKey("BookId");
 
+                    b.HasIndex("CategoryId");
+
                     b.HasIndex("PublisherId");
 
                     b.ToTable("Books");
-                });
-
-            modelBuilder.Entity("EBookLibraryData.Models.BookAuthor", b =>
-                {
-                    b.Property<int>("BookAuthorId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AuthorId");
-
-                    b.Property<int>("BookId");
-
-                    b.HasKey("BookAuthorId");
-
-                    b.HasIndex("AuthorId");
-
-                    b.HasIndex("BookId");
-
-                    b.ToTable("BookAuthors");
-                });
-
-            modelBuilder.Entity("EBookLibraryData.Models.BookCategory", b =>
-                {
-                    b.Property<int>("BookCategoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("BookId");
-
-                    b.Property<int>("CategoryId");
-
-                    b.HasKey("BookCategoryId");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("BookCategories");
                 });
 
             modelBuilder.Entity("EBookLibraryData.Models.Category", b =>
@@ -169,6 +124,14 @@ namespace EBookLibraryData.Migrations
                     b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new { CategoryId = 1, Name = "Science fiction" },
+                        new { CategoryId = 2, Name = "Satyry" },
+                        new { CategoryId = 3, Name = "Horrory" },
+                        new { CategoryId = 4, Name = "Przygodowe" },
+                        new { CategoryId = 5, Name = "Inne" }
+                    );
                 });
 
             modelBuilder.Entity("EBookLibraryData.Models.Copy", b =>
@@ -179,15 +142,11 @@ namespace EBookLibraryData.Migrations
 
                     b.Property<int>("BookId");
 
-                    b.Property<int>("UserId");
-
-                    b.Property<string>("UserId1");
+                    b.Property<bool>("IsRented");
 
                     b.HasKey("CopyId");
 
                     b.HasIndex("BookId");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("Copies");
                 });
@@ -200,17 +159,19 @@ namespace EBookLibraryData.Migrations
 
                     b.Property<int>("CopyId");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("LoanDurationDays");
 
-                    b.Property<string>("UserId1");
+                    b.Property<DateTime>("StartDate");
+
+                    b.Property<string>("UserId");
 
                     b.HasKey("LoanId");
 
                     b.HasIndex("CopyId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("Loan");
+                    b.ToTable("Loans");
                 });
 
             modelBuilder.Entity("EBookLibraryData.Models.Publisher", b =>
@@ -250,11 +211,6 @@ namespace EBookLibraryData.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new { Id = "admin", ConcurrencyStamp = "09260e22-36c1-4726-972e-07a1ea2e662f", Name = "admin", NormalizedName = "admin" },
-                        new { Id = "4d1da35f-9789-4363-afd2-e2a2d80a19f9", ConcurrencyStamp = "cc40d227-3a1c-4701-b2a4-3335e66ee0eb", Name = "user", NormalizedName = "user" }
-                    );
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -326,10 +282,6 @@ namespace EBookLibraryData.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
-
-                    b.HasData(
-                        new { UserId = "admin", RoleId = "admin" }
-                    );
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -349,36 +301,14 @@ namespace EBookLibraryData.Migrations
 
             modelBuilder.Entity("EBookLibraryData.Models.Book", b =>
                 {
-                    b.HasOne("EBookLibraryData.Models.Publisher", "Publisher")
-                        .WithMany("Books")
-                        .HasForeignKey("PublisherId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("EBookLibraryData.Models.BookAuthor", b =>
-                {
-                    b.HasOne("EBookLibraryData.Models.Author", "Author")
-                        .WithMany("BookAuthors")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("EBookLibraryData.Models.Book", "Book")
-                        .WithMany("BookAuthors")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("EBookLibraryData.Models.BookCategory", b =>
-                {
-                    b.HasOne("EBookLibraryData.Models.Book", "Book")
-                        .WithMany("BookCategory")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("EBookLibraryData.Models.Category", "Category")
-                        .WithMany("BookCategory")
+                        .WithMany("Books")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EBookLibraryData.Models.Publisher", "Publisher")
+                        .WithMany("Books")
+                        .HasForeignKey("PublisherId");
                 });
 
             modelBuilder.Entity("EBookLibraryData.Models.Copy", b =>
@@ -387,10 +317,6 @@ namespace EBookLibraryData.Migrations
                         .WithMany()
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("EBookLibraryData.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("EBookLibraryData.Models.Loan", b =>
@@ -402,7 +328,7 @@ namespace EBookLibraryData.Migrations
 
                     b.HasOne("EBookLibraryData.Models.ApplicationUser", "User")
                         .WithMany("Loans")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

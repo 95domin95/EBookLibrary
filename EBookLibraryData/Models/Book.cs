@@ -17,8 +17,11 @@ namespace EBookLibraryData.Models
         public string CoveringPath { get; set; }
         public string Author { get; set; }
         public int? PublisherId { get; set; }
+        [ForeignKey("PublisherId")]
         public Publisher Publisher { get; set; }
         public int CategoryId { get; set; }
+        [ForeignKey("CategoryId")]
         public Category Category { get; set; }
+        public IEnumerable<Copy> Copies { get; set; }
     }
 }

@@ -27,6 +27,13 @@
                             <span class="fa fa-book-open">
                             </span>
                         </a>
+                        <form asp-controller="Home" asp-action="RemoveUserLoan" method="post">
+                            <button class="btn btn-success" asp-controller="Home" asp-action="RemoveUserLoan" name="BookId" value="@Model.BookId">
+                                Zwróć
+                                <span class="fa fa-book-open">
+                                </span>
+                            </button>
+                        </form>
                     }
                     else
                     {

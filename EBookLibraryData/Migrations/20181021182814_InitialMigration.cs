@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EBookLibraryData.Migrations
 {
-    public partial class BaseDBStucture : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,21 +26,21 @@ namespace EBookLibraryData.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    AccessFailedCount = table.Column<int>(nullable: false),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(nullable: false),
                     Id = table.Column<string>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(nullable: false),
                     PasswordHash = table.Column<string>(nullable: true),
                     SecurityStamp = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    AccessFailedCount = table.Column<int>(nullable: false),
                     Adress = table.Column<string>(nullable: true),
                     City = table.Column<string>(nullable: true),
                     Country = table.Column<string>(nullable: true),
@@ -52,16 +52,16 @@ namespace EBookLibraryData.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Authors",
+                name: "Categories",
                 columns: table => new
                 {
-                    AuthorId = table.Column<int>(nullable: false)
+                    CategoryId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Authors", x => x.AuthorId);
+                    table.PrimaryKey("PK_Categories", x => x.CategoryId);
                 });
 
             migrationBuilder.CreateTable(
@@ -76,19 +76,6 @@ namespace EBookLibraryData.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Publishers", x => x.PublisherId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Subjects",
-                columns: table => new
-                {
-                    CategoryId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Subjects", x => x.CategoryId);
                 });
 
             migrationBuilder.CreateTable(
@@ -203,73 +190,31 @@ namespace EBookLibraryData.Migrations
                 {
                     BookId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ISBN = table.Column<int>(nullable: false),
+                    ISBN = table.Column<int>(nullable: true),
                     Title = table.Column<string>(nullable: true),
-                    Pages = table.Column<int>(nullable: false),
+                    Pages = table.Column<int>(nullable: true),
+                    CopiesCount = table.Column<int>(nullable: false),
                     Path = table.Column<string>(nullable: true),
-                    PublisherId = table.Column<int>(nullable: false)
+                    CoveringPath = table.Column<string>(nullable: true),
+                    Author = table.Column<string>(nullable: true),
+                    PublisherId = table.Column<int>(nullable: true),
+                    CategoryId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Books", x => x.BookId);
                     table.ForeignKey(
+                        name: "FK_Books_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "CategoryId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Books_Publishers_PublisherId",
                         column: x => x.PublisherId,
                         principalTable: "Publishers",
                         principalColumn: "PublisherId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BookAuthors",
-                columns: table => new
-                {
-                    BookAuthorId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    BookId = table.Column<int>(nullable: false),
-                    AuthorId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BookAuthors", x => x.BookAuthorId);
-                    table.ForeignKey(
-                        name: "FK_BookAuthors_Authors_AuthorId",
-                        column: x => x.AuthorId,
-                        principalTable: "Authors",
-                        principalColumn: "AuthorId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_BookAuthors_Books_BookId",
-                        column: x => x.BookId,
-                        principalTable: "Books",
-                        principalColumn: "BookId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BookCategories",
-                columns: table => new
-                {
-                    BookCategoryId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    BookId = table.Column<int>(nullable: false),
-                    CategoryId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BookCategories", x => x.BookCategoryId);
-                    table.ForeignKey(
-                        name: "FK_BookCategories_Books_BookId",
-                        column: x => x.BookId,
-                        principalTable: "Books",
-                        principalColumn: "BookId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_BookCategories_Subjects_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Subjects",
-                        principalColumn: "CategoryId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -279,8 +224,7 @@ namespace EBookLibraryData.Migrations
                     CopyId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     BookId = table.Column<int>(nullable: false),
-                    PatronId = table.Column<int>(nullable: false),
-                    PatronId1 = table.Column<string>(nullable: true)
+                    IsRented = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -291,39 +235,46 @@ namespace EBookLibraryData.Migrations
                         principalTable: "Books",
                         principalColumn: "BookId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Copies_AspNetUsers_PatronId1",
-                        column: x => x.PatronId1,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Loan",
+                name: "Loans",
                 columns: table => new
                 {
                     LoanId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    PatronId = table.Column<int>(nullable: false),
-                    PatronId1 = table.Column<string>(nullable: true),
-                    CopyId = table.Column<int>(nullable: false)
+                    UserId = table.Column<string>(nullable: true),
+                    CopyId = table.Column<int>(nullable: false),
+                    StartDate = table.Column<DateTime>(nullable: false),
+                    LoanDurationDays = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Loan", x => x.LoanId);
+                    table.PrimaryKey("PK_Loans", x => x.LoanId);
                     table.ForeignKey(
-                        name: "FK_Loan_Copies_CopyId",
+                        name: "FK_Loans_Copies_CopyId",
                         column: x => x.CopyId,
                         principalTable: "Copies",
                         principalColumn: "CopyId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Loan_AspNetUsers_PatronId1",
-                        column: x => x.PatronId1,
+                        name: "FK_Loans_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "CategoryId", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Science fiction" },
+                    { 2, "Satyry" },
+                    { 3, "Horrory" },
+                    { 4, "Przygodowe" },
+                    { 5, "Inne" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -366,23 +317,8 @@ namespace EBookLibraryData.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookAuthors_AuthorId",
-                table: "BookAuthors",
-                column: "AuthorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BookAuthors_BookId",
-                table: "BookAuthors",
-                column: "BookId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BookCategories_BookId",
-                table: "BookCategories",
-                column: "BookId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BookCategories_CategoryId",
-                table: "BookCategories",
+                name: "IX_Books_CategoryId",
+                table: "Books",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
@@ -396,19 +332,14 @@ namespace EBookLibraryData.Migrations
                 column: "BookId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Copies_PatronId1",
-                table: "Copies",
-                column: "PatronId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Loan_CopyId",
-                table: "Loan",
+                name: "IX_Loans_CopyId",
+                table: "Loans",
                 column: "CopyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Loan_PatronId1",
-                table: "Loan",
-                column: "PatronId1");
+                name: "IX_Loans_UserId",
+                table: "Loans",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -429,31 +360,22 @@ namespace EBookLibraryData.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "BookAuthors");
-
-            migrationBuilder.DropTable(
-                name: "BookCategories");
-
-            migrationBuilder.DropTable(
-                name: "Loan");
+                name: "Loans");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Authors");
-
-            migrationBuilder.DropTable(
-                name: "Subjects");
-
-            migrationBuilder.DropTable(
                 name: "Copies");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Books");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Publishers");

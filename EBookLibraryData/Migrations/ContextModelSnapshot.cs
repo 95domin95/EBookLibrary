@@ -312,7 +312,7 @@ namespace EBookLibraryData.Migrations
             modelBuilder.Entity("EBookLibraryData.Models.Copy", b =>
                 {
                     b.HasOne("EBookLibraryData.Models.Book", "Book")
-                        .WithMany()
+                        .WithMany("Copies")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

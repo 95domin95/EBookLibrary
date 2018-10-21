@@ -27,6 +27,8 @@ namespace EBookLibraryData
                 new Category { Name = "Horrory", CategoryId = 3 },
                 new Category { Name = "Przygodowe", CategoryId = 4 },
                 new Category { Name = "Inne", CategoryId = 5 });
+
+            builder.Entity<Copy>().Property(p => p.CopyId).UseSqlServerIdentityColumn();
         }
     }
 }

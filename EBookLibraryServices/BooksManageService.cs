@@ -58,7 +58,7 @@ namespace EBookLibraryServices
 
                 for(int i=0; i<copiesCount; i++)//zoptymalizować zrobic dodawanie wszystkich za jednym zamachem
                 {
-                    _context.Copies.Add(AddCopy(bookToAdd));
+                   AddCopy(bookToAdd, true, i==copiesCount-1);
                 }
 
                 var bookId = bookToAdd.BookId;
@@ -72,7 +72,7 @@ namespace EBookLibraryServices
                 savedBook.Path = bookFileName;
                 savedBook.CoveringPath = bookCoveringFileName;
 
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
 
                 if (!(await _file.UploadFile(book, bookFileName) && await _file.UploadFile(bookCovering, bookCoveringFileName)))
                 {
@@ -97,18 +97,17 @@ namespace EBookLibraryServices
             }
         }
 
-        public Copy AddCopy(Book book, bool isRented=true)
+        public Copy AddCopy(Book book, bool isRented=true, bool saveChanges=false)
         {
             try
             {
                 var copy = new Copy
                 {
                     Book = book,
-                    BookId = book.BookId,
                     IsRented = isRented
                 };
                 _context.Copies.Add(copy);
-                _context.SaveChanges();
+                if(saveChanges)_context.SaveChanges();
                 return copy;
             }
             catch(Exception e)
@@ -400,6 +399,72 @@ namespace EBookLibraryServices
             {
                 Console.WriteLine(e.Message);
                 return null;
+            }
+        }
+
+        public bool DecrementBookCopy(Book book)
+        {
+            try
+            {
+                var bookToUpdate = _context.Books.Where(b => b.BookId.Equals(book.BookId)).FirstOrDefault();
+                if (bookToUpdate != null)
+                {
+                    bookToUpdate.CopiesCount--;
+                    _context.SaveChanges();
+                    return true;
+                }
+                else return false;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
+        public bool IncrementBookCopy(Book book)
+        {
+            try
+            {
+                var bookToUpdate = _context.Books.Where(b => b.BookId.Equals(book.BookId)).FirstOrDefault();
+                if (bookToUpdate != null)
+                {
+                    bookToUpdate.CopiesCount++;
+                    _context.SaveChanges();
+                    return true;
+                }
+                else return false;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
+        public bool RemoveUserLoan(ApplicationUser applicationUser, Book loanBook)
+        {
+            try
+            {
+                var loanToRemove = (from loan in _context.Loans join user
+                                   in _context.ApplicationUsers on loan.UserId equals user.Id
+                                   join copy in _context.Copies on loan.CopyId equals copy.CopyId
+                                   join book in _context.Books on copy.BookId equals book.BookId
+                                   where applicationUser.Id.Equals(user.Id) && loanBook.BookId.Equals(book.BookId)
+                                   select loan).FirstOrDefault();
+
+                if (loanToRemove != null)
+                {
+                    _context.Remove(loanToRemove);
+                    _context.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
             }
         }
     }

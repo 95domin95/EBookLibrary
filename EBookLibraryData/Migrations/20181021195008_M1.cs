@@ -2,7 +2,7 @@
 
 namespace EBookLibraryData.Migrations
 {
-    public partial class ErrorFixed : Migration
+    public partial class M1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

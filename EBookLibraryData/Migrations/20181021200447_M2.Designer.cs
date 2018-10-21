@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EBookLibraryData.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20181020000506_FixedErrorsWithStartDate")]
-    partial class FixedErrorsWithStartDate
+    [Migration("20181021200447_M2")]
+    partial class M2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -144,13 +144,9 @@ namespace EBookLibraryData.Migrations
 
                     b.Property<bool>("IsRented");
 
-                    b.Property<string>("UserId");
-
                     b.HasKey("CopyId");
 
                     b.HasIndex("BookId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Copies");
                 });
@@ -318,13 +314,9 @@ namespace EBookLibraryData.Migrations
             modelBuilder.Entity("EBookLibraryData.Models.Copy", b =>
                 {
                     b.HasOne("EBookLibraryData.Models.Book", "Book")
-                        .WithMany()
+                        .WithMany("Copies")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("EBookLibraryData.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("EBookLibraryData.Models.Loan", b =>
