@@ -15,8 +15,12 @@ namespace EBookLibraryData.Models
         Publisher GetPublisher(string name);
         Task<bool> Add(string Title, int? ISBN, int? Pages,
             string Author, string Publisher, string Category,
-            IFormFile book, IFormFile bookCovering);
+            IFormFile book, IFormFile bookCovering, int copiesCount);
+        IEnumerable<Copy> GetBookCopies(Book book);
+        IEnumerable<Copy> GetAvailableBookCopies(Book book);
+        IEnumerable<Copy> GetUserLoanCopies(ApplicationUser user);
         bool DeleteById(int id);
+        bool AddLoan(Loan loan);
         bool UpdateById(int? id, string newTitle, int? newISBN, string newAuthor,
             int? newPages, string newPublisher, string newCategory);
         int? GetISBN(int id);

@@ -4,14 +4,16 @@ using EBookLibraryData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EBookLibraryData.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20181009093753_CopiesCountAdded")]
+    partial class CopiesCountAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,11 +142,15 @@ namespace EBookLibraryData.Migrations
 
                     b.Property<int>("BookId");
 
-                    b.Property<bool>("IsRented");
+                    b.Property<int>("UserId");
+
+                    b.Property<string>("UserId1");
 
                     b.HasKey("CopyId");
 
                     b.HasIndex("BookId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Copies");
                 });
@@ -157,19 +163,17 @@ namespace EBookLibraryData.Migrations
 
                     b.Property<int>("CopyId");
 
-                    b.Property<int>("LoanDurationDays");
+                    b.Property<int>("UserId");
 
-                    b.Property<DateTime>("StartDate");
-
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId1");
 
                     b.HasKey("LoanId");
 
                     b.HasIndex("CopyId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
-                    b.ToTable("Loans");
+                    b.ToTable("Loan");
                 });
 
             modelBuilder.Entity("EBookLibraryData.Models.Publisher", b =>
@@ -315,6 +319,10 @@ namespace EBookLibraryData.Migrations
                         .WithMany()
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EBookLibraryData.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("EBookLibraryData.Models.Loan", b =>
@@ -326,7 +334,7 @@ namespace EBookLibraryData.Migrations
 
                     b.HasOne("EBookLibraryData.Models.ApplicationUser", "User")
                         .WithMany("Loans")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

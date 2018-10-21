@@ -12,6 +12,7 @@ namespace EBookLibraryData.Models
         public int? ISBN { get; set; }
         public string Title { get; set; }
         public int? Pages { get; set; }
+        public int CopiesCount { get; set; } = 1;
         public string Path { get; set; }
         public string CoveringPath { get; set; }
         public string Author { get; set; }

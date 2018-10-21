@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EBookLibraryData.Models
@@ -10,7 +11,6 @@ namespace EBookLibraryData.Models
         public int CopyId { get; set; }
         public int BookId { get; set; }
         public Book Book { get; set; }
-        public int UserId { get; set; }
-        public ApplicationUser User { get; set; }
+        public bool IsRented { get; set; } = false;
     }
 }

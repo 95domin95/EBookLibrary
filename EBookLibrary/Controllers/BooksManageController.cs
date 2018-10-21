@@ -82,7 +82,7 @@ namespace EBookLibrary.Controllers
                 case "add":
                     if (!await _manage.Add(model.Title, model.ISBN, model.Pages,
                         model.Author, model.Publisher, model.Category,
-                        model.Book, model.BookCovering))
+                        model.Book, model.BookCovering, model.CopiesCount))
                     {
                         model.OperationErrorName = model.Errors.ElementAt((int)OperationError.add);
                     }
@@ -123,6 +123,11 @@ namespace EBookLibrary.Controllers
 
                         model.Books = _manage.GetBooks(model.Title, model.ISBN, model.Author,
                             model.PagesMin, model.PagesMax, model.Publisher, model.Category);
+
+                        if(model.Availability)
+                        {
+                            model.Books = model.Books.Where(b => b.CopiesCount > 0);
+                        }
 
                         var elementsCount = 0;
 

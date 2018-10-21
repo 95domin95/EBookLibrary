@@ -14,6 +14,7 @@ namespace EBookLibraryData
         public DbSet<Copy> Copies { get; set; }
         public DbSet<Publisher> Publishers { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Loan> Loans { get; set; }
         public Context(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)

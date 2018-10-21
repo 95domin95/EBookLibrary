@@ -7,15 +7,20 @@ using Microsoft.AspNetCore.Mvc;
 using EBookLibraryData.Models.ViewModels.Home;
 using EBookLibraryServices;
 using EBookLibraryData.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EBookLibrary.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IBooksManage _manage;
-        public HomeController(IBooksManage manage)
+        public HomeController(IBooksManage manage,
+            UserManager<ApplicationUser> userManager)
         {
             _manage = manage;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -37,19 +42,135 @@ namespace EBookLibrary.Controllers
         }
 
         [HttpPost]
-        public IActionResult BookPreview(int id)
+        public async Task<IActionResult> LoanBook(LoanViewModel model)
         {
-            var book = _manage.GetById(id);
-
-            if (book != default(Book))
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var book = _manage.GetById((int)model.BookId);
+            model.LoanError = false;
+            model.BookRented = false;
+            model.BookNotAvailable = false;
+            if (book != null)
             {
-                return View(new BookPreviewViewModel
+                var copy = _manage.GetAvailableBookCopies(book).FirstOrDefault();
+                if (copy != default(Copy))
                 {
-                    Book = book
+                    var loan = new Loan
+                    {
+                        User = user,
+                        UserId = user.Id,
+                        Copy = copy,
+                        CopyId = copy.CopyId,
+                        LoanDurationDays = 7,//tutaj to zmienić
+                        StartDate = DateTime.Now//Dodać jeszcze sprawdzanie czy wyporzyczenie nie ubiegło końca przy wyświetlaniu preview na przykład najprościej
+                        //Dodać filtrowanie po dostępności w book preview i może w managerze dodawania oraz dodać w managerze pole ilość kopii
+                    };
+                    if (_manage.AddLoan(loan))
+                    {
+                        return RedirectToAction("BookPreview", new BookPreviewViewModel
+                        {
+                            BookId = model.BookId,
+                            BookRented = true,
+                            LoanError = true
+                        });
+                    }
+                }
+                return RedirectToAction("BookPreview", new BookPreviewViewModel
+                {
+                    BookId = model.BookId,
+                    BookRented = false,
+                    BookNotAvailable = true,
                 });
+            }
+            return new NoContentResult();
+        }
+
+        [HttpGet]
+        [HttpPost]
+        public async Task<IActionResult> BookPreview(BookPreviewViewModel model)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (model.BookId != null)
+            {
+                model.BookRent = false;
+                model.Book = _manage.GetById((int)model.BookId);
+                if (model.Book != default(Book))
+                {
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        var userCopies = _manage.GetUserLoanCopies(user);
+                        if (userCopies != null && userCopies.Any())
+                        {
+                            foreach (var i in userCopies)
+                            {
+                                if (i.BookId.Equals(model.BookId))//tu może się coś jebać przez to że BookId mogło nie wyciągnąć
+                                {
+                                    model.BookRent = true;
+                                }
+                            }
+                        }
+                    }
+                    return View(model);
+                }
+                else return new NotFoundResult();
             }
             else return new NotFoundResult();
         }
+
+        //[HttpPost]
+        //public async Task<IActionResult> BookPreview(int BookId)
+        //{
+        //    var user = await _userManager.GetUserAsync(HttpContext.User);
+        //    var book = _manage.GetById(BookId);
+        //    var model = new BookPreviewViewModel
+        //    {
+        //        Book = book
+        //    };
+        //    var bookCopies = _manage.GetBookCopies(book);
+        //    model.BookRent = false;
+        //    if (bookCopies.Any())
+        //    {
+        //        foreach (var i in bookCopies)
+        //        {
+        //            if (i.UserId.Equals(user.Id))
+        //            {
+        //                model.BookRent = true;
+        //            }
+        //        }
+        //    }
+        //    if (book != default(Book))
+        //    {
+        //        return View(model);
+        //    }
+        //    else return new NotFoundResult();
+        //}
+        //[HttpPost]
+        //public async Task<IActionResult> LoanBook(BookPreviewViewModel model)
+        //{
+        //    if (model.Book != default(Book))
+        //    {
+        //        model.LoanError = false;
+        //        model.BookNotAvailable = false;
+        //        var availableCopies = _manage.GetAvailableBookCopies(model.Book);
+        //        if (availableCopies.Any())
+        //        {
+        //            var user = await _userManager.GetUserAsync(HttpContext.User);
+        //            var copyToRent = availableCopies.First();
+        //            var loan = new Loan
+        //            {
+        //                Copy = copyToRent,
+        //                CopyId = copyToRent.CopyId,
+        //                User = user,
+        //                UserId = user.Id
+        //            };
+        //            if (!_manage.AddLoan(loan))
+        //            {
+        //                model.LoanError = true;
+        //            }
+        //        }
+        //        else model.BookNotAvailable = true;
+        //    }
+        //    return RedirectToAction("BookPreview", model);
+        //}
 
         [HttpGet]
         public IActionResult BrowseBooks(BrowseBooksViewModel model)

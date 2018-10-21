@@ -4,14 +4,16 @@ using EBookLibraryData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EBookLibraryData.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20181020000506_FixedErrorsWithStartDate")]
+    partial class FixedErrorsWithStartDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -142,9 +144,13 @@ namespace EBookLibraryData.Migrations
 
                     b.Property<bool>("IsRented");
 
+                    b.Property<string>("UserId");
+
                     b.HasKey("CopyId");
 
                     b.HasIndex("BookId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Copies");
                 });
@@ -315,6 +321,10 @@ namespace EBookLibraryData.Migrations
                         .WithMany()
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EBookLibraryData.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("EBookLibraryData.Models.Loan", b =>

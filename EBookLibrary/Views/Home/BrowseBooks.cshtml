@@ -110,8 +110,8 @@
                             <p class="card-text">Autor: @i.Author</p>
                             <p class="card-text">Katgoria: @i.Category.Name</p>
                             <form asp-controller="Home" asp-action="BookPreview" method="post">
-                                <Button type="submit" class="btn btn-primary" name="id" value="@i.BookId">Szczegóły</Button>
-                            </form>
+                                <Button type="submit" class="btn btn-primary" name="BookId" value="@i.BookId">Szczegóły</Button>
+                            </form> 
                         </div>
                     </div>
                 }

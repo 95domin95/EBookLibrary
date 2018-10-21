@@ -22,7 +22,7 @@ namespace EBookLibraryServices
         }
         public async Task<bool> Add(string title, int? ISBN, int? pages,
             string author, string publisher, string category,
-            IFormFile book, IFormFile bookCovering)
+            IFormFile book, IFormFile bookCovering, int copiesCount=1)
         {
             if (title != "" && category != "" && book != default(IFormFile))
             {
@@ -35,7 +35,8 @@ namespace EBookLibraryServices
                     Title = title,
                     ISBN = ISBN,
                     Pages = pages,
-                    Author = author
+                    Author = author,
+                    CopiesCount = copiesCount
                 };
 
                 if(publisherResult != default(Publisher))
@@ -54,6 +55,11 @@ namespace EBookLibraryServices
 
                 _context.Books.Add(bookToAdd);
                 _context.SaveChanges();
+
+                for(int i=0; i<copiesCount; i++)//zoptymalizować zrobic dodawanie wszystkich za jednym zamachem
+                {
+                    _context.Copies.Add(AddCopy(bookToAdd));
+                }
 
                 var bookId = bookToAdd.BookId;
 
@@ -91,6 +97,27 @@ namespace EBookLibraryServices
             }
         }
 
+        public Copy AddCopy(Book book, bool isRented=true)
+        {
+            try
+            {
+                var copy = new Copy
+                {
+                    Book = book,
+                    BookId = book.BookId,
+                    IsRented = isRented
+                };
+                _context.Copies.Add(copy);
+                _context.SaveChanges();
+                return copy;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+
         public bool DeleteById(int id)
         {
             try
@@ -104,8 +131,9 @@ namespace EBookLibraryServices
                 }
                 else return false;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return false;
             }
             return true;
@@ -170,40 +198,73 @@ namespace EBookLibraryServices
 
         public string GetPath(int id)
         {
-            return _context.Books.Where(b => b.BookId.Equals(id)).Select(b => b.Path).FirstOrDefault();
+            try
+            {
+                return _context.Books.Where(b => b.BookId.Equals(id)).Select(b => b.Path).FirstOrDefault();
+            }
+            catch(ArgumentNullException e)
+            {
+                Console.WriteLine(e);
+                return String.Empty;
+            }
         }
 
         public Publisher GetPublisher(int id)
         {
-            return _context.Publishers.Where(p => p.Name.Equals
-            (p.Books.Where(b => b.BookId.Equals(id))
-            .FirstOrDefault())).FirstOrDefault();
+            try
+            {
+                return _context.Publishers.Where(p => p.Name.Equals
+                (p.Books.Where(b => b.BookId.Equals(id))
+                .FirstOrDefault())).FirstOrDefault();
+            }
+            catch(ArgumentNullException e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
         }
 
         public string GetTitle(int id)
         {
-            return _context.Books.Where(b => b.BookId.Equals(id)).Select(b => b.Title).FirstOrDefault();
+            try
+            {
+                return _context.Books.Where(b => b.BookId.Equals(id)).Select(b => b.Title).FirstOrDefault();
+            }
+            catch(ArgumentNullException e)
+            {
+                Console.WriteLine(e.Message);
+                return String.Empty;
+            }
         }
 
         public Publisher AddPublisher(string name, string city)
         {
-            if(name != "" && name != null)
+            try
             {
-                var publisher = _context.Publishers.Where(p => p.Name.Contains(name)).FirstOrDefault();
-
-                if (publisher == default(Publisher))
+                if (name != "" && name != null)
                 {
-                    publisher = new Publisher {Name = name };
-                    if(city != "" && city != null)
+                    var publisher = _context.Publishers.Where(p => p.Name.Contains(name)).FirstOrDefault();
+
+                    if (publisher == default(Publisher))
                     {
-                        publisher.City = city;
+                        publisher = new Publisher { Name = name };
+                        if (city != "" && city != null)
+                        {
+                            publisher.City = city;
+                        }
+                        _context.Publishers.Add(publisher);
+                        _context.SaveChanges();
+                        return publisher;
                     }
-                    _context.Publishers.Add(publisher);
-                    _context.SaveChanges();
-                    return publisher;
                 }
+                return default(Publisher);
             }
-            return default(Publisher);
+            catch(ArgumentNullException e)
+            {
+                Console.WriteLine(e.Message);
+                return default(Publisher);
+            }
+
         }
 
         public bool UpdateById(int? id, string newTitle="", int? newISBN=null,
@@ -248,9 +309,97 @@ namespace EBookLibraryServices
                 }
                 else return false;
             }
-            catch(Exception)
+            catch(Exception e)
             {
+                Console.WriteLine(e.Message);
                 return false;
+            }
+        }
+
+        public IEnumerable<Copy> GetBookCopies(Book book)
+        {
+            try
+            {
+                var tmp = _context.Copies.Where(c => c.BookId.Equals(book.BookId)).ToList();
+                return tmp;
+            }
+            catch(ArgumentNullException e)
+            {
+                Console.WriteLine(e.Message); 
+                return default(IEnumerable<Copy>);
+            }
+        }
+
+        public bool AddLoan(Loan loan)
+        {
+            try
+            {
+                if (loan.Copy != null && loan.User != null)
+                {
+                    _context.Loans.Add(loan);
+                    _context.SaveChanges();
+                    return true;
+                }
+                else return false;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+        public Loan AddLoan(ApplicationUser user, Copy copy, int loanDurationDays = 7)
+        {
+            try
+            {
+                var loan = new Loan
+                {
+                    Copy = copy,
+                    CopyId = copy.CopyId,
+                    StartDate = DateTime.Now,
+                    LoanDurationDays = loanDurationDays,
+                    User = user,
+                    UserId = user.Id
+                };
+                _context.Loans.Add(loan);
+                _context.SaveChanges();
+                return loan;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+
+        public IEnumerable<Copy> GetAvailableBookCopies(Book book)
+        {
+            try
+            {
+                return GetBookCopies(book).Where(c => c.IsRented);
+            }
+            catch (ArgumentNullException e)
+            {
+                Console.WriteLine(e.Message);
+                return default(IEnumerable<Copy>);
+            }
+        }
+
+        public IEnumerable<Copy> GetUserLoanCopies(ApplicationUser user)
+        {
+            try
+            {
+                var query = from loan in _context.Loans join 
+                        copy in _context.Copies on loan.CopyId
+                        equals copy.CopyId where loan.UserId.Equals(user.Id)
+                        select copy;
+                return query;
+                //return _context.Loans.Where(l => l.UserId.Equals(user.Id)).ToList();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
             }
         }
     }
