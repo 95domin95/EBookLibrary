@@ -48,6 +48,7 @@ namespace EBookLibrary.Controllers
             model.BookRented = false;
             _manage.RemoveUserLoan(user, _manage.GetById((int)model.BookId));
             return RedirectToAction("BookPreview", new BookPreviewViewModel {
+                BookId = model.BookId,
                 BookRented = false,
                 BookRent = false
             });

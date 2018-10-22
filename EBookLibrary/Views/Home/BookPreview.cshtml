@@ -27,8 +27,8 @@
                             <span class="fa fa-book-open">
                             </span>
                         </a>
-                        <form asp-controller="Home" asp-action="RemoveUserLoan" method="post">
-                            <button class="btn btn-success" asp-controller="Home" asp-action="RemoveUserLoan" name="BookId" value="@Model.BookId">
+                        <form asp-controller="Home" asp-action="RemoveUserLoan" method="post" class="mb-2">
+                            <button class="btn btn-success" asp-controller="Home" asp-action="ReturnBook" name="BookId" value="@Model.BookId">
                                 Zwróć
                                 <span class="fa fa-book-open">
                                 </span>
@@ -45,12 +45,27 @@
                         }
                         else
                         {
-                            <form asp-controller="Home" asp-action="LoanBook" method="post">
-                                <button class="btn btn-success" asp-controller="Home" asp-action="LoanBook" name="BookId" value="@Model.BookId">
-                                    Wyporzycz
-                                    <span class="fa fa-book-open">
-                                    </span>
-                                </button>
+                            <form asp-controller="Home" asp-action="LoanBook" method="post" class="mb-2">
+                                <div class="form-row">
+                                    <div class="col-xs-2">
+                                        <div style="line-height: 35px">
+                                            <label asp-for="LoanPeroidDays"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">                                         
+                                            <input asp-for="LoanPeroidDays" class="form-control" style="width: 96px" max="7"/>
+                                            <span asp-validation-for="LoanPeroidDays" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <button class="btn btn-success" asp-controller="Home" asp-action="LoanBook" name="BookId" value="@Model.BookId">
+                                            Wyporzycz
+                                            <span class="fa fa-book-open">
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
                             </form>
                         }
                     }
