@@ -107,7 +107,12 @@
                         <img class="card-img-top" src="~/images/BookCovering/@i.CoveringPath" alt="Okładka">
                         <div class="card-body">
                             <h5 class="card-title">@i.Title</h5>
-                            <p class="card-text">Autor: @i.Author</p>
+                            <p class="card-text">Autorzy:
+                            @foreach(var author in i.BookAuthors)
+                            {
+                                <text>@author.Author.Name</text>
+                            }
+                            </p>
                             <p class="card-text">Katgoria: @i.Category.Name</p>
                             <form asp-controller="Home" asp-action="BookPreview" method="post">
                                 <Button type="submit" class="btn btn-primary" name="BookId" value="@i.BookId">Szczegóły</Button>

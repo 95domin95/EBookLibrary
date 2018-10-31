@@ -30,12 +30,22 @@ namespace EBookLibraryServices
 
                 var categoryResult = _context.Categories.Where(c => c.Name.Contains(category)).FirstOrDefault();
 
+                var dbAuthor = _context.Authors.Where(a => a.Name.ToLower().Contains(author.ToLower())).FirstOrDefault();
+
+                if(dbAuthor == null)
+                {
+                    dbAuthor = new Author
+                    {
+                        Name = author
+                    };
+                    _context.SaveChanges();
+                }
+
                 var bookToAdd = new Book
                 {
                     Title = title,
                     ISBN = ISBN,
                     Pages = pages,
-                    Author = author,
                     CopiesCount = copiesCount
                 };
 
@@ -54,6 +64,13 @@ namespace EBookLibraryServices
                 }
 
                 _context.Books.Add(bookToAdd);
+                _context.SaveChanges();
+
+                _context.BookAuthors.Add(new BookAuthor
+                {
+                    Author = dbAuthor,
+                    Book = bookToAdd
+                });
                 _context.SaveChanges();
 
                 for(int i=0; i<copiesCount; i++)//zoptymalizować zrobic dodawanie wszystkich za jednym zamachem
@@ -154,11 +171,20 @@ namespace EBookLibraryServices
             List<Book> result = new List<Book>();
             if(_context.Books.Count() > 0)
             {
-                result = _context.Books.ToList();
+                result = _context.Books.Include(b => b.BookAuthors).ThenInclude(ba => ba.Author).ToList();
             }
             if (ISBN != null) result = result.Where(b => b.ISBN.Equals(ISBN)).ToList();
             if (title != "" && title != null) result = result.Where(b => b.Title.Contains(title)).ToList();
-            if (author != "" && author != null) result = result.Where(b => b.Author.Contains(author)).ToList();
+            if (author != "" && author != null)
+            {
+                var dbAuthor = _context.Authors.Where(a => a.Name.ToLower().Contains(author.ToLower())).FirstOrDefault();
+                var bookAuthor = _context.BookAuthors.Where(ba => ba.AuthorId.Equals(dbAuthor.AuthorId)).FirstOrDefault();
+                if(bookAuthor != null)
+                {
+                    result = result.Where(b => b.BookAuthors.Contains(bookAuthor)).ToList(); //to jest w chuj ryzykowne :)
+                }
+                else result = new List<Book>();
+            }
             if (pagesMax != null) result = result.Where(b => b.Pages < pagesMax).ToList();
             if (pagesMin != null) result = result.Where(b => b.Pages > pagesMin).ToList();
             if (publisher != "" && publisher != null)
@@ -181,7 +207,7 @@ namespace EBookLibraryServices
 
         public Book GetById(int id)
         {
-            return _context.Books.Where(b => b.BookId.Equals(id))
+            return _context.Books.Where(b => b.BookId.Equals(id)).Include(b => b.BookAuthors).ThenInclude(ba => ba.Author)
                 .Include(b => b.Category).Include(b => b.Publisher).FirstOrDefault();
         }
 
@@ -280,7 +306,6 @@ namespace EBookLibraryServices
                     {
                         if (newTitle != "") book.Title = newTitle;
                         if (newISBN != null) book.ISBN = newISBN;
-                        if (newAuthor != "") book.Author = newAuthor;
                         if (newPages != null) book.Pages = newPages;
                         if (newPublisher != "")
                         {
@@ -302,6 +327,24 @@ namespace EBookLibraryServices
                         }
                         _context.Update(book);
                         _context.SaveChanges();
+                        if (newAuthor != "")
+                        {
+                            var dbAuthor = _context.Authors.Where(a => a.Name.ToLower().Contains(newAuthor.ToLower())).FirstOrDefault();
+                            if (dbAuthor != null)
+                            {
+                                var bookAuthor = _context.BookAuthors.Where(ba => ba.AuthorId.Equals(dbAuthor.AuthorId)).FirstOrDefault();
+                                if (bookAuthor == null)
+                                {
+                                    _context.BookAuthors.Add(new BookAuthor
+                                    {
+                                        Author = dbAuthor,
+                                        Book = book
+                                    });
+                                    _context.SaveChanges();
+                                }
+                            }
+
+                        }
                         return true;
                     }
                     else return false;

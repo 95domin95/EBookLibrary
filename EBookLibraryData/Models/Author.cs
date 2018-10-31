@@ -1,15 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 
 namespace EBookLibraryData.Models
 {
-    public class Category
+    public class Author
     {
-        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CategoryId { get; set; }
+        [Key]
+        public int AuthorId { get; set; }
         public string Name { get; set; }
-        public ICollection<Book> Books { get; set; }
+        public ICollection<BookAuthor> BookAuthors { get; set; }
     }
 }

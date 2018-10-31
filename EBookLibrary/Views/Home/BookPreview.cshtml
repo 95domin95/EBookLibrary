@@ -11,7 +11,12 @@
         <div class="col-xs-12 col-sm-6">
             <div class="card-img-bottom">
                 <h4>@Model.Book.Title</h4>
-                <p>Autor: @Model.Book.Author</p>
+                <p>Autor: 
+                @foreach(var author in Model.Book.BookAuthors)
+                {
+                    <text>@author.Author.Name</text>
+                }
+                </p>
                 <p>Kategoria: @Model.Book.Category.Name</p>
                 @if (Model.Book.Publisher != null)
                 {

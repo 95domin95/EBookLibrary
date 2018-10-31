@@ -146,7 +146,12 @@
                         <img class="card-img-top" src="~/images/BookCovering/@i.CoveringPath" alt="Card image cap">
                         <div class="card-body">
                             <h5 class="card-title">@i.Title</h5>
-                            <p class="card-text">Autor: @i.Author</p>
+                            <p class="card-text">Autor: 
+                            @foreach(var author in i.BookAuthors)
+                            {
+                                <text>@author.Author.Name</text>
+                            }
+                            </p>
                             <p class="card-text">Katgoria: @i.Category.Name</p>
                             <div class="float-left pl-1 pb-3">
                                 <form asp-controller="Home" asp-action="BookPreview" method="post">
