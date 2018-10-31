@@ -31,5 +31,6 @@ namespace EBookLibraryData.Models
         int? GetPages(int id);
         string GetPath(int id);
         Publisher AddPublisher(string name, string city);
+        Loan GetLoanByCopy(Copy copy);
     }
 }

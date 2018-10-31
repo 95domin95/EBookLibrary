@@ -375,12 +375,41 @@ namespace EBookLibraryServices
         {
             try
             {
-                return GetBookCopies(book).Where(c => c.IsRented);
+                var allBookCopies = GetBookCopies(book).ToList();
+                if(allBookCopies.Where(c => c.IsRented.Equals(false)).Any())
+                {
+                    return allBookCopies;
+                }
+                else
+                {
+                    List<Loan> loans = new List<Loan>(); 
+                    foreach(var copy in allBookCopies)
+                    {
+                        loans.Add(_context.Loans.Where(c => copy.CopyId.Equals(copy.CopyId)).Include(c => c.Copy).FirstOrDefault());
+                    }
+                    foreach(var loan in loans)
+                    {
+                        if(loan.StartDate.AddDays(loan.LoanDurationDays) >= DateTime.Now)
+                        {
+                            allBookCopies.Add(loan.Copy);
+                        }
+                        else
+                        {
+                            loans.Remove(loan);
+                        }
+                    }
+                    if(allBookCopies.Any())
+                    {
+                        return allBookCopies;
+                    }
+                    return null;
+                    //WAŻNE: PRZETESTOWAĆ
+                }
             }
             catch (ArgumentNullException e)
             {
                 Console.WriteLine(e.Message);
-                return default(IEnumerable<Copy>);
+                return null;
             }
         }
 
@@ -455,6 +484,13 @@ namespace EBookLibraryServices
 
                 if (loanToRemove != null)
                 {
+                    /*loanToRemove.Copy.IsRented = false;*/ //to nie wiedomo czy zadziała
+                    var copy = _context.Copies.Where(c => c.CopyId.Equals(loanToRemove.CopyId)).FirstOrDefault();
+                    if(copy != null)
+                    {
+                        copy.IsRented = false;
+                        _context.SaveChanges();
+                    }
                     _context.Remove(loanToRemove);
                     _context.SaveChanges();
                     return true;
@@ -467,5 +503,18 @@ namespace EBookLibraryServices
                 return false;
             }
         }
+
+        public Loan GetLoanByCopy(Copy copy)
+        {
+            try
+            {
+                return _context.Loans.Where(l => l.CopyId.Equals(copy.CopyId)).FirstOrDefault();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+       }
     }
 }

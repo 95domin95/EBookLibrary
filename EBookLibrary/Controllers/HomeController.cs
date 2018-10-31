@@ -47,11 +47,13 @@ namespace EBookLibrary.Controllers
             var user = await _userManager.GetUserAsync(HttpContext.User);
             model.BookRented = false;
             _manage.RemoveUserLoan(user, _manage.GetById((int)model.BookId));
-            return RedirectToAction("BookPreview", new BookPreviewViewModel {
+            var bookPreviewModel = new BookPreviewViewModel
+            {
                 BookId = model.BookId,
                 BookRented = false,
                 BookRent = false
-            });
+            };
+            return RedirectToAction("BookPreview", bookPreviewModel);
         }
 
         [HttpPost]
@@ -69,13 +71,21 @@ namespace EBookLibrary.Controllers
                 {
                     var loan = new Loan
                     {
+                        //ogranąć jak się robi doc commenty w C#
                         User = user,
                         UserId = user.Id,
                         Copy = copy,
                         CopyId = copy.CopyId,
-                        LoanDurationDays = 7,//tutaj to zmienić
+                        LoanDurationDays = model.LoanPeroidDays,
                         StartDate = DateTime.Now//Dodać jeszcze sprawdzanie czy wyporzyczenie nie ubiegło końca przy wyświetlaniu preview na przykład najprościej
                         //Dodać filtrowanie po dostępności w book preview i może w managerze dodawania oraz dodać w managerze pole ilość kopii
+
+                        //Dodać jeszcze sprawdzanie wyporzyczeń jak ktoś chce wyporzyczy kniżke a nie ma wystarczających kopi żeby se wyporzyczył
+                        //Dodać dodawanie do kolejki
+                        //Zrobic kolejkowanie zleceń i po dacie dołączenia sprawdzać
+
+                        //Poprawic błąd z nie podświetlaniem się inputów
+                        //wybieranie plików w maangerze zrobić na drag and dropa
                     };
                     if (_manage.AddLoan(loan))
                     {
@@ -116,11 +126,26 @@ namespace EBookLibrary.Controllers
                         var userCopies = _manage.GetUserLoanCopies(user);
                         if (userCopies != null && userCopies.Any())
                         {
-                            foreach (var i in userCopies)
+                            foreach (var userCopy in userCopies)
                             {
-                                if (i.BookId.Equals(model.BookId))//tu może się coś jebać przez to że BookId mogło nie wyciągnąć
+                                if (userCopy.BookId.Equals(model.BookId))//tu się jebie
                                 {
                                     model.BookRent = true;
+                                    var loan = _manage.GetLoanByCopy(userCopy);
+                                    if(loan != null)
+                                    {
+                                        if(loan.StartDate.AddDays(loan.LoanDurationDays) <= DateTime.Today)
+                                        {
+                                            _manage.RemoveUserLoan(user, model.Book);
+                                            model.BookRent = false;
+                                            model.BookRented = false;
+                                        }
+                                    }
+                                    //WAŻNE: SPRAWDZIĆ CZY TO DZIAŁA WOGÓLE W SENSIE PRZEDAWNIENIE WYPORZYCZENIA
+
+                                    //znormalizować BookRent i BookRented, bo juz mi się to pierdoli a dodałem to 2 tygodnie na zad a co dopiero będzi potem za jakieś kurwa 2 
+                                    //miesiące jak będę musiał tłumaczyć mechanizm działania wyporzyczeń
+                                    
                                 }
                             }
                         }
@@ -131,62 +156,6 @@ namespace EBookLibrary.Controllers
             }
             else return new NotFoundResult();
         }
-
-        //[HttpPost]
-        //public async Task<IActionResult> BookPreview(int BookId)
-        //{
-        //    var user = await _userManager.GetUserAsync(HttpContext.User);
-        //    var book = _manage.GetById(BookId);
-        //    var model = new BookPreviewViewModel
-        //    {
-        //        Book = book
-        //    };
-        //    var bookCopies = _manage.GetBookCopies(book);
-        //    model.BookRent = false;
-        //    if (bookCopies.Any())
-        //    {
-        //        foreach (var i in bookCopies)
-        //        {
-        //            if (i.UserId.Equals(user.Id))
-        //            {
-        //                model.BookRent = true;
-        //            }
-        //        }
-        //    }
-        //    if (book != default(Book))
-        //    {
-        //        return View(model);
-        //    }
-        //    else return new NotFoundResult();
-        //}
-        //[HttpPost]
-        //public async Task<IActionResult> LoanBook(BookPreviewViewModel model)
-        //{
-        //    if (model.Book != default(Book))
-        //    {
-        //        model.LoanError = false;
-        //        model.BookNotAvailable = false;
-        //        var availableCopies = _manage.GetAvailableBookCopies(model.Book);
-        //        if (availableCopies.Any())
-        //        {
-        //            var user = await _userManager.GetUserAsync(HttpContext.User);
-        //            var copyToRent = availableCopies.First();
-        //            var loan = new Loan
-        //            {
-        //                Copy = copyToRent,
-        //                CopyId = copyToRent.CopyId,
-        //                User = user,
-        //                UserId = user.Id
-        //            };
-        //            if (!_manage.AddLoan(loan))
-        //            {
-        //                model.LoanError = true;
-        //            }
-        //        }
-        //        else model.BookNotAvailable = true;
-        //    }
-        //    return RedirectToAction("BookPreview", model);
-        //}
 
         [HttpGet]
         public IActionResult BrowseBooks(BrowseBooksViewModel model)
