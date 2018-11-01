@@ -207,6 +207,7 @@ namespace EBookLibrary.Controllers
             {
                 model.MoreThanOnePage = false;
             }
+            model.Authors = _manage.GetAllAuthors();
             return View(model);
         }
 

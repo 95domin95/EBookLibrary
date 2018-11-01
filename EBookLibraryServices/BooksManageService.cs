@@ -559,5 +559,11 @@ namespace EBookLibraryServices
                 return null;
             }
        }
+
+        public IEnumerable<Author> GetAllAuthors()
+        {
+            var authors = _context.Authors.ToList();
+            return authors.Any() ? authors : null;
+        }
     }
 }

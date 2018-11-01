@@ -19,6 +19,7 @@ namespace EBookLibraryData.Models
         IEnumerable<Copy> GetBookCopies(Book book);
         IEnumerable<Copy> GetAvailableBookCopies(Book book);
         IEnumerable<Copy> GetUserLoanCopies(ApplicationUser user);
+        IEnumerable<Author> GetAllAuthors();
         bool DeleteById(int id);
         bool AddLoan(Loan loan);
         bool UpdateById(int? id, string newTitle, int? newISBN, string newAuthor,

@@ -39,8 +39,9 @@ namespace EBookLibrary.Controllers
         {
             return View(new ManagePanelViewModel {
                 Categories = _manage.GetAllCategories(),
-                Operations = operations
-            });
+                Operations = operations,
+                Authors = _manage.GetAllAuthors()
+        });
         }
 
         [HttpPost]
@@ -71,6 +72,7 @@ namespace EBookLibrary.Controllers
             model.BookRemoved = false;
             model.BookSearched = false;
             model.OperationErrorName = string.Empty;
+            model.Authors = _manage.GetAllAuthors();
             if (!model.PagesRangeSelected)
             {
                 model.PagesMin = null;

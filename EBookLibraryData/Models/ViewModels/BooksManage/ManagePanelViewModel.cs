@@ -64,5 +64,7 @@ namespace EBookLibraryData.Models.ViewModels.BooksManage
         public IEnumerable<Book> Books { get; set; }
         public IEnumerable<Category> Categories { get; set; }
         public IEnumerable<string[]> Operations { get; set; }
+        [Display(Name = "Autorzy")]
+        public IEnumerable<Author> Authors { get; set; }
     }
 }

@@ -87,17 +87,29 @@
                         <span asp-validation-for="Category" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-3">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                     <div class="form-group">
                         <label asp-for="CopiesCount"></label>
                         <input asp-for="CopiesCount" class="form-control" id="copies-count" />
                         <span asp-validation-for="CopiesCount" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+                @*<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+            <div class="form-group">
+                <label asp-for="Author"></label>
+                <input asp-for="Author" class="form-control" id="author" />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+        </div>*@
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                     <div class="form-group">
                         <label asp-for="Author"></label>
-                        <input asp-for="Author" class="form-control" id="author" />
+                        <select asp-for="Author" class="form-control" id="author">
+                            @foreach(var author in Model.Authors)
+                            {
+                                <option value="@author.Name">@author.Name</option>
+                            }
+                        </select>
                         <span asp-validation-for="Author" class="text-danger"></span>
                     </div>
                 </div>

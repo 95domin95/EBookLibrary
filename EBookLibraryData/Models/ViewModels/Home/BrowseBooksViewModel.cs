@@ -33,5 +33,7 @@ namespace EBookLibraryData.Models.ViewModels.Home
         public bool PagesRangeSelected { get; set; } = false;
         public IEnumerable<Book> Books { get; set; }
         public IEnumerable<Category> Categories { get; set; }
+        [Display(Name = "Autorzy")]
+        public IEnumerable<Author> Authors { get; set; }
     }
 }
