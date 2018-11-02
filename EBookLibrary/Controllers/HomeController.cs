@@ -9,6 +9,7 @@ using EBookLibraryServices;
 using EBookLibraryData.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using EBookLibraryData.Models.JsonBinding;
 
 namespace EBookLibrary.Controllers
 {
@@ -66,8 +67,17 @@ namespace EBookLibrary.Controllers
             model.BookNotAvailable = false;
             if (book != null)
             {
-                var copy = _manage.GetAvailableBookCopies(book).FirstOrDefault();
-                if (copy != default(Copy))
+                Copy copy = null;
+                try
+                {
+                    copy = _manage.GetAvailableBookCopies(book).FirstOrDefault();
+                }
+                catch(ArgumentNullException)
+                {
+
+                }
+
+                if (copy != null)
                 {
                     var loan = new Loan
                     {
@@ -91,6 +101,7 @@ namespace EBookLibrary.Controllers
                     {
                         if(_manage.DecrementBookCopy(book))
                         {
+                            _manage.ChangeCopyRentedStatus(copy);
                             return RedirectToAction("BookPreview", new BookPreviewViewModel
                             {
                                 BookId = model.BookId,

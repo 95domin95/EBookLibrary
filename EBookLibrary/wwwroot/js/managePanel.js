@@ -2,6 +2,14 @@
 
     //TODO: Podpiąc funckje wyszarzającą inputy do windows load
 
+    var isbn = document.getElementById('isbn');
+
+    var id = document.getElementById('id');
+
+    var copiesCount = document.getElementById('copies-count');
+
+    var pages = document.getElementById('pages');
+
     var book = document.getElementById("book");
 
     var bookCovering = document.getElementById("book-covering");
@@ -12,15 +20,21 @@
 
     var documentExts = new Array("pdf");
 
+    var newAuthor = document.getElementById("new-author");
+
+    var addAuthorBtn = document.getElementById("add-new-author-button");
+
     var operation = {
         "add": [
             "id",
             "double-input-min",
-            "double-input-max"
+            "double-input-max",
+            "new-author"
         ],
         "update": [
             "double-input-min",
-            "double-input-max"
+            "double-input-max",
+            "new-author"
         ],
         "delete": [
             "isbn",
@@ -32,7 +46,8 @@
             "category",
             "author",
             "book-covering",
-            "book"
+            "book",
+            "copies-count"
         ],
         "select": [
             "book-covering",
@@ -51,7 +66,9 @@
         "category",
         "author",
         "book-covering",
-        "book"
+        "book",
+        "copies-count",
+        "new-author"
     ];
 
     operationSelect.addEventListener("change", () => {
@@ -106,5 +123,37 @@
 
         return false;
     }
+
+    isbn.addEventListener('input', () => {
+        isbn.value = parseInt(String(page.value).replace(/[^0-9]/g, ''));
+    }, false);
+
+    copiesCount.addEventListener('input', () => {
+        copiesCount.value = parseInt(String(page.value).replace(/[^0-9]/g, ''));
+    }, false);
+
+    id.addEventListener('input', () => {
+        id.value = parseInt(String(page.value).replace(/[^0-9]/g, ''));
+    }, false);
+
+    pages.addEventListener('input', () => {
+        id.value = parseInt(String(page.value).replace(/[^0-9]/g, ''));
+    }, false);
+
+    addAuthorBtn.addEventListener('click', e => {
+        e.preventDefault();
+        data = JSON.stringify({
+            "Name": newAuthor.value
+        });
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'AddNewAuthor');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                console.log(JSON.parse(xhr));
+            }
+        };
+        xhr.send(data);
+    }, false);
 
 }, false);

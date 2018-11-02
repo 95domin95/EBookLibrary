@@ -15,9 +15,11 @@ namespace EBookLibraryData.Models.ViewModels.BooksManage
             "remove",
             "modify"
         };
+        [RegularExpression("([0-9]+)")]
         [Display(Name = "Id Książki")]
         public int? Id { get; set; }
         [Display(Name = "Ilość kopii")]
+        [RegularExpression("([0-9]+)")]
         public int CopiesCount { get; set; }
         [Display(Name = "Dostępne")]
         public bool Availability { get; set; } = false;
@@ -44,10 +46,11 @@ namespace EBookLibraryData.Models.ViewModels.BooksManage
         [Display(Name = "Kategoria")]
         public string Category { get; set; }
         [Display(Name = "Autor")]
-        public string Author { get; set; }
+        public string[] Author { get; set; }
         [Display(Name = "Okładka")]
         public IFormFile BookCovering { get; set; }
-        [Display(Name = "Książka")]
+        [Display(Name = "Dodaj autora")]
+        public string NewAuthor { get; set; }
         public bool BookSearched { get; set; } = false;
         public bool BookModified { get; set; } = false;
         public bool BookRemoved { get; set; } = false;
@@ -60,11 +63,12 @@ namespace EBookLibraryData.Models.ViewModels.BooksManage
         public string BookAddedMessageError { get; } = "Nie udało się dodać książki o podanych paramaterach.";
         public string BookRemovedMessageError { get; } = "Nie udało się usunąć książki.";
         public string BookModifiedMessageError { get; } = "Dane książki nie zostały zmienione.";
+        [Display(Name = "Książka")]
         public IFormFile Book { get; set; }
         public IEnumerable<Book> Books { get; set; }
         public IEnumerable<Category> Categories { get; set; }
         public IEnumerable<string[]> Operations { get; set; }
-        [Display(Name = "Autorzy")]
+        [Display(Name = "Wybierz autora")]
         public IEnumerable<Author> Authors { get; set; }
     }
 }

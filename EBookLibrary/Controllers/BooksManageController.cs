@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EBookLibraryData;
 using EBookLibraryData.Models;
+using EBookLibraryData.Models.JsonBinding;
 using EBookLibraryData.Models.ViewModels.BooksManage;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -42,6 +43,16 @@ namespace EBookLibrary.Controllers
                 Operations = operations,
                 Authors = _manage.GetAllAuthors()
         });
+        }
+
+        [HttpPost]
+        public IActionResult AddNewAuthor([FromBody]NewAuthor newAuthor)
+        {
+            if(newAuthor != null)
+            {
+                if (_manage.AddAuthor(newAuthor.Name)) return new JsonResult("Success");
+            }
+            return new JsonResult("Failed");
         }
 
         [HttpPost]

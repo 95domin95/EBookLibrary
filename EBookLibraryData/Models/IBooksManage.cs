@@ -8,21 +8,23 @@ namespace EBookLibraryData.Models
 {
     public interface IBooksManage
     {
-        IEnumerable<Book> GetBooks(string title, int? ISBN, string author, int? pagesMin,
+        IEnumerable<Book> GetBooks(string title, int? ISBN, string[] author, int? pagesMin,
             int? pagesMax, string publisher, string category);
         IEnumerable<Category> GetAllCategories();
         Book GetById(int id);
         Publisher GetPublisher(string name);
-        Task<bool> Add(string Title, int? ISBN, int? Pages,
-            string Author, string Publisher, string Category,
+        Task<bool> Add(string title, int? ISBN, int? pages,
+            string[] author, string publisher, string category,
             IFormFile book, IFormFile bookCovering, int copiesCount);
         IEnumerable<Copy> GetBookCopies(Book book);
         IEnumerable<Copy> GetAvailableBookCopies(Book book);
         IEnumerable<Copy> GetUserLoanCopies(ApplicationUser user);
         IEnumerable<Author> GetAllAuthors();
         bool DeleteById(int id);
+        bool ChangeCopyRentedStatus(Copy copy);
+        bool AddAuthor(string name);
         bool AddLoan(Loan loan);
-        bool UpdateById(int? id, string newTitle, int? newISBN, string newAuthor,
+        bool UpdateById(int? id, string newTitle, int? newISBN, string[] newAuthor,
             int? newPages, string newPublisher, string newCategory);
         bool DecrementBookCopy(Book book);
         bool IncrementBookCopy(Book book);

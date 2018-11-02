@@ -29,13 +29,13 @@
                     {
                         <a class="btn btn-success mb-2" href="~/lib/pdfjs-1.9.426-dist/web/viewer.html?file=/images/Book/@Model.Book.Path">
                             Czytaj
-                            <span class="fa fa-book-open">
+                            <span class="fa fa-book-reader">
                             </span>
                         </a>
                         <form asp-controller="Home" asp-action="RemoveUserLoan" method="post" class="mb-2">
                             <button class="btn btn-success" asp-controller="Home" asp-action="ReturnBook" name="BookId" value="@Model.BookId">
                                 Zwróć
-                                <span class="fa fa-book-open">
+                                <span class="fa fa-book">
                                 </span>
                             </button>
                         </form>

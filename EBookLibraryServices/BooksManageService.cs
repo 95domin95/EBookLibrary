@@ -9,6 +9,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+/**
+ * PRZETESTOWAĆ TO WSZYSTKO W CHUJ BO PROBABLY NIE DZIAŁA
+ **/
+
 namespace EBookLibraryServices
 {
     public class BooksManageService : IBooksManage
@@ -21,25 +26,37 @@ namespace EBookLibraryServices
             _file = file;
         }
         public async Task<bool> Add(string title, int? ISBN, int? pages,
-            string author, string publisher, string category,
+            string[] authors, string publisher, string category,
             IFormFile book, IFormFile bookCovering, int copiesCount=1)
         {
-            if (title != "" && category != "" && book != default(IFormFile))
+            if (title != "" && title != null && category != "" && category != null && book != default(IFormFile))
             {
+                if (publisher == null) publisher = string.Empty;
                 var publisherResult = _context.Publishers.Where(p => p.Name.Contains(publisher)).FirstOrDefault();
 
                 var categoryResult = _context.Categories.Where(c => c.Name.Contains(category)).FirstOrDefault();
 
-                var dbAuthor = _context.Authors.Where(a => a.Name.ToLower().Contains(author.ToLower())).FirstOrDefault();
+                List<Author> dbAuthors = new List<Author>();
 
-                if(dbAuthor == null)
+                foreach(var author in authors)
                 {
-                    dbAuthor = new Author
+                    var authorResult = _context.Authors.Where(a => a.Name.ToLower().Contains(author.ToLower())).FirstOrDefault();
+                    if(authorResult != null)
                     {
-                        Name = author
-                    };
-                    _context.SaveChanges();
+                        dbAuthors.Append(authorResult);
+                    }
+                    else
+                    {
+                        var dbAuthor = new Author
+                        {
+                            Name = author
+                        };
+                        _context.Authors.Add(dbAuthor);
+                        _context.SaveChanges();
+                        dbAuthors.Append(dbAuthor);
+                    }
                 }
+                _context.SaveChanges();
 
                 var bookToAdd = new Book
                 {
@@ -66,16 +83,19 @@ namespace EBookLibraryServices
                 _context.Books.Add(bookToAdd);
                 _context.SaveChanges();
 
-                _context.BookAuthors.Add(new BookAuthor
+                foreach(var dbAuthor in dbAuthors)
                 {
-                    Author = dbAuthor,
-                    Book = bookToAdd
-                });
+                    _context.BookAuthors.Add(new BookAuthor
+                    {
+                        Author = dbAuthor,
+                        Book = bookToAdd
+                    });
+                }
                 _context.SaveChanges();
 
                 for(int i=0; i<copiesCount; i++)//zoptymalizować zrobic dodawanie wszystkich za jednym zamachem
                 {
-                   AddCopy(bookToAdd, true, i==copiesCount-1);
+                   AddCopy(bookToAdd, false, i==copiesCount-1);
                 }
 
                 var bookId = bookToAdd.BookId;
@@ -141,7 +161,19 @@ namespace EBookLibraryServices
                 var count = _context.Books.Where(b => b.BookId.Equals(id)).Count();
 
                 if (count > 0)
-                {
+                {//To może okazać się zupełnie niepotrzebne jeżeli przy usuwaniu booka bezie się usuwało kaskadowao cała reszta badziewia czyli loan i copy
+                    var copies = _context.Copies.Where(c => c.BookId.Equals(id));
+                    var loans = _context.Loans.Where(l => l.Copy.BookId.Equals(id)); //to też nie koniecznie musi działać
+                    if(copies.Any())
+                    {
+                        _context.Copies.RemoveRange(copies); //to może nie działać PRZETESTOWAĆ!!!
+                        _context.SaveChanges();
+                        if (loans.Any())
+                        {
+                            _context.Loans.RemoveRange(loans);
+                            _context.SaveChanges();
+                        }
+                    }
                     _context.Books.Remove(GetById(id));
                     _context.SaveChanges();
                 }
@@ -165,7 +197,7 @@ namespace EBookLibraryServices
         }
 
         public IEnumerable<Book> GetBooks(string title="", int? ISBN = null,
-            string author = "", int? pagesMin = null, int? pagesMax=null,
+            string[] authors = null, int? pagesMin = null, int? pagesMax=null,
             string publisher = "", string category = "")
         {
             List<Book> result = new List<Book>();
@@ -175,13 +207,21 @@ namespace EBookLibraryServices
             }
             if (ISBN != null) result = result.Where(b => b.ISBN.Equals(ISBN)).ToList();
             if (title != "" && title != null) result = result.Where(b => b.Title.Contains(title)).ToList();
-            if (author != "" && author != null)
+            if (authors != null)
             {
-                var dbAuthor = _context.Authors.Where(a => a.Name.ToLower().Contains(author.ToLower())).FirstOrDefault();
-                var bookAuthor = _context.BookAuthors.Where(ba => ba.AuthorId.Equals(dbAuthor.AuthorId)).FirstOrDefault();
-                if(bookAuthor != null)
+                ICollection<BookAuthor> bookAuthors = null;
+                foreach(var author in authors)
                 {
-                    result = result.Where(b => b.BookAuthors.Contains(bookAuthor)).ToList(); //to jest w chuj ryzykowne :)
+                    var dbAuthor = _context.Authors.Where(a => a.Name.ToLower().Contains(author.ToLower())).FirstOrDefault();
+                    if(dbAuthor != null)
+                    {
+                        var bookAuthor = _context.BookAuthors.Where(ba => ba.AuthorId.Equals(dbAuthor.AuthorId)).FirstOrDefault();
+                        if(bookAuthor != null) bookAuthors.Append(bookAuthor);
+                    }
+                }
+                if(bookAuthors != null)
+                {
+                    result = result.Where(b => b.BookAuthors.Equals(bookAuthors)).ToList(); //to jest w chuj ryzykowne :) //może się pierdolić jak sasha
                 }
                 else result = new List<Book>();
             }
@@ -293,7 +333,7 @@ namespace EBookLibraryServices
         }
 
         public bool UpdateById(int? id, string newTitle="", int? newISBN=null,
-            string newAuthor="", int? newPages = null,
+            string[] newAuthors=null, int? newPages = null,
             string newPublisher="", string newCategory="")
         {
             try
@@ -327,20 +367,31 @@ namespace EBookLibraryServices
                         }
                         _context.Update(book);
                         _context.SaveChanges();
-                        if (newAuthor != "")
+                        if (newAuthors != null)
                         {
-                            var dbAuthor = _context.Authors.Where(a => a.Name.ToLower().Contains(newAuthor.ToLower())).FirstOrDefault();
-                            if (dbAuthor != null)
+                            ICollection<Author> dbAuthors = null;
+                            foreach(var newAuthor in newAuthors)
                             {
-                                var bookAuthor = _context.BookAuthors.Where(ba => ba.AuthorId.Equals(dbAuthor.AuthorId)).FirstOrDefault();
-                                if (bookAuthor == null)
+                                var dbAuthor = _context.Authors.Where(a => a.Name.ToLower().Contains(newAuthor.ToLower())).FirstOrDefault();
+                                if(dbAuthor != null)
                                 {
-                                    _context.BookAuthors.Add(new BookAuthor
+                                    dbAuthors.Append(dbAuthor);
+                                }
+                            }
+                            if (dbAuthors != null)
+                            {
+                                foreach(var dbAuthor in dbAuthors)
+                                {
+                                    var bookAuthor = _context.BookAuthors.Where(ba => ba.AuthorId.Equals(dbAuthor.AuthorId)).FirstOrDefault();
+                                    if (bookAuthor == null)
                                     {
-                                        Author = dbAuthor,
-                                        Book = book
-                                    });
-                                    _context.SaveChanges();
+                                        _context.BookAuthors.Add(new BookAuthor
+                                        {
+                                            Author = dbAuthor,
+                                            Book = book
+                                        });
+                                        _context.SaveChanges();
+                                    }
                                 }
                             }
 
@@ -414,6 +465,14 @@ namespace EBookLibraryServices
             }
         }
 
+        ///<summary>
+        ///Funkcja do pobierania wszystkich egzemplarzy książki które nie są wyporzyczone
+        ///</summary>
+        ///<remarks>
+        ///Jeśli nie znaleziono żadnej dostępnej kopii książki to wyszukiwana jest kopia, 
+        ///która może zostać zwolniona(czas wyporzyczenia dobiegł końca, lecz nie została
+        ///jeszcze uwzględniona jako wolna w systemie).
+        ///</remarks>
         public IEnumerable<Copy> GetAvailableBookCopies(Book book)
         {
             try
@@ -428,17 +487,22 @@ namespace EBookLibraryServices
                     List<Loan> loans = new List<Loan>(); 
                     foreach(var copy in allBookCopies)
                     {
-                        loans.Add(_context.Loans.Where(c => copy.CopyId.Equals(copy.CopyId)).Include(c => c.Copy).FirstOrDefault());
+                        var loan = _context.Loans.Where(c => copy.CopyId.Equals(copy.CopyId)).Include(c => c.Copy).FirstOrDefault();
+                        if(loan != null) loans.Add(loan);
                     }
-                    foreach(var loan in loans)
+                    if(loans.Any())
                     {
-                        if(loan.StartDate.AddDays(loan.LoanDurationDays) >= DateTime.Now)
+                        foreach (var loan in loans)
                         {
-                            allBookCopies.Add(loan.Copy);
-                        }
-                        else
-                        {
-                            loans.Remove(loan);
+                            if (loan.StartDate.AddDays(loan.LoanDurationDays) >= DateTime.Now)
+                            {
+                                allBookCopies.Add(loan.Copy);
+                            }
+                            else
+                            {
+                                _context.Loans.Remove(loan);
+                                _context.SaveChanges();
+                            }
                         }
                     }
                     if(allBookCopies.Any())
@@ -564,6 +628,46 @@ namespace EBookLibraryServices
         {
             var authors = _context.Authors.ToList();
             return authors.Any() ? authors : null;
+        }
+
+        public bool AddAuthor(string name)
+        {
+            if(name != null && name != string.Empty)
+            {
+                try
+                {
+                    _context.Authors.Add(new Author
+                    {
+                        Name = name
+                    });
+                    _context.SaveChanges();
+                    return true;
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        public bool ChangeCopyRentedStatus(Copy copy)
+        {
+            try
+            {
+                if(copy != null)
+                {
+                    copy.IsRented = true;
+                    _context.SaveChanges();
+                }
+                return false;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
         }
     }
 }
