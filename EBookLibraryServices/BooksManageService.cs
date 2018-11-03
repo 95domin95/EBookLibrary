@@ -690,5 +690,41 @@ namespace EBookLibraryServices
                 return null;
             }
         }
+
+        public IEnumerable<Book> GetMostRecentBooks(int booksCount=10)
+        {
+            try
+            {
+                var books = _context.Books.Include(b => b.BookAuthors).Include(b => b.Category).OrderBy(b => b.AddDate).Take(booksCount);
+                if(books != null)
+                {
+                    return books.ToList();
+                }
+                return null;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+
+        public IEnumerable<Book> GetMostPopularBooks(int booksCount = 10)
+        {
+            try
+            {
+                var books = _context.Books.Include(b => b.BookAuthors).Include(b => b.Category).OrderBy(b => b.LoansCount).Take(booksCount);
+                if (books != null)
+                {
+                    return books.ToList();
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
     }
 }

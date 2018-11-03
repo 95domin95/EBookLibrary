@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,6 +10,7 @@ namespace EBookLibraryData.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int BookId { get; set; }
+        public DateTime AddDate { get; set; } = DateTime.Now;
         public int? ISBN { get; set; }
         public string Title { get; set; }
         public int? Pages { get; set; }

@@ -31,11 +31,16 @@ namespace EBookLibrary.Controllers
 
         public IActionResult Index()
         {
-            return View(new IndexViewModel());
+            return View(new IndexViewModel {
+                MostRecent = _manage.GetMostRecentBooks(),
+                MostPopular = _manage.GetMostPopularBooks()
+            });
         }
         [HttpGet]
         public IActionResult Index(IndexViewModel model)
         {
+            model.MostRecent = _manage.GetMostRecentBooks();
+            model.MostPopular = _manage.GetMostPopularBooks();
             return View(model);
         }
 
