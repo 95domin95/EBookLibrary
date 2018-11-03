@@ -12,6 +12,8 @@ namespace EBookLibraryData.Models
         [ForeignKey("CountryId")]
         public Country Country { get; set; }
         public string PostalCode { get; set; }
+        public long BooksRead { get; set; } = 0;
         public ICollection<Loan> Loans { get; set; }
+        public ICollection<Queue> Queues { get; set; }
     }
 }

@@ -17,11 +17,14 @@ namespace EBookLibrary.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IBooksManage _manage;
+        private readonly IQueue _queue;
         public HomeController(IBooksManage manage,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IQueue queue)
         {
             _manage = manage;
             _userManager = userManager;
+            _queue = queue;
         }
 
         public IActionResult Index()
@@ -43,16 +46,65 @@ namespace EBookLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ReturnBook(LoanViewModel model)
+        public async Task<IActionResult> LeaveQueue(BookPreviewViewModel model)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            model.BookRented = false;
-            _manage.RemoveUserLoan(user, _manage.GetById((int)model.BookId));
             var bookPreviewModel = new BookPreviewViewModel
             {
                 BookId = model.BookId,
                 BookRented = false,
+                BookRent = false,
+                JoinQueueError = false
+            };
+            if (_queue.CheckIfAlreadyInQueue(user, _manage.GetById((int)model.BookId)))
+            {
+                if (_queue.RemoveQueue(_queue.GetQueue(user, _manage.GetById((int)model.BookId))))
+                {
+                    bookPreviewModel.InQueue = false;
+                }
+            }
+            return RedirectToAction("BookPreview", bookPreviewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> JoinQueue(BookPreviewViewModel model)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            model.JoinQueueError = false;
+            var bookPreviewModel = new BookPreviewViewModel
+            {
+                BookId = model.BookId,
+                InQueue = false,
+                BookRented = false,
                 BookRent = false
+            };
+            if (!_queue.CheckIfAlreadyInQueue(user, _manage.GetById((int)model.BookId)))
+            {
+                if (_queue.AddQueue(user, _manage.GetById((int)model.BookId)))
+                {
+                    bookPreviewModel.InQueue = true;
+                }
+                else model.JoinQueueError = true;
+            }
+            else model.JoinQueueError = true;
+            return RedirectToAction("BookPreview", bookPreviewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ReturnBook(LoanViewModel model)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            model.BookRented = false;
+            if(_manage.RemoveUserLoan(user, _manage.GetById((int)model.BookId)))
+            {
+                _manage.IncrementBookCopy(_manage.GetById((int)model.BookId));
+            }
+            var bookPreviewModel = new BookPreviewViewModel
+            {
+                BookId = model.BookId,
+                BookRented = false,
+                BookRent = false,
+                JoinQueueError = false
             };
             return RedirectToAction("BookPreview", bookPreviewModel);
         }
@@ -106,7 +158,8 @@ namespace EBookLibrary.Controllers
                             {
                                 BookId = model.BookId,
                                 BookRented = true,
-                                LoanError = true
+                                LoanError = true,
+                                JoinQueueError = false
                             });
                         }
                     }
@@ -116,6 +169,7 @@ namespace EBookLibrary.Controllers
                     BookId = model.BookId,
                     BookRented = false,
                     BookNotAvailable = true,
+                    JoinQueueError = false
                 });
             }
             return new NoContentResult();
@@ -129,7 +183,9 @@ namespace EBookLibrary.Controllers
             if (model.BookId != null)
             {
                 model.BookRent = false;
+                model.InQueue = false;
                 model.Book = _manage.GetById((int)model.BookId);
+                model.JoinQueueError = false;
                 if (model.Book != default(Book))
                 {
                     if (User.Identity.IsAuthenticated)
@@ -160,6 +216,36 @@ namespace EBookLibrary.Controllers
                                 }
                             }
                         }
+                        #region book loan if in queue
+                        var userQueue = _queue.GetQueue(user, model.Book);
+                        if (userQueue != null)
+                        {
+                            model.InQueue = true;
+                            var queues = _queue.GetQueuesForBook(model.Book);
+                            if (queues.ElementAt(0).JoinDate < userQueue.JoinDate) model.InQueue = true;
+                            else if(queues.ElementAt(0).JoinDate >= userQueue.JoinDate)
+                            {
+                                var copies = _manage.GetAvailableBookCopies(model.Book);
+                                if(copies != null)
+                                {
+                                    if (_manage.AddLoan(new Loan
+                                    {
+                                        Copy = copies.FirstOrDefault(),
+                                        User = user,
+                                        StartDate = DateTime.Now,
+                                        LoanDurationDays = model.LoanPeroidDays
+                                    }))
+                                    {
+                                        if (_queue.RemoveQueue(userQueue))
+                                        {
+                                            model.InQueue = true;
+                                        }
+                                        else model.InQueue = false;
+                                    }
+                                }
+                            }
+                        }
+                        #endregion
                     }
                     return View(model);
                 }

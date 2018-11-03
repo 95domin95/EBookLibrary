@@ -78,6 +78,7 @@ namespace EBookLibrary
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddTransient<IBooksManage, BooksManageService>();
             services.AddTransient<IFileManage, FileManageService>();
+            services.AddTransient<IQueue, QueueService>();
             services.Configure<AdminAccountOptions>(Configuration.GetSection("AdminAccount"));
         }
 

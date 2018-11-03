@@ -15,6 +15,7 @@ namespace EBookLibraryData.Models
         public int CopiesCount { get; set; } = 1;
         public string Path { get; set; }
         public string CoveringPath { get; set; }
+        public long LoansCount { get; set; } = 0;
         public int? PublisherId { get; set; }
         [ForeignKey("PublisherId")]
         public Publisher Publisher { get; set; }
@@ -23,5 +24,6 @@ namespace EBookLibraryData.Models
         public Category Category { get; set; }
         public ICollection<Copy> Copies { get; set; }
         public ICollection<BookAuthor> BookAuthors { get; set; }
+        public ICollection<Queue> Queues { get; set; }
     }
 }

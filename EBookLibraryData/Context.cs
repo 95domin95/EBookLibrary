@@ -18,6 +18,7 @@ namespace EBookLibraryData
         public DbSet<Author> Authors { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<BookAuthor> BookAuthors { get; set;}
+        public DbSet<Queue> Queues { get; set; }
         public Context(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
