@@ -1,0 +1,21 @@
+﻿<div class="list-group">
+    
+    @foreach(var option in (string[])ViewData["Options"])
+    {
+        @if (ViewData["Selected"].Equals(option))
+        {
+
+        }
+    }
+    @if (ViewData["Selected"].Equals(option))
+    {
+        <a class="list-group-item list-group-item-action active" asp-controller="AccountManage" asp-action="LoanHistory">Historia Wyporzyczeń</a>
+        <a class="list-group-item list-group-item-action" asp-controller="AccountManage" asp-action="UserBooks">Oczekujące</a>
+        <a class="list-group-item list-group-item-action" asp-controller="AccountManage" asp-action="UserBooks">Wypożyczone</a>
+    }
+    else
+    {
+        <a class="list-group-item list-group-item-action" asp-controller="AccountManage" asp-action="LoanHistory">Historia Wyporzyczeń</a>
+        <a class="list-group-item list-group-item-action active" asp-controller="AccountManage" asp-action="UserBooks">Oczekujące/Wypożyczone</a>
+    }
+</div>

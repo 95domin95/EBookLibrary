@@ -4,14 +4,16 @@ using EBookLibraryData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EBookLibraryData.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20181103003753_AddedLoanHistory")]
+    partial class AddedLoanHistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -239,15 +241,11 @@ namespace EBookLibraryData.Migrations
 
                     b.Property<DateTime>("LoanDate");
 
-                    b.Property<DateTime?>("ReturnDate");
-
-                    b.Property<string>("UserId");
+                    b.Property<DateTime>("ReturnDate");
 
                     b.HasKey("LoanHistoryId");
 
                     b.HasIndex("BookId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("LoanHistories");
                 });
@@ -455,10 +453,6 @@ namespace EBookLibraryData.Migrations
                     b.HasOne("EBookLibraryData.Models.Book", "Book")
                         .WithMany()
                         .HasForeignKey("BookId");
-
-                    b.HasOne("EBookLibraryData.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("EBookLibraryData.Models.Queue", b =>

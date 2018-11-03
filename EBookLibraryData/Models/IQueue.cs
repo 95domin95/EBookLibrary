@@ -11,5 +11,6 @@ namespace EBookLibraryData.Models
         bool RemoveQueue(Queue queue);
         IEnumerable<Queue> GetQueuesForBook(Book book);
         bool CheckIfAlreadyInQueue(ApplicationUser user, Book book);
+        IEnumerable<Book> GetAllUserBooksInQueue(ApplicationUser user);
     }
 }

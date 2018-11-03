@@ -79,6 +79,7 @@ namespace EBookLibrary
             services.AddTransient<IBooksManage, BooksManageService>();
             services.AddTransient<IFileManage, FileManageService>();
             services.AddTransient<IQueue, QueueService>();
+            services.AddTransient<ILoanHistory, LoanHistoryService>();
             services.Configure<AdminAccountOptions>(Configuration.GetSection("AdminAccount"));
         }
 

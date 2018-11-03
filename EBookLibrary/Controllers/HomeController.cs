@@ -9,7 +9,6 @@ using EBookLibraryServices;
 using EBookLibraryData.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
-using EBookLibraryData.Models.JsonBinding;
 
 namespace EBookLibrary.Controllers
 {
@@ -18,13 +17,16 @@ namespace EBookLibrary.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IBooksManage _manage;
         private readonly IQueue _queue;
+        private readonly ILoanHistory _loanHistory;
         public HomeController(IBooksManage manage,
             UserManager<ApplicationUser> userManager,
-            IQueue queue)
+            IQueue queue,
+            ILoanHistory loanHistory)
         {
             _manage = manage;
             _userManager = userManager;
             _queue = queue;
+            _loanHistory = loanHistory;
         }
 
         public IActionResult Index()
@@ -106,6 +108,8 @@ namespace EBookLibrary.Controllers
                 BookRent = false,
                 JoinQueueError = false
             };
+            var loanHistory = _loanHistory.GetLoanHistory(user, _manage.GetById((int)model.BookId));
+            if (loanHistory != null) _loanHistory.ModifyReturnDate(DateTime.Now, loanHistory);
             return RedirectToAction("BookPreview", bookPreviewModel);
         }
 
@@ -154,6 +158,7 @@ namespace EBookLibrary.Controllers
                         if(_manage.DecrementBookCopy(book))
                         {
                             _manage.ChangeCopyRentedStatus(copy);
+                            _loanHistory.AddLoanHistory(loan, user, _manage.GetById((int)model.BookId));
                             return RedirectToAction("BookPreview", new BookPreviewViewModel
                             {
                                 BookId = model.BookId,

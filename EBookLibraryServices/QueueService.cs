@@ -1,5 +1,6 @@
 ﻿using EBookLibraryData;
 using EBookLibraryData.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -102,6 +103,24 @@ namespace EBookLibraryServices
             {
                 Console.WriteLine(e.Message);
                 return false;
+            }
+        }
+
+        public IEnumerable<Book> GetAllUserBooksInQueue(ApplicationUser user)
+        {
+            try
+            {
+                if(user != null)
+                {
+                    var books = _context.Queues.Where(q => q.UserId.Equals(user.Id)).Include(q => q.Book).Select(q => q.Book);
+                    if (books.Any()) return books.ToList();
+                }
+                return null;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
             }
         }
     }
