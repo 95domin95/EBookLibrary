@@ -1,5 +1,50 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model EBookLibraryData.Models.ViewModels.AccountManage.InQueueViewModel
+
 @{
+    Layout = "_ManageAccountLayout";
+}
+
+<h3>@ViewData["Title"]</h3>
+@if (Model.Books != null)
+{
+    <table id="table" class="table table-striped table-bordered" style="width: 100%">
+        <thead>
+            <tr>
+                @foreach (var column in Model.ColumnNames)
+                {
+                    <th>@column</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @{ int counter = 0;}
+            @foreach (var book in Model.Books)
+            {
+                counter = counter + 1;
+            <tr>
+                <td>@counter</td>
+                <td><img class="book-covering-image-table" src="~/images/BookCovering/@book.CoveringPath" /></td>
+                <td>@book.Title</td>
+                <td>
+                    <div class="float-left pl-1 pb-3">
+                        <form asp-controller="Home" asp-action="BookPreview" method="post">
+                            <button type="submit" class="btn btn-primary" name="BookId" value="@book.BookId"><span class="fa fa-info"></span></button>
+                        </form>
+                    </div>
+                    <div class="float-left pl-1 pb-3">
+                        <form asp-controller="Home" asp-action="LeaveQueue" method="post">
+                            <button class="btn btn-danger" name="BookId" value="@book.BookId"><span class="fa fa-times"></span></button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info" role="alert">
+        Brak elementów do wyświetlenia.
+    </div>
 }

@@ -8,9 +8,12 @@
     <li class="nav-item dropdown">
         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@UserManager.GetUserName(User) <span class="caret"></span></a>
         <ul class="dropdown-menu">
+            <li><a class="dropdown-item" asp-controller="AccountManage" asp-action="LoanHistory"><i class="fa fa-history"></i> Historia wyporzyczeń</a></li>
+            <li><a class="dropdown-item" asp-controller="AccountManage" asp-action="InQueue"><i class="fa fa-spinner"></i> Oczekujące</a></li>
+            <li><a class="dropdown-item" asp-controller="AccountManage" asp-action="Loaned"><i class="fa fa-book-open"></i> Wyporzyczone</a></li>
             @if (User.IsInRole("Admin"))
             {
-                <li role="separator" class="divider"></li>
+                <li class="dropdown-divider"></li>
                 <li><a class="dropdown-item" asp-controller="BooksManage" asp-action="ManagePanel"><i class="fa fa-cog"></i> Zarzadzaj książkami</a></li>
             }
             <li class="dropdown-divider"></li>

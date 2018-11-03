@@ -669,5 +669,26 @@ namespace EBookLibraryServices
                 return false;
             }
         }
+
+        public IEnumerable<Book> GetAllUserLoanedBooks(ApplicationUser user)
+        {
+            try
+            {
+                if(user != null)
+                {
+                    var books = _context.Loans.Where(l => l.UserId.Equals(user.Id)).Include(l => l.Copy).ThenInclude(l => l.Book).Select(l => l.Copy.Book);
+                    if(books.Any())
+                    {
+                        return books.ToList();
+                    }
+                }
+                return null;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
     }
 }

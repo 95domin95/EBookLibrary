@@ -65,6 +65,21 @@ namespace EBookLibrary.Controllers
                     bookPreviewModel.InQueue = false;
                 }
             }
+
+            var referer = new string(Request.Headers["Referer"].ToString().Reverse().ToArray());
+            string actionName = string.Empty;
+            foreach(var i in referer)
+            {
+                if (i.Equals('/'))
+                {
+                    break;
+                }
+                actionName += i;
+            }
+            if (new string(actionName.Reverse().ToArray()).Equals("InQueue"))
+            {
+                return RedirectToAction("InQueue", "AccountManage");
+            }
             return RedirectToAction("BookPreview", bookPreviewModel);
         }
 
@@ -110,6 +125,21 @@ namespace EBookLibrary.Controllers
             };
             var loanHistory = _loanHistory.GetLoanHistory(user, _manage.GetById((int)model.BookId));
             if (loanHistory != null) _loanHistory.ModifyReturnDate(DateTime.Now, loanHistory);
+
+            var referer = new string(Request.Headers["Referer"].ToString().Reverse().ToArray());
+            string actionName = string.Empty;
+            foreach (var i in referer)
+            {
+                if (i.Equals('/'))
+                {
+                    break;
+                }
+                actionName += i;
+            }
+            if (new string(actionName.Reverse().ToArray()).Equals("Loaned"))
+            {
+                return RedirectToAction("Loaned", "AccountManage");
+            }
             return RedirectToAction("BookPreview", bookPreviewModel);
         }
 

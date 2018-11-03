@@ -1,5 +1,6 @@
 ﻿using EBookLibraryData;
 using EBookLibraryData.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -85,7 +86,7 @@ namespace EBookLibraryServices
             {
                 if(user != null)
                 {
-                    var loanHistories = _context.LoanHistories.Where(lh => lh.UserId.Equals(user.Id));
+                    var loanHistories = _context.LoanHistories.Where(lh => lh.UserId.Equals(user.Id)).Include(lh => lh.Book);
                     if(loanHistories.Any())
                     {
                         return loanHistories.ToList();

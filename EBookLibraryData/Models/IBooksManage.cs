@@ -35,5 +35,6 @@ namespace EBookLibraryData.Models
         string GetPath(int id);
         Publisher AddPublisher(string name, string city);
         Loan GetLoanByCopy(Copy copy);
+        IEnumerable<Book> GetAllUserLoanedBooks(ApplicationUser user);
     }
 }
