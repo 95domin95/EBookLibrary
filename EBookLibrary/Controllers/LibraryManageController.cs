@@ -22,13 +22,18 @@ namespace EBookLibrary.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IAuthors _author;
         private readonly IPublishers _publisher;
+        private readonly ICategory _category;
+        private readonly ILoans _loans;
+
         public LibraryManageController(IBooksManage manage,
             IQueue queue,
             ILoanHistory loanHistory,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IAuthors author,
-            IPublishers publisher)
+            IPublishers publisher,
+            ICategory category,
+            ILoans loans)
         {
             _manage = manage;
             _queue = queue;
@@ -37,6 +42,8 @@ namespace EBookLibrary.Controllers
             _loanHistory = loanHistory;
             _author = author;
             _publisher = publisher;
+            _category = category;
+            _loans = loans;
         }
 
         private readonly List<string[]> operations = new List<string[]>()
@@ -259,14 +266,17 @@ namespace EBookLibrary.Controllers
             ViewData["Title"] = "Autorzy";
             ViewData["Options"] = menuOptions;
             ViewData["Selected"] = menuOptions[(int)Option.Authors][(int)Option.Name];
-
-            if(model.Name != null)
+            model.RemovedSuccessfully = false;
+            model.AddedSuccessfully = false;
+            model.AddError = false;
+            model.RemoveError = false;
+            if (model.Name != null)
             {
                 if(_author.Add(model.Name))
                 {
                     model.AddedSuccessfully = true;
                 }
-                else model.AddedSuccessfully = false;
+                else model.AddError = true;
             }
             else if(model.AuthorId != null)
             {
@@ -274,7 +284,7 @@ namespace EBookLibrary.Controllers
                 {
                     model.RemovedSuccessfully = true;
                 }
-                else model.RemovedSuccessfully = false;
+                else model.RemoveError = true;
             }
             model.Take = 1000;
             model.Authors = _author.GetMany(model.Take);
@@ -302,14 +312,17 @@ namespace EBookLibrary.Controllers
             ViewData["Title"] = "Wydawcy";
             ViewData["Options"] = menuOptions;
             ViewData["Selected"] = menuOptions[(int)Option.Publishers][(int)Option.Name];
-
+            model.RemovedSuccessfully = false;
+            model.AddedSuccessfully = false;
+            model.AddError = false;
+            model.RemoveError = false;
             if (model.Name != null)
             {
                 if (_publisher.Add(model.Name, model.City))
                 {
                     model.AddedSuccessfully = true;
                 }
-                else model.AddedSuccessfully = false;
+                else model.AddError = true;
             }
             else if (model.PublisherId != null)
             {
@@ -317,12 +330,167 @@ namespace EBookLibrary.Controllers
                 {
                     model.RemovedSuccessfully = true;
                 }
-                else model.RemovedSuccessfully = false;
+                else model.RemoveError = true;
             }
             model.Take = 1000;
             model.Publishers = _publisher.GetMany(model.Take);
             model.PublisherId = null;
             model.Name = null;
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Categories()
+        {
+            ViewData["Title"] = "Kategorie";
+            ViewData["Options"] = menuOptions;
+            ViewData["Selected"] = menuOptions[(int)Option.Categories][(int)Option.Name];
+            return View(new CategoriesManageViewModel
+            {
+                Categories = _category.GetMany(1000),
+                Take = 1000
+            });
+        }
+
+        [HttpPost]
+        public IActionResult Categories(CategoriesManageViewModel model)
+        {
+            ViewData["Title"] = "Kategorie";
+            ViewData["Options"] = menuOptions;
+            ViewData["Selected"] = menuOptions[(int)Option.Categories][(int)Option.Name];
+            model.RemovedSuccessfully = false;
+            model.AddedSuccessfully = false;
+            model.AddError = false;
+            model.RemoveError = false;
+
+            if (model.Name != null)
+            {
+                if (_category.Add(model.Name))
+                {
+                    model.AddedSuccessfully = true;
+                }
+                else model.AddError = true;
+            }
+            else if (model.CategoryId != null)
+            {
+                if (_category.Remove((int)model.CategoryId))
+                {
+                    model.RemovedSuccessfully = true;
+                }
+                else model.RemoveError = true;
+            }
+            model.Take = 1000;
+            model.Categories = _category.GetMany(model.Take);
+            model.CategoryId = null;
+            model.Name = null;
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Queues()
+        {
+            ViewData["Title"] = "Kolejki";
+            ViewData["Options"] = menuOptions;
+            ViewData["Selected"] = menuOptions[(int)Option.Queues][(int)Option.Name];
+            return View(new QueuesManageViewModel
+            {
+                Queues = _queue.GetMany(1000),
+                Take = 1000
+            });
+        }
+
+        [HttpPost]
+        public IActionResult Queues(QueuesManageViewModel model)
+        {
+            ViewData["Title"] = "Kolejki";
+            ViewData["Options"] = menuOptions;
+            ViewData["Selected"] = menuOptions[(int)Option.Queues][(int)Option.Name];
+            model.RemovedSuccessfully = false;
+            model.RemoveError = false;
+
+            if (model.QueueId != null)
+            {
+                if (_category.Remove((int)model.QueueId))
+                {
+                    model.RemovedSuccessfully = true;
+                }
+                else model.RemoveError = true;
+            }
+            model.Take = 1000;
+            model.Queues = _queue.GetMany(model.Take);
+            model.QueueId = null;
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult LoanHistories()
+        {
+            ViewData["Title"] = "Historie wyporzyczeń";
+            ViewData["Options"] = menuOptions;
+            ViewData["Selected"] = menuOptions[(int)Option.LoanHistories][(int)Option.Name];
+            return View(new LoanHistoriesManageViewModel
+            {
+                LoanHistories = _loanHistory.GetMany(1000),
+                Take = 1000
+            });
+        }
+
+        [HttpPost]
+        public IActionResult LoanHistories(LoanHistoriesManageViewModel model)
+        {
+            ViewData["Title"] = "Historie wyporzyczeń";
+            ViewData["Options"] = menuOptions;
+            ViewData["Selected"] = menuOptions[(int)Option.LoanHistories][(int)Option.Name];
+            model.RemovedSuccessfully = false;
+            model.RemoveError = false;
+
+            if (model.LoanHistoryId != null)
+            {
+                if (_category.Remove((int)model.LoanHistoryId))
+                {
+                    model.RemovedSuccessfully = true;
+                }
+                else model.RemoveError = true;
+            }
+            model.Take = 1000;
+            model.LoanHistories = _loanHistory.GetMany(model.Take);
+            model.LoanHistoryId = null;
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Loans()
+        {
+            ViewData["Title"] = "Wyporzyczenia";
+            ViewData["Options"] = menuOptions;
+            ViewData["Selected"] = menuOptions[(int)Option.Loans][(int)Option.Name];
+            return View(new LoansManageViewModel
+            {
+                Loans = _loans.GetMany(1000),
+                Take = 1000
+            });
+        }
+
+        [HttpPost]
+        public IActionResult Loans(LoansManageViewModel model)
+        {
+            ViewData["Title"] = "Wyporzyczenia";
+            ViewData["Options"] = menuOptions;
+            ViewData["Selected"] = menuOptions[(int)Option.Loans][(int)Option.Name];
+            model.RemovedSuccessfully = false;
+            model.RemoveError = false;
+
+            if (model.LoanId != null)
+            {
+                if (_category.Remove((int)model.LoanId))
+                {
+                    model.RemovedSuccessfully = true;
+                }
+                else model.RemoveError = true;
+            }
+            model.Take = 1000;
+            model.Loans = _loans.GetMany(model.Take);
+            model.LoanId = null;
             return View(model);
         }
     }

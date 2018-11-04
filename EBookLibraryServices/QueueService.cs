@@ -123,5 +123,46 @@ namespace EBookLibraryServices
                 return null;
             }
         }
+
+        public bool RemoveById(int id = -1)
+        {
+            try
+            {
+                if (id > 0)
+                {
+                    var queue = _context.Queues.Where(a => a.QueueId.Equals(id));
+                    if (queue.Any())
+                    {
+                        _context.Remove(queue.FirstOrDefault());
+                        _context.SaveChanges();
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
+        public IEnumerable<Queue> GetMany(int take = 1000)
+        {
+            try
+            {
+                var queues = _context.Queues.Take(take);
+                if (queues.Any())
+                {
+                    return queues.ToList();
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
     }
 }

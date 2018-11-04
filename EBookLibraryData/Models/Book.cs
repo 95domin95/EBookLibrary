@@ -21,7 +21,7 @@ namespace EBookLibraryData.Models
         public int? PublisherId { get; set; }
         [ForeignKey("PublisherId")]
         public Publisher Publisher { get; set; }
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
         public ICollection<Copy> Copies { get; set; }

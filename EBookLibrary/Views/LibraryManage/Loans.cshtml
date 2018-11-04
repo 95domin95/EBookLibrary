@@ -1,4 +1,4 @@
-﻿@model EBookLibraryData.Models.ViewModels.LibraryManage.QueuesManageViewModel
+﻿@model EBookLibraryData.Models.ViewModels.LibraryManage.LoansManageViewModel
 
 @{
     Layout = "_ManageLibraryLayout";
@@ -20,7 +20,7 @@ else if (Model.RemoveError)
     </div>
 }
 
-@if (Model.Queues != null)
+@if (Model.Loans != null)
 {
     <table id="table" class="table table-striped table-bordered" style="width: 100%">
         <thead>
@@ -33,37 +33,36 @@ else if (Model.RemoveError)
         </thead>
         <tbody>
             @{ int counter = 0;}
-            @foreach (var queue in Model.Queues)
+            @foreach (var loan in Model.Loans)
             {
                 counter = counter + 1;
                 <tr>
                     <td>@counter</td>
-                    <td>@queue.QueueId</td>
-                    <td>@queue.BookId</td>
-                    <td>@queue.UserId</td>
-                    <td>@queue.JoinDate</td>
+                    <td>@loan.LoanId</td>
+                    <td>@loan.UserId</td>
+                    <td>@loan.CopyId</td>
                     <td>
                         <div class="float-left pl-1 pb-3">
                             <!-- Button trigger modal -->
-                            <button class="btn btn-danger" data-toggle="modal" data-target="#remove-modal-@queue.QueueId"><span class="fa fa-times"></span></button>
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#remove-modal-@loan.LoanId"><span class="fa fa-times"></span></button>
 
                             <!-- Modal -->
-                            <div class="modal fade" id="remove-modal-@queue.QueueId" tabindex="-1" role="dialog" aria-labelledby="remove-modal-@queue.QueueId-label" aria-hidden="true">
+                            <div class="modal fade" id="remove-modal-@loan.LoanId" tabindex="-1" role="dialog" aria-labelledby="remove-modal-@loan.LoanId-label" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="remove-modal-@queue.QueueId-label">Usuwanie autora</h5>
+                                            <h5 class="modal-title" id="remove-modal-@loan.LoanId-label">Usuwanie wyporzyczenia</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <form asp-controller="LibraryManage" asp-action="Queues" method="post" id="remove-author-form-@queue.QueueId"></form>
-                                            Czy na pewno chcesz usunąć tego autora?
+                                            <form asp-controller="LibraryManage" asp-action="Loans" method="post" id="remove-author-form-@loan.LoanId"></form>
+                                            Czy na pewno chcesz usunąć te wyporzyczenie?
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-                                            <button class="btn btn-danger" name="AuthorId" value="@queue.QueueId" form="remove-author-form-@queue.QueueId">Usuń</button>
+                                            <button class="btn btn-danger" name="AuthorId" value="@loan.LoanId" form="remove-author-form-@loan.LoanId">Usuń</button>
                                         </div>
                                     </div>
                                 </div>

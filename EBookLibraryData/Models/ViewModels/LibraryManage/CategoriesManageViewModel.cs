@@ -5,7 +5,7 @@ using System.Text;
 
 namespace EBookLibraryData.Models.ViewModels.LibraryManage
 {
-    public class PublisherManageViewModel
+    public class CategoriesManageViewModel
     {
         public string[] ColumnNames
         {
@@ -16,51 +16,47 @@ namespace EBookLibraryData.Models.ViewModels.LibraryManage
                     "#",
                     "Id",
                     "Nazwa",
-                    "Miasto",
                     "Operacje"
                 };
             }
         }
-        [Display(Name = "Nazwa wydawcy")]
+        [Display(Name = "Nazwa Kategorii")]
         public string Name { get; set; }
-        [Display(Name = "Miasto")]
-        public string City { get; set; }
         public bool AddedSuccessfully { get; set; } = false;
         public bool AddError { get; set; } = false;
-        public string RemoveSuccess
-        {
-            get
-            {
-                return "Dodano wydawcę";
-            }
-        }
-        public string RemoveFailed
-        {
-            get
-            {
-                return "Nie udało się dodać wydawcę";
-            }
-        }
-
-        public int? PublisherId { get; set; } = null;
-        public bool RemovedSuccessfully { get; set; } = false;
-        public bool RemoveError { get; set; } = false;
         public string AddSuccess
         {
             get
             {
-                return "Usunięto wydawcę";
+                return "Dodano kategorię";
             }
         }
         public string AddFailed
         {
             get
             {
-                return "Nie udało się usunąć wydawcy";
+                return "Nie udało się dodać kategorii";
+            }
+        }
+        public int? CategoryId { get; set; } = null;
+        public bool RemovedSuccessfully { get; set; } = false;
+        public bool RemoveError { get; set; } = false;
+        public string RemoveSuccess
+        {
+            get
+            {
+                return "Usunięto kategorię";
+            }
+        }
+        public string RemoveFailed
+        {
+            get
+            {
+                return "Nie udało się usunąć kategorię";
             }
         }
         public int Take { get; set; }
-        public IEnumerable<Publisher> Publishers { get; set; }
+        public IEnumerable<Category> Categories { get; set; }
 
     }
 }

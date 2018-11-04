@@ -10,5 +10,6 @@ namespace EBookLibraryData.Models
         bool ModifyReturnDate(DateTime returnDate, LoanHistory loanHistory);
         LoanHistory GetLoanHistory(ApplicationUser user, Book book);
         IEnumerable<LoanHistory> GetAllUserLoanHistories(ApplicationUser user);
+        IEnumerable<LoanHistory> GetMany(int take = 1000);
     }
 }

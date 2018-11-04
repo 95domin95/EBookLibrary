@@ -100,5 +100,23 @@ namespace EBookLibraryServices
                 return null;
             }
         }
+
+        public IEnumerable<LoanHistory> GetMany(int take = 1000)
+        {
+            try
+            {
+                var loanHistories = _context.LoanHistories.Take(take);
+                if (loanHistories.Any())
+                {
+                    return loanHistories.ToList();
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
     }
 }

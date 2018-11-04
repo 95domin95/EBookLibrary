@@ -4,7 +4,7 @@ using System.Text;
 
 namespace EBookLibraryData.Models.ViewModels.LibraryManage
 {
-    public class AuthorsManageViewModel
+    public class LoansManageViewModel
     {
         public string[] ColumnNames
         {
@@ -14,47 +14,30 @@ namespace EBookLibraryData.Models.ViewModels.LibraryManage
                 {
                     "#",
                     "Id",
-                    "Nazwa",
+                    "Id uzytkownika",
+                    "Id kopii",
                     "Operacje"
                 };
             }
         }
-        public string Name { get; set; }
-        public bool AddedSuccessfully { get; set; } = false;
-        public bool AddError { get; set; } = false;
-        public string AddSuccess
-        {
-            get
-            {
-                return "Dodano autora";
-            }
-        }
-        public string AddFailed
-        {
-            get
-            {
-                return "Nie udało się dodać autora";
-            }
-        }
-        public int? AuthorId { get; set; } = null;
+        public int? LoanId { get; set; } = null;
         public bool RemovedSuccessfully { get; set; } = false;
         public bool RemoveError { get; set; } = false;
         public string RemoveSuccess
         {
             get
             {
-                return "Usunięto autora";
+                return "Usunięto wyporzyczenie";
             }
         }
         public string RemoveFailed
         {
             get
             {
-                return "Nie udało się usunąć autora";
+                return "Nie udało się usunąć wyporzyczenia";
             }
         }
         public int Take { get; set; }
-        public IEnumerable<Author> Authors { get; set; }
-
+        public IEnumerable<Loan> Loans { get; set; }
     }
 }
