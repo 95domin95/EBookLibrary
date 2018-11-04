@@ -1,7 +1,5 @@
 ﻿window.addEventListener("load", () => {
 
-    //TODO: Podpiąc funckje wyszarzającą inputy do windows load
-
     var isbn = document.getElementById('isbn');
 
     var id = document.getElementById('id');
@@ -14,73 +12,9 @@
 
     var bookCovering = document.getElementById("book-covering");
 
-    var operationSelect = document.getElementById("operation-types");
-
     var imageExts = new Array("png", "jpg", "jpeg");
 
     var documentExts = new Array("pdf");
-
-    var newAuthor = document.getElementById("new-author");
-
-    var addAuthorBtn = document.getElementById("add-new-author-button");
-
-    var operation = {
-        "add": [
-            "id",
-            "double-input-min",
-            "double-input-max",
-            "new-author"
-        ],
-        "update": [
-            "double-input-min",
-            "double-input-max",
-            "new-author"
-        ],
-        "delete": [
-            "isbn",
-            "title",
-            "pages",
-            "double-input-min",
-            "double-input-max",
-            "publisher",
-            "category",
-            "author",
-            "book-covering",
-            "book",
-            "copies-count"
-        ],
-        "select": [
-            "book-covering",
-            "book"
-        ]
-    };
-
-    var formField = [
-        "id",
-        "isbn",
-        "title",
-        "pages",
-        "double-input-min",
-        "double-input-max",
-        "publisher",
-        "category",
-        "author",
-        "book-covering",
-        "book",
-        "copies-count",
-        "new-author"
-    ];
-
-    operationSelect.addEventListener("change", () => {
-        for (i in formField) {
-            var test = document.getElementById(formField[i]);
-            console.log(test);
-            document.getElementById(formField[i]).disabled = false;
-        }
-        for (i in operation[operationSelect.value]) {
-            document.getElementById(operation[operationSelect.value][i]).disabled = true;
-        }
-    }, false);
 
     bookCovering.addEventListener("change", e => {
         var preview = document.getElementById("book-covering-image");
@@ -100,7 +34,6 @@
     }, false);
 
     book.addEventListener("change", e => {
-        var previev = document.getElementById("book-image");
         var file = e.target.files[0];
         var reader = new FileReader();
 
@@ -138,22 +71,6 @@
 
     pages.addEventListener('input', () => {
         id.value = parseInt(String(page.value).replace(/[^0-9]/g, ''));
-    }, false);
-
-    addAuthorBtn.addEventListener('click', e => {
-        e.preventDefault();
-        data = JSON.stringify({
-            "Name": newAuthor.value
-        });
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'AddNewAuthor');
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                console.log(JSON.parse(xhr));
-            }
-        };
-        xhr.send(data);
     }, false);
 
 }, false);

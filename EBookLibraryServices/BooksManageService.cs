@@ -212,9 +212,10 @@ namespace EBookLibraryServices
                 ICollection<BookAuthor> bookAuthors = null;
                 foreach(var author in authors)
                 {
-                    var dbAuthor = _context.Authors.Where(a => a.Name.ToLower().Contains(author.ToLower())).FirstOrDefault();
-                    if(dbAuthor != null)
+                    var dbAuthors = _context.Authors.Where(a => a.Name.ToLower().Contains(author.ToLower()));
+                    if(dbAuthors != null)
                     {
+                        var dbAuthor = dbAuthors.FirstOrDefault();
                         var bookAuthor = _context.BookAuthors.Where(ba => ba.AuthorId.Equals(dbAuthor.AuthorId)).FirstOrDefault();
                         if(bookAuthor != null) bookAuthors.Append(bookAuthor);
                     }
@@ -715,6 +716,24 @@ namespace EBookLibraryServices
             {
                 var books = _context.Books.Include(b => b.BookAuthors).Include(b => b.Category).OrderBy(b => b.LoansCount).Take(booksCount);
                 if (books != null)
+                {
+                    return books.ToList();
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+
+        public IEnumerable<Book> GetMany(int take = 1000)
+        {
+            try
+            {
+                var books = _context.Books.Include(b => b.BookAuthors).ThenInclude(ba => ba.Author).Take(take);
+                if (books.Any())
                 {
                     return books.ToList();
                 }

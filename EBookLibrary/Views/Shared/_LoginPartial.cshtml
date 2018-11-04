@@ -14,7 +14,7 @@
             @if (User.IsInRole("Admin"))
             {
                 <li class="dropdown-divider"></li>
-                <li><a class="dropdown-item" asp-controller="LibraryManage" asp-action="ManagePanel"><i class="fa fa-cog"></i> Zarzadzaj książkami</a></li>
+                <li><a class="dropdown-item" asp-controller="LibraryManage" asp-action="Books"><i class="fa fa-cog"></i> Zarzadzaj książkami</a></li>
             }
             <li class="dropdown-divider"></li>
             <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout"><i class="fa fa-power-off"></i> Wyloguj</a></li>

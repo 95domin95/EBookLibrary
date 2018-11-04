@@ -24,6 +24,9 @@
                     <p>Wydawca: @Model.Book.Publisher.Name</p>
                 }
                 <p>Ilość stron: @Model.Book.Pages</p>
+                <p>Data dodania: @Model.Book.AddDate</p>
+                <p>Dostępnych egzemplarzy: @Model.Book.CopiesCount</p>
+                <p>ISBN: @Model.Book.ISBN</p>
                 @if (SignInManager.IsSignedIn(User))
                 {
                     @if (Model.BookRent)

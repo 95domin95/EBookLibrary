@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace EBookLibraryData.Models.ViewModels.LibraryManage
@@ -19,6 +20,7 @@ namespace EBookLibraryData.Models.ViewModels.LibraryManage
                 };
             }
         }
+        [Display(Name = "Nazwa autora:")]
         public string Name { get; set; }
         public bool AddedSuccessfully { get; set; } = false;
         public bool AddError { get; set; } = false;

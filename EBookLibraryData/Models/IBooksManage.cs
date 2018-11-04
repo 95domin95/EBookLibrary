@@ -38,5 +38,6 @@ namespace EBookLibraryData.Models
         IEnumerable<Book> GetAllUserLoanedBooks(ApplicationUser user);
         IEnumerable<Book> GetMostPopularBooks(int booksCount = 10);
         IEnumerable<Book> GetMostRecentBooks(int booksCount = 10);
+        IEnumerable<Book> GetMany(int take = 1000);
     }
 }

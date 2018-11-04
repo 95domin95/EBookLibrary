@@ -118,137 +118,21 @@ namespace EBookLibrary.Controllers
         };
 
         [HttpGet]
-        public IActionResult ManagePanel()
+        public IActionResult Books()
         {
             ViewData["Title"] = "Książki";
             ViewData["Options"] = menuOptions;
             ViewData["Selected"] = menuOptions[(int)Option.Books][(int)Option.Name];
-            return View(new ManagePanelViewModel {
+            return View(new BooksManageViewModel {
                 Categories = _manage.GetAllCategories(),
-                Operations = operations,
-                Authors = _manage.GetAllAuthors()
-        });
+                Authors = _manage.GetAllAuthors(),
+                Publishers = _publisher.GetMany(1000),
+                Books = _manage.GetMany(1000),
+                
+            });
         }
 
-        [HttpPost]
-        public IActionResult AddNewAuthor([FromBody]NewAuthor newAuthor)
-        {
-            if (newAuthor != null)
-            {
-                if (_manage.AddAuthor(newAuthor.Name)) return new JsonResult("Success");
-            }
-            return new JsonResult("Failed");
-        }
 
-        [HttpPost]
-        public IActionResult DeleteBook(string id, ManagePanelViewModel model)
-        {
-            if (!(model.Id == null || model.Id.Equals(string.Empty)))
-            {
-                if (!_manage.DeleteById((int)model.Id))
-                {
-                    model.OperationErrorName = model.Errors.ElementAt((int)OperationError.remove);
-                }
-            }
-            else model.OperationErrorName = model.Errors.ElementAt((int)OperationError.remove);
-            model.BookRemoved = true;
-
-            return RedirectToAction("ManagePanel", model);
-        }
-
-        [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> ManagePanel(ManagePanelViewModel model)
-        {
-            ViewData["Title"] = "Książki";
-            ViewData["Options"] = menuOptions;
-            ViewData["Selected"] = menuOptions[(int)Option.Books][(int)Option.Name];
-            model.BookAdded = false;
-            model.BookModified = false;
-            model.BookRemoved = false;
-            model.BookSearched = false;
-            model.OperationErrorName = string.Empty;
-            model.Authors = _manage.GetAllAuthors();
-            if (!model.PagesRangeSelected)
-            {
-                model.PagesMin = null;
-                model.PagesMax = null;
-            }
-
-            switch (model.OperationType)
-            {
-                case "add":
-                    if (!await _manage.Add(model.Title, model.ISBN, model.Pages,
-                        model.Author, model.Publisher, model.Category,
-                        model.Book, model.BookCovering, model.CopiesCount))
-                    {
-                        model.OperationErrorName = model.Errors.ElementAt((int)OperationError.add);
-                    }
-                    model.BookAdded = true;
-                    break;
-                case "update":
-                    if(!_manage.UpdateById(model.Id, model.Title, model.ISBN, 
-                        model.Author, model.Pages, model.Publisher, model.Category))
-                    {
-                        model.OperationErrorName = model.Errors.ElementAt((int)OperationError.modify);
-                    }
-                    model.BookModified = true;
-                    break;
-                case "delete":
-                    if(!(model.Id == null||model.Id.Equals(string.Empty)))
-                    {
-                        if(!_manage.DeleteById((int)model.Id))
-                        {
-                            model.OperationErrorName = model.Errors.ElementAt((int)OperationError.remove);
-                        }
-                    }
-                    else model.OperationErrorName = model.Errors.ElementAt((int)OperationError.remove);
-                    model.BookRemoved = true;
-                    break;
-                case "select":
-                    if (model.Id == null||model.Id.Equals(string.Empty))
-                    {
-                        //Wyszukiwanie po właściwościach
-                        model.BookSearched = true;
-
-                        if (model.Category == null)
-                        {
-                            var firstCategory = _manage.GetAllCategories().FirstOrDefault();
-                            if (firstCategory != default(Category))
-                            {
-                                model.Category = firstCategory.Name;
-                            }
-                        }
-
-                        model.Books = _manage.GetBooks(model.Title, model.ISBN, model.Author,
-                            model.PagesMin, model.PagesMax, model.Publisher, model.Category, model.ElementsToshow);
-
-                        if(model.Availability)
-                        {
-                            model.Books = model.Books.Where(b => b.CopiesCount > 0);
-                        }
-                    }
-                    else
-                    {
-                        //Wyszukiwanie konkretnej książki po Id
-                        model.BookSearched = true;
-                        var book = _manage.GetById((int)model.Id);
-                        if(book != null)
-                        {
-                            model.Books = new List<Book>
-                            {
-                                book
-                            };
-                        }
-                    }
-                    break;
-                default:
-                    break;
-            }
-            model.Operations = operations;
-            model.Categories = _manage.GetAllCategories();
-            return View(model);
-        }
 
         [HttpGet]
         public IActionResult Authors()
