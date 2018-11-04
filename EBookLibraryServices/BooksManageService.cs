@@ -198,7 +198,7 @@ namespace EBookLibraryServices
 
         public IEnumerable<Book> GetBooks(string title="", int? ISBN = null,
             string[] authors = null, int? pagesMin = null, int? pagesMax=null,
-            string publisher = "", string category = "")
+            string publisher = "", string category = "", int take=1000)
         {
             List<Book> result = new List<Book>();
             if(_context.Books.Count() > 0)
@@ -242,7 +242,7 @@ namespace EBookLibraryServices
                 result = result.Where(b => b.CategoryId.Equals(categoryId)).ToList();
             }
 
-            return result.Count() > 0 ? result : default(List<Book>);
+            return result.Count() > 0 ? result.Take(take) : default(List<Book>);
         }
 
         public Book GetById(int id)

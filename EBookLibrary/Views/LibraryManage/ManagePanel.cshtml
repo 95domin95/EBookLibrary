@@ -1,12 +1,16 @@
-﻿@model EBookLibraryData.Models.ViewModels.BooksManage.ManagePanelViewModel
+﻿@model EBookLibraryData.Models.ViewModels.LibraryManage.ManagePanelViewModel
+
+@{
+    Layout = "_ManageLibraryLayout";
+}
 
 <script src="~/js/managePanel.js"></script>
 <script src="~/js/pagination.js"></script>
 <script src="~/js/doubleInput.js"></script>
 <div class="row">
     <div class="col-xs-12">
-        <form enctype="multipart/form-data" asp-controller="BooksManage" asp-action="ManagePanel" method="post" id="manage-books-form">
-            <h4>Zarządzaj</h4>
+        <form enctype="multipart/form-data" asp-controller="LibraryManage" asp-action="ManagePanel" method="post" id="manage-books-form">
+            <h3>@ViewData["Title"]</h3>
             <div class="form-row">
                 <div class="col-xs-12 col-sm-6">
                     <div class="form-group">
@@ -50,21 +54,21 @@
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                     <div class="form-group">
                         <label asp-for="Id"></label>
-                        <input asp-for="Id" class="form-control" id="id" min="0"/>
+                        <input asp-for="Id" class="form-control" id="id" min="0" />
                         <span asp-validation-for="Id" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                     <div class="form-group">
                         <label asp-for="ISBN"></label>
-                        <input asp-for="ISBN" class="form-control" id="isbn" min="0"/>
+                        <input asp-for="ISBN" class="form-control" id="isbn" min="0" />
                         <span asp-validation-for="ISBN" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                     <div class="form-group">
                         <label asp-for="Pages"></label>
-                        <input asp-for="Pages" class="form-control" id="pages" min="0"/>
+                        <input asp-for="Pages" class="form-control" id="pages" min="0" />
                         <span asp-validation-for="Pages" class="text-danger"></span>
                     </div>
                 </div>
@@ -91,28 +95,20 @@
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                     <div class="form-group">
                         <label asp-for="CopiesCount"></label>
-                        <input asp-for="CopiesCount" class="form-control" id="copies-count" min="0"/>
+                        <input asp-for="CopiesCount" class="form-control" id="copies-count" min="0" />
                         <span asp-validation-for="CopiesCount" class="text-danger"></span>
                     </div>
                 </div>
                 @*<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
-            <div class="form-group">
-                <label asp-for="Author"></label>
-                <input asp-for="Author" class="form-control" id="author" />
-                <span asp-validation-for="Author" class="text-danger"></span>
-            </div>
-        </div>*@
+                        <div class="form-group">
+                            <label asp-for="Author"></label>
+                            <input asp-for="Author" class="form-control" id="author" />
+                            <span asp-validation-for="Author" class="text-danger"></span>
+                        </div>
+                    </div>*@
                 <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                     <div class="form-group">
-                        <label asp-for="NewAuthor"></label>
-                        <div class="input-group">
-                            <input asp-for="NewAuthor" class="form-control" id="new-author" />
-                            <div class="input-group-append" id="add-new-author-button">
-                                <div class="btn btn-success">
-                                    <span class="fa fa-plus"></span>
-                                </div>
-                            </div>
-                        </div>
+
                         <select asp-for="Author" class="form-control" id="author" multiple>
                             <option value=""></option>
                             @foreach (var author in Model.Authors)
@@ -156,83 +152,48 @@
         <h4>Lista książek</h4>
     </div>
 </div>
-<div class="row justify-content-center">
-    @if (Model.Books != null)
-    {
-        @if (Model.Books.Count() > 0)
-        {
-            <div class="card-columns">
-                @foreach (var i in Model.Books)
-                {
-                    <div class="card" style="width: 100%">
-                        <img class="card-img-top" src="~/images/BookCovering/@i.CoveringPath" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">@i.Title</h5>
-                            <p class="card-text">Autor: 
-                            @foreach(var author in i.BookAuthors)
-                            {
-                                <text>@author.Author.Name</text>
-                            }
-                            </p>
-                            <p class="card-text">Katgoria: @i.Category.Name</p>
-                            <div class="float-left pl-1 pb-3">
-                                <form asp-controller="Home" asp-action="BookPreview" method="post">
-                                    <Button type="submit" class="btn btn-primary" name="id" value="@i.BookId">
-                                        <span class="fa fa-info"></span>
-                                    </Button>
-                                </form>
-                            </div>
-                            <div class="float-left pl-1 pb-3">
-                                <form asp-controller="BooksManage" asp-action="DeleteBook" method="post">
-                                    <button class="btn btn-danger" name="id" value="@i.BookId">
-                                        <span class="fa fa-trash"></span>
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-        }
-    }
-</div>
 @if (Model.BookSearched)
 {
-    @if (Model.AnyElements)
+    @if (Model.Books != null)
     {
-        @if (Model.MoreThanOnePage)
-        {
-            <div class="row justify-content-center mt-4">
-                <div class="col-xs-12">
-                    @{
-                        var next = Model.Page + 1;
-                        var prev = Model.Page - 1;
-                        if (next > Model.AllPagesCount)
-                        {
-                            next = Model.AllPagesCount;
-                        }
-                        if (prev < 1)
-                        {
-                            prev = 1;
-                        }
+        <table id="table" class="table table-striped table-bordered" style="width: 100%">
+            <thead>
+                <tr>
+                    @foreach (var column in Model.ColumnNames)
+                    {
+                        <th>@column</th>
                     }
-                    <ul class="pagination">
-                        <li>
-                            <button class="btn btn-default" id="prev-btn" value="@prev" form="manage-books-form">
-                                <span class="fa fa-angle-left"></span> Poprzednia
-                            </button>
-                        </li>
-                        <li class="pl-1 pr-2"><input asp-for="Page" class="form-control" style="width: 96px" id="page-input" step="1" form="manage-books-form" /></li>
-                        <li>z<button class="btn btn-link" id="max-page" value="@Model.AllPagesCount" form="manage-books-form">@Model.AllPagesCount</button></li>
-                        <li>
-                            <button class="btn btn-default" id="next-btn" value="@next" form="manage-books-form">
-                                Następna <span class="fa fa-angle-right"></span>
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        }
+                </tr>
+            </thead>
+            <tbody>
+                @{ int counter = 0;}
+                @foreach (var book in Model.Books)
+                {
+                    counter = counter + 1;
+                    <tr>
+                        <td>@counter</td>
+                        <td><img class="book-covering-image-table" src="~/images/BookCovering/@book.CoveringPath" /></td>
+                        <td>@book.BookId</td>
+                        <td>@book.Title</td>
+                        <td>
+                            <div class="float-left pl-1 pb-3">
+                                <form asp-controller="Home" asp-action="BookPreview" method="post">
+                                    <Button type="submit" class="btn btn-primary" name="BookId" value="@book.BookId"><span class="fa fa-info"></span></Button>
+                                </form>
+                            </div>
+                            <div class="float-left pl-1 pb-3">
+                                <form asp-controller="Home" asp-action="ReturnBook" method="post">
+                                    <button class="btn btn-danger" name="BookId" value="@book.BookId"><span class="fa fa-times"></span></button>
+                                </form>
+                            </div>
+                        </td>
+                        <td>@book.Category</td>
+                        <td>@book.LoansCount</td>
+                        <td>@book.AddDate</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     }
     else
     {
@@ -243,47 +204,47 @@
 }
 @if (Model.BookAdded)
 {
-    @if (Model.OperationErrorName != "add")
+@if (Model.OperationErrorName != "add")
     {
-        <div class="alert alert-success" role="alert">
-            @Model.BookAddedMessageSuccess
-        </div>
+<div class="alert alert-success" role="alert">
+    @Model.BookAddedMessageSuccess
+</div>
     }
     else
     {
-        <div class="alert alert-danger" role="alert">
-            @Model.BookAddedMessageError
-        </div>
+<div class="alert alert-danger" role="alert">
+    @Model.BookAddedMessageError
+</div>
     }
 }
 @if (Model.BookRemoved)
 {
-    @if (Model.OperationErrorName != "remove")
+@if (Model.OperationErrorName != "remove")
     {
-        <div class="alert alert-success" role="alert">
-            @Model.BookRemovedMessageSuccess
-        </div>
+<div class="alert alert-success" role="alert">
+    @Model.BookRemovedMessageSuccess
+</div>
     }
     else
     {
-        <div class="alert alert-danger" role="alert">
-            @Model.BookRemovedMessageError
-        </div>
+<div class="alert alert-danger" role="alert">
+    @Model.BookRemovedMessageError
+</div>
     }
 }
 @if (Model.BookModified)
 {
-    @if (Model.OperationErrorName != "modify")
+@if (Model.OperationErrorName != "modify")
     {
-        <div class="alert alert-success" role="alert">
-            @Model.BookModifiedMessageSuccess
-        </div>
+<div class="alert alert-success" role="alert">
+    @Model.BookModifiedMessageSuccess
+</div>
     }
     else
     {
-        <div class="alert alert-danger" role="alert">
-            @Model.BookModifiedMessageError
-        </div>
+<div class="alert alert-danger" role="alert">
+    @Model.BookModifiedMessageError
+</div>
     }
 }
 

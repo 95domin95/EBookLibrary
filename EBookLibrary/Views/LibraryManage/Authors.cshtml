@@ -1,0 +1,45 @@
+﻿@model EBookLibraryData.Models.ViewModels.LibraryManage.AuthorsManageViewModel
+
+@{
+    Layout = "_ManageLibraryLayout";
+}
+
+<h3>@ViewData["Title"]</h3>
+@if (Model.Authors != null)
+{
+    <table id="table" class="table table-striped table-bordered" style="width: 100%">
+        <thead>
+            <tr>
+                @foreach (var column in Model.ColumnNames)
+                {
+                    <th>@column</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @{ int counter = 0;}
+            @foreach (var author in Model.Authors)
+            {
+                counter = counter + 1;
+                <tr>
+                    <td>@counter</td>
+                    <td>@author.AuthorId</td>
+                    <td>@author.Name</td>
+                    <td>
+                        <div class="float-left pl-1 pb-3">
+                            <form asp-controller="LibraryManage" asp-action="Authors" method="post">
+                                <button class="btn btn-danger" name="AuthorId" value="@author.AuthorId"><span class="fa fa-times"></span></button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info" role="alert">
+        Brak elementów do wyświetlenia.
+    </div>
+}

@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace EBookLibraryData.Models.ViewModels.BooksManage
+namespace EBookLibraryData.Models.ViewModels.LibraryManage
 {
-    public class ManagePanelViewModel : Pagination
+    public class ManagePanelViewModel
     {
         public List<string> Errors = new List<string>
         {
@@ -15,6 +15,23 @@ namespace EBookLibraryData.Models.ViewModels.BooksManage
             "remove",
             "modify"
         };
+        public string[] ColumnNames
+        {
+            get
+            {
+                return new string[]
+                {
+                    "#",
+                    "Książka",
+                    "Id",
+                    "Tytuł",
+                    "Szczegóły",
+                    "Kategoria",
+                    "Ilość wyporzyczeń",
+                    "Data dodania"
+                };
+            }
+        }
         [RegularExpression("([0-9]+)")]
         [Display(Name = "Id Książki")]
         public int? Id { get; set; }
@@ -51,12 +68,15 @@ namespace EBookLibraryData.Models.ViewModels.BooksManage
         public IFormFile BookCovering { get; set; }
         [Display(Name = "Dodaj autora")]
         public string NewAuthor { get; set; }
+        [Display(Name = "Elementów do wyświetlenia")]
+        public int ElementsToshow { get; set; } = 1000;
         public bool BookSearched { get; set; } = false;
         public bool BookModified { get; set; } = false;
         public bool BookRemoved { get; set; } = false;
         public bool BookAdded { get; set; } = false;
         public bool PagesRangeSelected { get; set; } = false;
         public string OperationErrorName { get; set; } = string.Empty;
+        public string NoElementsMessage { get; set; } = "Brak elementów do wyświetlenia";
         public string BookAddedMessageSuccess { get; } = "Nowa książka została dodana.";
         public string BookRemovedMessageSuccess { get; } = "Książka została usunięta";
         public string BookModifiedMessageSuccess { get; } = "Dane książki zostały zmienione.";

@@ -1,4 +1,5 @@
-﻿using EBookLibraryData;
+﻿using System;
+using EBookLibraryData;
 using EBookLibraryData.Models;
 using System;
 using System.Collections.Generic;
@@ -7,46 +8,49 @@ using System.Text;
 
 namespace EBookLibraryServices
 {
-    public class AuthorsService: IAuthors
+    public class PublishersService: IPublishers
     {
         private Context _context;
-        public AuthorsService(Context context)
+        public PublishersService(Context context)
         {
             _context = context;
         }
-        public bool Remove(int id=-1)
+        public bool Remove(int id = -1)
         {
             try
             {
-                if(id > 0)
+                if (id > 0)
                 {
-                    var author = _context.Authors.Where(a => a.AuthorId.Equals(id));
-                    if(author.Any())
+                    var publisher = _context.Publishers.Where(a => a.PublisherId.Equals(id));
+                    if (publisher.Any())
                     {
-                        _context.Remove(author.FirstOrDefault());
+                        _context.Remove(publisher.FirstOrDefault());
                         _context.SaveChanges();
                         return true;
                     }
                 }
                 return false;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 return false;
             }
         }
 
-        public bool Add(string name)
+        public bool Add(string name, string city)
         {
+
             try
             {
                 if (name != null)
                 {
-                    _context.Authors.Add(new Author
+                    var publisher = new Publisher
                     {
                         Name = name
-                    });
+                    };
+                    if (city != null) publisher.City = city;
+                    _context.Publishers.Add(publisher);
                     _context.SaveChanges();
                     return true;
                 }
@@ -58,14 +62,15 @@ namespace EBookLibraryServices
                 return false;
             }
         }
-        public IEnumerable<Author> GetMany(int take = 1000)
+
+        public IEnumerable<Publisher> GetMany(int take=1000)
         {
             try
             {
-                var authors = _context.Authors.Take(take);
-                if (authors.Any())
+                var publishers = _context.Publishers.Take(take);
+                if(publishers.Any())
                 {
-                    return authors.ToList();
+                    return publishers.ToList();
                 }
                 return null;
             }

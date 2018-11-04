@@ -80,6 +80,10 @@ namespace EBookLibrary
             services.AddTransient<IFileManage, FileManageService>();
             services.AddTransient<IQueue, QueueService>();
             services.AddTransient<ILoanHistory, LoanHistoryService>();
+            services.AddTransient<IAuthors, AuthorsService>();
+            services.AddTransient<IPublishers, PublishersService>();
+            services.AddTransient<ICategory, CategoryService>();
+            services.AddTransient<IUserManage, UserManageService>();
             services.Configure<AdminAccountOptions>(Configuration.GetSection("AdminAccount"));
         }
 

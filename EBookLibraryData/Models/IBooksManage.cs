@@ -9,7 +9,7 @@ namespace EBookLibraryData.Models
     public interface IBooksManage
     {
         IEnumerable<Book> GetBooks(string title, int? ISBN, string[] author, int? pagesMin,
-            int? pagesMax, string publisher, string category);
+            int? pagesMax, string publisher, string category, int take=1000);
         IEnumerable<Category> GetAllCategories();
         Book GetById(int id);
         Publisher GetPublisher(string name);

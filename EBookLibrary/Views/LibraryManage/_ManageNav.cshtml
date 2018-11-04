@@ -1,0 +1,13 @@
+﻿<div class="list-group">
+    @foreach (var option in (ViewData["Options"] as List<String []>))
+    {
+        @if (ViewData["Selected"].Equals(option[0]))
+        {
+            <a class="list-group-item list-group-item-action active" asp-controller="LibraryManage" asp-action="@option[0]">@option[1]</a>
+        }
+        else
+        {
+            <a class="list-group-item list-group-item-action" asp-controller="LibraryManage" asp-action="@option[0]">@option[1]</a>
+        }
+    }
+</div>
