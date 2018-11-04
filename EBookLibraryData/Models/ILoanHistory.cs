@@ -11,5 +11,6 @@ namespace EBookLibraryData.Models
         LoanHistory GetLoanHistory(ApplicationUser user, Book book);
         IEnumerable<LoanHistory> GetAllUserLoanHistories(ApplicationUser user);
         IEnumerable<LoanHistory> GetMany(int take = 1000);
+        bool Remove(int id = -1);
     }
 }

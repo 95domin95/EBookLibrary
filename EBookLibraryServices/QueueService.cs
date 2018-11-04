@@ -75,6 +75,29 @@ namespace EBookLibraryServices
             }
         }
 
+        public bool RemoveById(int id = -1)
+        {
+            try
+            {
+                if (id > 0)
+                {
+                    var queue = _context.Queues.Where(a => a.QueueId.Equals(id));
+                    if (queue.Any())
+                    {
+                        _context.Remove(queue.FirstOrDefault());
+                        _context.SaveChanges();
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
         public IEnumerable<Queue> GetQueuesForBook(Book book)
         {
             try
@@ -121,29 +144,6 @@ namespace EBookLibraryServices
             {
                 Console.WriteLine(e.Message);
                 return null;
-            }
-        }
-
-        public bool RemoveById(int id = -1)
-        {
-            try
-            {
-                if (id > 0)
-                {
-                    var queue = _context.Queues.Where(a => a.QueueId.Equals(id));
-                    if (queue.Any())
-                    {
-                        _context.Remove(queue.FirstOrDefault());
-                        _context.SaveChanges();
-                        return true;
-                    }
-                }
-                return false;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return false;
             }
         }
 

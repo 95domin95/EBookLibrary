@@ -24,6 +24,7 @@ namespace EBookLibrary.Controllers
         private readonly IPublishers _publisher;
         private readonly ICategory _category;
         private readonly ILoans _loans;
+        private readonly IUserManage _users;
 
         public LibraryManageController(IBooksManage manage,
             IQueue queue,
@@ -33,7 +34,8 @@ namespace EBookLibrary.Controllers
             IAuthors author,
             IPublishers publisher,
             ICategory category,
-            ILoans loans)
+            ILoans loans,
+            IUserManage users)
         {
             _manage = manage;
             _queue = queue;
@@ -44,6 +46,7 @@ namespace EBookLibrary.Controllers
             _publisher = publisher;
             _category = category;
             _loans = loans;
+            _users = users;
         }
 
         private readonly List<string[]> operations = new List<string[]>()
@@ -410,7 +413,7 @@ namespace EBookLibrary.Controllers
 
             if (model.QueueId != null)
             {
-                if (_category.Remove((int)model.QueueId))
+                if (_queue.RemoveById((int)model.QueueId))
                 {
                     model.RemovedSuccessfully = true;
                 }
@@ -446,7 +449,7 @@ namespace EBookLibrary.Controllers
 
             if (model.LoanHistoryId != null)
             {
-                if (_category.Remove((int)model.LoanHistoryId))
+                if (_loanHistory.Remove((int)model.LoanHistoryId))
                 {
                     model.RemovedSuccessfully = true;
                 }
@@ -482,7 +485,7 @@ namespace EBookLibrary.Controllers
 
             if (model.LoanId != null)
             {
-                if (_category.Remove((int)model.LoanId))
+                if (_loans.Remove((int)model.LoanId))
                 {
                     model.RemovedSuccessfully = true;
                 }
@@ -492,6 +495,70 @@ namespace EBookLibrary.Controllers
             model.Loans = _loans.GetMany(model.Take);
             model.LoanId = null;
             return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Users()
+        {
+            ViewData["Title"] = "Użytkownicy";
+            ViewData["Options"] = menuOptions;
+            ViewData["Selected"] = menuOptions[(int)Option.Users][(int)Option.Name];
+            return View(new UsersManageViewModel
+            {
+                Roles = _users.GetAllRoles(),
+                Users = _users.GetMany(1000),
+                Take = 1000
+            });
+        }
+
+        [HttpPost]
+        public IActionResult Users(UsersManageViewModel model)
+        {
+            ViewData["Title"] = "Użytkownicy";
+            ViewData["Options"] = menuOptions;
+            ViewData["Selected"] = menuOptions[(int)Option.Users][(int)Option.Name];
+            model.RemovedSuccessfully = false;
+            model.RemoveError = false;
+
+            if (model.UserId != null)
+            {
+                if (_users.Remove(model.UserId))
+                {
+                    model.RemovedSuccessfully = true;
+                }
+                else model.RemoveError = true;
+            }
+            model.Take = 1000;
+            model.Users = _users.GetMany(model.Take);
+            model.UserId = null;
+            model.RoleChoosed = null;
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult ChangeLockStatus(UsersManageViewModel model)
+        {
+            var user = _users.GetById(model.UserId);
+            if(user != null)
+            {
+                if(user.LockoutEnabled)
+                {
+                    _users.Unlock(model.UserId);
+                }
+                else _users.Lock(model.UserId);
+            }
+            return RedirectToAction("Users");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeRole(UsersManageViewModel model)
+        {
+            var user = _users.GetById(model.UserId);
+            if (user != null && model.RoleChoosed != null)
+            {
+                await _userManager.AddToRoleAsync(user, model.RoleChoosed);
+            }
+            return RedirectToAction("Users");
         }
     }
 }

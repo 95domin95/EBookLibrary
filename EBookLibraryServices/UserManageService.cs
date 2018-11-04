@@ -1,5 +1,7 @@
 ﻿using EBookLibraryData;
 using EBookLibraryData.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +16,7 @@ namespace EBookLibraryServices
         {
             _context = context;
         }
-        public IEnumerable<ApplicationUser> Users(int take=1000)
+        public IEnumerable<ApplicationUser> GetMany(int take=1000)
         {
             try
             {
@@ -93,6 +95,37 @@ namespace EBookLibraryServices
             {
                 Console.WriteLine(e.Message);
                 return false;
+            }
+        }
+
+        public ApplicationUser GetById(string id)
+        {
+            try
+            {
+                var user = _context.ApplicationUsers.Where(u => u.Id.Equals(id));
+                if (user != null)
+                {
+                    return user.FirstOrDefault();
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+
+        public IEnumerable<IdentityRole> GetAllRoles()
+        {
+            try
+            {
+                return _context.Roles;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
             }
         }
     }

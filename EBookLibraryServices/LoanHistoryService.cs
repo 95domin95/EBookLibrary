@@ -118,5 +118,28 @@ namespace EBookLibraryServices
                 return null;
             }
         }
+
+        public bool Remove(int id = -1)
+        {
+            try
+            {
+                if (id > 0)
+                {
+                    var loanHistory = _context.LoanHistories.Where(a => a.LoanHistoryId.Equals(id));
+                    if (loanHistory.Any())
+                    {
+                        _context.Remove(loanHistory.FirstOrDefault());
+                        _context.SaveChanges();
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
     }
 }

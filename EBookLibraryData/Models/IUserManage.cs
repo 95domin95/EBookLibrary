@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,6 +10,8 @@ namespace EBookLibraryData.Models
         bool Lock(string id, int days=10000);
         bool Unlock(string id);
         bool Remove(string id);
-        IEnumerable<ApplicationUser> Users(int take = 1000);
+        IEnumerable<ApplicationUser> GetMany(int take = 1000);
+        ApplicationUser GetById(string id);
+        IEnumerable<IdentityRole> GetAllRoles();
     }
 }

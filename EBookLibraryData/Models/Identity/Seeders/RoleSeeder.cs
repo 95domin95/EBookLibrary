@@ -18,6 +18,8 @@ namespace EBookLibraryData.Models.Seeders
                 var roleManager = scopedServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
                 await roleManager.AddRoleAsync(Roles.Admin);
+                await roleManager.AddRoleAsync(Roles.Moderator);
+                await roleManager.AddRoleAsync(Roles.User);
             }
         }
 
