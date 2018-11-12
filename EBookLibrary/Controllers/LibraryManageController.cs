@@ -89,10 +89,6 @@ namespace EBookLibrary.Controllers
             new string[]{
                 "LoanHistories",
                 "Historie wyporzyczeń"
-            },
-            new string[]{
-                "Stats",
-                "Statystyki",
             }
         };
         enum Option
@@ -106,8 +102,7 @@ namespace EBookLibrary.Controllers
             Loans,
             Queues,
             Categories,
-            LoanHistories,
-            Stats
+            LoanHistories
         };
 
         enum OperationError
@@ -132,7 +127,91 @@ namespace EBookLibrary.Controllers
             });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddBook(BooksManageViewModel model)
+        {
+            ViewData["Title"] = "Autorzy";
+            ViewData["Options"] = menuOptions;
+            ViewData["Selected"] = menuOptions[(int)Option.Books][(int)Option.Name];
+            model.RemovedSuccessfully = false;
+            model.AddedSuccessfully = false;
+            model.AddError = false;
+            model.RemoveError = false;
+            model.ModifiedSuccessfully = false;
+            model.ModifiedError = false;
 
+            if(await _manage.Add(model.Title, model.ISBN, model.Pages, model.Author, model.Publisher,
+                model.Category, model.Book, model.BookCovering, (int)model.CopiesCount))
+            {
+                model.AddedSuccessfully = true;
+            }
+
+            model.Take = 1000;
+            model.Authors = _author.GetMany(model.Take);
+            model.Categories = _manage.GetAllCategories();
+            model.Publishers = _publisher.GetMany(1000);
+            model.Books = _manage.GetMany(1000);
+            return RedirectToAction("Books", model);
+        }
+
+        [HttpPost]
+        public IActionResult RemoveBook(BooksManageViewModel model)
+        {
+            ViewData["Title"] = "Autorzy";
+            ViewData["Options"] = menuOptions;
+            ViewData["Selected"] = menuOptions[(int)Option.Books][(int)Option.Name];
+            model.RemovedSuccessfully = false;
+            model.AddedSuccessfully = false;
+            model.AddError = false;
+            model.RemoveError = false;
+            model.ModifiedSuccessfully = false;
+            model.ModifiedError = false;
+
+            if (_manage.DeleteById((int)model.Id))
+            {
+                model.RemovedSuccessfully = true;
+            }
+
+            model.Take = 1000;
+            model.Authors = _author.GetMany(model.Take);
+            model.Categories = _manage.GetAllCategories();
+            model.Publishers = _publisher.GetMany(1000);
+            model.Books = _manage.GetMany(1000);
+            return RedirectToAction("Books", model);
+        }
+
+        [HttpPost]
+        public IActionResult ModifyBook(BooksManageViewModel model)
+        {
+            ViewData["Title"] = "Autorzy";
+            ViewData["Options"] = menuOptions;
+            ViewData["Selected"] = menuOptions[(int)Option.Books][(int)Option.Name];
+            model.RemovedSuccessfully = false;
+            model.AddedSuccessfully = false;
+            model.AddError = false;
+            model.RemoveError = false;
+            model.ModifiedSuccessfully = false;
+            model.ModifiedError = false;
+
+            if(_manage.Modify(model))
+            {
+                model.ModifiedSuccessfully = true;
+                model.Title = null;
+                model.CopiesCount = null;
+                model.BookCovering = null;
+                model.Pages = null;
+                model.Author = null;
+                model.Publisher = null;
+                model.ISBN = null;
+            }
+
+            model.Take = 1000;
+            model.Authors = _author.GetMany(model.Take);
+            model.Categories = _manage.GetAllCategories();
+            model.Publishers = _publisher.GetMany(1000);
+            model.Books = _manage.GetMany(1000);
+            return RedirectToAction("Books", model);
+        }
 
         [HttpGet]
         public IActionResult Authors()
@@ -382,7 +461,7 @@ namespace EBookLibrary.Controllers
         }
 
         [HttpGet]
-        public IActionResult Users()
+        public async Task<IActionResult> Users()
         {
             ViewData["Title"] = "Użytkownicy";
             ViewData["Options"] = menuOptions;
@@ -440,6 +519,8 @@ namespace EBookLibrary.Controllers
             var user = _users.GetById(model.UserId);
             if (user != null && model.RoleChoosed != null)
             {
+                var roles = await _userManager.GetRolesAsync(user);
+                await _userManager.RemoveFromRoleAsync(user, roles.FirstOrDefault());
                 await _userManager.AddToRoleAsync(user, model.RoleChoosed);
             }
             return RedirectToAction("Users");

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using EBookLibraryData.Models.ViewModels.LibraryManage;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -39,5 +40,7 @@ namespace EBookLibraryData.Models
         IEnumerable<Book> GetMostPopularBooks(int booksCount = 10);
         IEnumerable<Book> GetMostRecentBooks(int booksCount = 10);
         IEnumerable<Book> GetMany(int take = 1000);
+        IEnumerable<Book> LongestLoaned(int booksCount = 10);
+        bool Modify(BooksManageViewModel model);
     }
 }

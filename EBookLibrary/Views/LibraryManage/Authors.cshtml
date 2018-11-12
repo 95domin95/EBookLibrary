@@ -4,11 +4,13 @@
     Layout = "_ManageLibraryLayout";
 }
 
-<h3>
+<h3 class="pb-2">
     @ViewData["Title"]
-    <span style="display: inline-block">
-        <!-- Button trigger modal -->
-        <button class="btn btn-success" data-toggle="modal" data-target="#add-modal"><span class="fa fa-plus"></span></button>
+    <span style="display: inline-block; float: right">
+        <span style="display: inline-block">
+            <!-- Button trigger modal -->
+            <button class="btn btn-success" data-toggle="modal" data-target="#add-modal"><span class="fa fa-plus"></span></button>
+        </span>
     </span>
 </h3>
 @if (Model.AddedSuccessfully)

@@ -178,15 +178,7 @@ namespace EBookLibrary.Controllers
                         Copy = copy,
                         CopyId = copy.CopyId,
                         LoanDurationDays = model.LoanPeroidDays,
-                        StartDate = DateTime.Now//Dodać jeszcze sprawdzanie czy wyporzyczenie nie ubiegło końca przy wyświetlaniu preview na przykład najprościej
-                        //Dodać filtrowanie po dostępności w book preview i może w managerze dodawania oraz dodać w managerze pole ilość kopii
-
-                        //Dodać jeszcze sprawdzanie wyporzyczeń jak ktoś chce wyporzyczy kniżke a nie ma wystarczających kopi żeby se wyporzyczył
-                        //Dodać dodawanie do kolejki
-                        //Zrobic kolejkowanie zleceń i po dacie dołączenia sprawdzać
-
-                        //Poprawic błąd z nie podświetlaniem się inputów
-                        //wybieranie plików w maangerze zrobić na drag and dropa
+                        StartDate = DateTime.Now
                     };
                     if (_manage.AddLoan(loan))
                     {
@@ -235,7 +227,7 @@ namespace EBookLibrary.Controllers
                         {
                             foreach (var userCopy in userCopies)
                             {
-                                if (userCopy.BookId.Equals(model.BookId))//tu się jebie
+                                if (userCopy.BookId.Equals(model.BookId))
                                 {
                                     model.BookRent = true;
                                     var loan = _manage.GetLoanByCopy(userCopy);
@@ -248,11 +240,6 @@ namespace EBookLibrary.Controllers
                                             model.BookRented = false;
                                         }
                                     }
-                                    //WAŻNE: SPRAWDZIĆ CZY TO DZIAŁA WOGÓLE W SENSIE PRZEDAWNIENIE WYPORZYCZENIA
-
-                                    //znormalizować BookRent i BookRented, bo juz mi się to pierdoli a dodałem to 2 tygodnie na zad a co dopiero będzi potem za jakieś kurwa 2 
-                                    //miesiące jak będę musiał tłumaczyć mechanizm działania wyporzyczeń
-                                    
                                 }
                             }
                         }
@@ -292,6 +279,12 @@ namespace EBookLibrary.Controllers
                 else return new NotFoundResult();
             }
             else return new NotFoundResult();
+        }
+
+        [HttpPost]
+        public IActionResult Reader(BookPreviewViewModel model)
+        {
+            return View(model);
         }
 
         [HttpGet]

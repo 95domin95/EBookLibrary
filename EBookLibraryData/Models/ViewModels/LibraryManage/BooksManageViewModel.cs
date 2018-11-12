@@ -27,33 +27,31 @@ namespace EBookLibraryData.Models.ViewModels.LibraryManage
         }
         [RegularExpression("([0-9]+)")]
         [Display(Name = "Id Książki")]
-        public int? Id { get; set; }
+        public int? Id { get; set; } = null;
         [Display(Name = "Ilość kopii")]
         [RegularExpression("([0-9]+)")]
-        public int CopiesCount { get; set; }
+        public int? CopiesCount { get; set; } = null;
         [Display(Name = "Dostępne")]
-        public bool Availability { get; set; } = false;
+        public bool? Availability { get; set; } = false;
         [Display(Name = "ISBN")]
         [RegularExpression("([0-9]+)")]
-        public int? ISBN { get; set; }
+        public int? ISBN { get; set; } = null;
         [Display(Name = "Tytuł")]
         [MaxLength(150)]
-        public string Title { get; set; }
+        public string Title { get; set; } = null;
         [Display(Name = "Ilość Stron")]
         [RegularExpression("([0-9]+)")]
-        public int? Pages { get; set; }
+        public int? Pages { get; set; } = null;
         [Display(Name = "Wydawca")]
-        public string Publisher { get; set; }
+        public string Publisher { get; set; } = null;
         [Display(Name = "Kategoria")]
-        public string Category { get; set; }
+        public string Category { get; set; } = null;
         [Display(Name = "Autor")]
-        public string[] Author { get; set; }
+        public string[] Author { get; set; } = null;
         [Display(Name = "Książka")]
-        public IFormFile Book { get; set; }
+        public IFormFile Book { get; set; } = null;
         [Display(Name = "Okładka")]
-        public IFormFile BookCovering { get; set; }
-        [Display(Name = "Dodaj autora")]
-        public string NewAuthor { get; set; }
+        public IFormFile BookCovering { get; set; } = null;
         [Display(Name = "Elementów do wyświetlenia")]
         public int ElementsToshow { get; set; } = 1000;
         public bool AddedSuccessfully { get; set; } = false;
@@ -87,6 +85,23 @@ namespace EBookLibraryData.Models.ViewModels.LibraryManage
             get
             {
                 return "Nie udało się usunąć książki";
+            }
+        }
+
+        public bool ModifiedSuccessfully { get; set; } = false;
+        public bool ModifiedError { get; set; } = false;
+        public string ModifiedSuccess
+        {
+            get
+            {
+                return "Zmieniono dane książki";
+            }
+        }
+        public string ModifiyFailed
+        {
+            get
+            {
+                return "Nie udało się zmienić danych książki";
             }
         }
         public IEnumerable<Book> Books { get; set; }

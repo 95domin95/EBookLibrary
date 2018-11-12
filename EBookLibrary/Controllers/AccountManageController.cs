@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EBookLibraryData.Models;
 using EBookLibraryData.Models.ViewModels.AccountManage;
+using EBookLibraryServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ namespace EBookLibrary.Controllers
         private readonly ILoanHistory _loanHistory;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IUserManage _user;
         private readonly List<string[]> menuOptions = new List<string[]>() {
             new string[]{
                 "LoanHistory",
@@ -30,6 +32,14 @@ namespace EBookLibrary.Controllers
             new string[]{
                 "Loaned",
                 "Wyporzyczone"
+            },
+            new string[]{
+                "AccountManage",
+                "Zmień dane"
+            },
+            new string[]{
+                "ChangePassword",
+                "Zmień hasło"
             }
         };
         enum Option
@@ -38,19 +48,23 @@ namespace EBookLibrary.Controllers
             CommonName,
             LoanHistory = 0,
             InQueue,
-            Loaned
+            Loaned,
+            AccountManage,
+            ChangePassword
         };
         public AccountManageController(IBooksManage manage,
             IQueue queue,
             ILoanHistory loanHistory,
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            IUserManage user)
         {
             _manage = manage;
             _queue = queue;
             _userManager = userManager;
             _signInManager = signInManager;
             _loanHistory = loanHistory;
+            _user = user;
         }
         public async Task<IActionResult> LoanHistory()
         {
@@ -83,6 +97,66 @@ namespace EBookLibrary.Controllers
             return View(new LoanedViewModel {
                 Books = _manage.GetAllUserLoanedBooks(user)
             });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ChangePassword()
+        {
+            ViewData["Title"] = "Zmień hasło";
+            ViewData["Options"] = menuOptions;
+            ViewData["Selected"] = menuOptions[(int)Option.ChangePassword][(int)Option.Name];
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            return View(new ChangePasswordViewModel {
+                User = user
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            ViewData["Title"] = "Zmień hasło";
+            ViewData["Options"] = menuOptions;
+            ViewData["Selected"] = menuOptions[(int)Option.ChangePassword][(int)Option.Name];
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            model.User = user;
+            model.ChangedSuccessfully = false;
+            model.ChangedError = false;
+            if (_user.SetPassword(model.User, model.OldPassword, model.NewPassword))
+            {
+                model.ChangedSuccessfully = true;
+            }
+            else model.ChangedError = true;
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AccountManage()
+        {
+            ViewData["Title"] = "Zmień dane";
+            ViewData["Options"] = menuOptions;
+            ViewData["Selected"] = menuOptions[(int)Option.AccountManage][(int)Option.Name];
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            return View(new ManageAccountViewModel {
+                User = user
+            });
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> AccountManage(ManageAccountViewModel model)
+        {
+            ViewData["Title"] = "Zmień dane";
+            ViewData["Options"] = menuOptions;
+            ViewData["Selected"] = menuOptions[(int)Option.AccountManage][(int)Option.Name];
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            model.User = user;
+            model.ChangedSuccessfully = false;
+            model.ChangedError = false;
+            if (_user.SetLoginAndEmail(model.User, model.Email, model.Username))
+            {
+                model.ChangedSuccessfully = true;
+            }
+            else model.ChangedError = true;
+            return View(model);
         }
     }
 }

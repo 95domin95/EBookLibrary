@@ -4,8 +4,20 @@
     Layout = "_ManageLibraryLayout";
 }
 
-<h3>
+<script type="text/javascript" src="~/lib/kayalshri-tableExport.jquery.plugin-a891806/tableExport.js"></script>
+<script type="text/javascript" src="~/lib/kayalshri-tableExport.jquery.plugin-a891806/jquery.base64.js"></script>
+<script type="text/javascript" src="~/lib/kayalshri-tableExport.jquery.plugin-a891806/jspdf/libs/sprintf.js"></script>
+<script type="text/javascript" src="~/lib/kayalshri-tableExport.jquery.plugin-a891806/jspdf/jspdf.js"></script>
+<script type="text/javascript" src="~/lib/kayalshri-tableExport.jquery.plugin-a891806/jspdf/libs/base64.js"></script>
+
+<h3 class="pb-2">
     @ViewData["Title"]
+    <span style="display: inline-block; float: right">
+        <span style="display: inline-block">
+            <!-- Button trigger modal -->
+            <button class="btn btn-primary" id="export-modal"><span class="fa fa-file-pdf"></span></button>
+        </span>
+    </span>
 </h3>
 
 @if (Model.RemovedSuccessfully)
@@ -111,6 +123,24 @@ else if (Model.RemoveError)
                                 </div>
                             </div>
                         </div>
+                        @if (user.LockoutEnabled)
+                        {
+                            <div class="float-left pl-1 pb-3">
+                                <!-- Button trigger modal -->
+                                <form asp-controller="LibraryManage" asp-action="ChangeLockStatus" method="post" id="block-user-form-@user.Id">
+                                    <button class="btn btn-warning" name="UserId" value="@user.Id"><span class="fa fa-unlock"></span></button>
+                                </form>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="float-left pl-1 pb-3">
+                                <!-- Button trigger modal -->
+                                <form asp-controller="LibraryManage" asp-action="ChangeLockStatus" method="post" id="unlock-user-form-@user.Id">
+                                    <button class="btn btn-warning" name="UserId" value="@user.Id"><span class="fa fa-lock"></span></button>
+                                </form>
+                            </div>
+                        }
                     </td>
                 </tr>
             }
@@ -122,4 +152,29 @@ else
     <div class="alert alert-info" role="alert">
         Brak elementów do wyświetlenia.
     </div>
+}
+<script>
+    var btn = document.getElementById('export-modal');
+    btn.addEventListener('click', () => {
+        var doc = new jsPDF('p', 'pt');
+        var elem = document.getElementById("table");
+        var res = doc.autoTableHtmlToJson(elem);
+
+        doc.addFont('Abha.ttf', 'Abha', 'normal', 'Identity-H');
+        doc.setFont('Abha');
+        doc.autoTable(res.columns, res.data, {
+            styles: { fillColor: [100, 255, 255] },
+            columnStyles: {
+                id: { fillColor: 255 }
+            },
+            margin: { top: 60 },
+            addPageContent: function (data) {
+                doc.text("@ViewData["Title"]", 40, 30);
+            }
+        });
+        doc.save("table.pdf");
+    }, false);
+</script>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }

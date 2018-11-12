@@ -13,5 +13,7 @@ namespace EBookLibraryData.Models
         IEnumerable<ApplicationUser> GetMany(int take = 1000);
         ApplicationUser GetById(string id);
         IEnumerable<IdentityRole> GetAllRoles();
+        bool SetPassword(ApplicationUser user, string oldPassword, string newPassword);
+        bool SetLoginAndEmail(ApplicationUser user, string email, string userName);
     }
 }

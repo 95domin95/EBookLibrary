@@ -8,11 +8,16 @@
 <script src="~/js/pagination.js"></script>
 <script src="~/js/doubleInput.js"></script>
 
-<h3>
+<h3 class="pb-2">
     @ViewData["Title"]
-    <span style="display: inline-block">
-        <!-- Button trigger modal -->
-        <button class="btn btn-success" data-toggle="modal" data-target="#add-modal"><span class="fa fa-plus"></span></button>
+    <span style="display: inline-block; float: right">
+        <span style="display: inline-block">
+            <!-- Button trigger modal -->
+            <button class="btn btn-success" data-toggle="modal" data-target="#add-modal"><span class="fa fa-plus"></span></button>
+        </span>
+        <span style="display: inline-block">
+            <button class="btn btn-primary" id="export-modal"><span class="fa fa-file-pdf"></span></button>
+        </span>
     </span>
 </h3>
 @if (Model.AddedSuccessfully)
@@ -53,7 +58,7 @@ else if (Model.RemoveError)
             <div class="modal-body">
                 <div class="row p-2">
                     <div class="col-xs-12">
-                        <form enctype="multipart/form-data" asp-controller="LibraryManage" asp-action="ManagePanel" method="post" id="manage-books-form">
+                        <form enctype="multipart/form-data" asp-controller="LibraryManage" asp-action="AddBook" method="post" id="manage-books-form">
                             <div class="form-row">
                                 <div class="col-xs-12 col-sm-12">
                                     <div class="form-group">
@@ -101,9 +106,20 @@ else if (Model.RemoveError)
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-6">
-                                    <div class="form-group">
+                                    @*<div class="form-group">
                                         <label asp-for="Publisher"></label>
                                         <input asp-for="Publisher" class="form-control" id="publisher" />
+                                        <span asp-validation-for="Publisher" class="text-danger"></span>
+                                    </div>*@
+                                    <div class="form-group">
+                                        <label asp-for="Publisher"></label>
+                                        <select asp-for="Publisher" class="form-control" id="publisher">
+                                            <option value=""></option>
+                                            @foreach (var i in Model.Publishers)
+                                            {
+                                                <option value="@i.Name">@i.Name</option>
+                                            }
+                                        </select>
                                         <span asp-validation-for="Publisher" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -173,9 +189,23 @@ else if (Model.RemoveError)
                     <td>@counter</td>
                     <td><img class="book-covering-image-table" src="~/images/BookCovering/@book.CoveringPath" /></td>
                     <td>@book.BookId</td>
-                    <td>@book.Title</td>
+                    <td>
+                        <form asp-controller="LibraryManage" asp-action="ModifyBook" method="post">
+                            <div class="form-group">
+                                <input type="hidden" asp-for="Id" value="@book.BookId" />
+                                <input asp-for="Title" class="form-control" value="@book.Title" onchange="this.form.submit();" />
+                            </div>
+                        </form>
+                    </td>
                     <td>@book.LoansCount</td>
-                    <td>@book.CopiesCount</td>
+                    <td>
+                        <form asp-controller="LibraryManage" asp-action="ModifyBook" method="post">
+                            <div class="form-group">
+                                <input type="hidden" asp-for="Id" value="@book.BookId"/>
+                                <input asp-for="CopiesCount" class="form-control" value="@book.CopiesCount" onchange="this.form.submit();" />
+                            </div>
+                        </form>
+                    </td>
                     <td>
                         <div class="float-left pl-1 pb-3">
                             <form asp-controller="Home" asp-action="BookPreview" method="post">
@@ -197,12 +227,12 @@ else if (Model.RemoveError)
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <form asp-controller="LibraryManage" asp-action="Book" method="post" id="remove-book-form-@book.BookId"></form>
+                                            <form asp-controller="LibraryManage" asp-action="RemoveBook" method="post" id="remove-book-form-@book.BookId"></form>
                                             Czy na pewno chcesz usunąć tę książkę?
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-                                            <button class="btn btn-danger" name="book" value="@book.BookId" form="remove-book-form-@book.BookId">Usuń</button>
+                                            <button class="btn btn-danger" name="Id" value="@book.BookId" form="remove-book-form-@book.BookId">Usuń</button>
                                         </div>
                                     </div>
                                 </div>
@@ -220,6 +250,29 @@ else
         Brak elementów do wyświetlenia
     </div>
 }
+<script>
+    var btn = document.getElementById('export-modal');
+    btn.addEventListener('click', () => {
+        var doc = new jsPDF('p', 'pt');
+        var elem = document.getElementById("table");
+        var res = doc.autoTableHtmlToJson(elem);
+
+        doc.addFont('Abha.ttf', 'Abha', 'normal', 'Identity-H');
+        doc.setFont('Abha');
+        doc.autoTable(res.columns, res.data, {
+            styles: { fillColor: [100, 255, 255] },
+            columnStyles: {
+                id: { fillColor: 255 }
+            },
+            margin: { top: 60 },
+            addPageContent: function (data) {
+                doc.text("@ViewData["Title"]", 40, 30);
+            }
+        });
+        doc.save("table.pdf");
+    }, false);
+</script>
+
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")

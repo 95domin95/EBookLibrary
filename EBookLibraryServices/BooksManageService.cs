@@ -1,5 +1,6 @@
 ﻿using EBookLibraryData;
 using EBookLibraryData.Models;
+using EBookLibraryData.Models.ViewModels.LibraryManage;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,20 +11,18 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-/**
- * PRZETESTOWAĆ TO WSZYSTKO W CHUJ BO PROBABLY NIE DZIAŁA
- **/
-
 namespace EBookLibraryServices
 {
     public class BooksManageService : IBooksManage
     {
         private Context _context;
         private IFileManage _file;
-        public BooksManageService(Context context, IFileManage file)
+        private ILoans _loans;
+        public BooksManageService(Context context, IFileManage file, ILoans loans)
         {
             _context = context;
             _file = file;
+            _loans = loans;
         }
         public async Task<bool> Add(string title, int? ISBN, int? pages,
             string[] authors, string publisher, string category,
@@ -161,18 +160,24 @@ namespace EBookLibraryServices
                 var count = _context.Books.Where(b => b.BookId.Equals(id)).Count();
 
                 if (count > 0)
-                {//To może okazać się zupełnie niepotrzebne jeżeli przy usuwaniu booka bezie się usuwało kaskadowao cała reszta badziewia czyli loan i copy
+                {
                     var copies = _context.Copies.Where(c => c.BookId.Equals(id));
-                    var loans = _context.Loans.Where(l => l.Copy.BookId.Equals(id)); //to też nie koniecznie musi działać
+                    var loans = _context.Loans.Where(l => l.Copy.BookId.Equals(id)).Include(l => l.Copy).ThenInclude(l => l.Book);
+                    var loanHistories = _context.LoanHistories.Where(lh => lh.BookId.Equals(id));
                     if(copies.Any())
                     {
-                        _context.Copies.RemoveRange(copies); //to może nie działać PRZETESTOWAĆ!!!
+                        _context.Copies.RemoveRange(copies);
                         _context.SaveChanges();
                         if (loans.Any())
                         {
                             _context.Loans.RemoveRange(loans);
                             _context.SaveChanges();
                         }
+                    }
+                    if(loanHistories.Any())
+                    {
+                        _context.LoanHistories.RemoveRange(loanHistories);
+                        _context.SaveChanges();
                     }
                     _context.Books.Remove(GetById(id));
                     _context.SaveChanges();
@@ -734,6 +739,108 @@ namespace EBookLibraryServices
             {
                 var books = _context.Books.Include(b => b.BookAuthors).ThenInclude(ba => ba.Author).Take(take);
                 if (books.Any())
+                {
+                    return books.ToList();
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+
+        public bool Modify(BooksManageViewModel model)
+        {
+            try
+            {
+                if(model != null)
+                {
+                    var book = GetById((int)model.Id);
+                    if(book != null)
+                    {
+                        if (model.Title != null)
+                        {
+                            book.Title = model.Title;
+                            _context.SaveChanges();
+                        }
+                        if(model.ISBN != null)
+                        {
+                            book.ISBN = model.ISBN;
+                            _context.SaveChanges();
+                        }
+                        if (model.Pages != null)
+                        {
+                            book.Pages = model.Pages;
+                            _context.SaveChanges();
+                        }
+                        if (model.CopiesCount != null)
+                        {
+                            if(book.CopiesCount < model.CopiesCount)
+                            {
+                                for (int i=0; i< (model.CopiesCount - book.CopiesCount); i++)
+                                {
+                                    _context.Copies.Add(new Copy
+                                    {
+                                        Book = book,
+                                        IsRented = false
+                                    });
+                                    _context.SaveChanges();
+                                }
+                                book.CopiesCount = (int)model.CopiesCount;
+                                _context.SaveChanges();
+                            }
+                            else if(book.CopiesCount > model.CopiesCount)
+                            {
+                                int toRemove = book.CopiesCount - (int)model.CopiesCount;
+                                var bookCopies = GetAvailableBookCopies(book);
+                                if(bookCopies.Count() <= toRemove)
+                                {
+                                    var loans = _loans.GetLoansByBook(book);
+                                    int counter = toRemove;
+                                    foreach (var loan in loans)
+                                    {
+                                        if (counter == toRemove) break;
+                                        _context.Loans.Remove(loan);
+                                        _context.SaveChanges();
+                                        counter++;
+                                    }
+
+                                }
+                                if(bookCopies.Count() >= toRemove)
+                                {
+                                    int counter = 0;
+                                    foreach(var bookCopy in bookCopies)
+                                    {
+                                        if (counter == toRemove) break;
+                                        _context.Copies.Remove(bookCopy);
+                                        _context.SaveChanges();
+                                        counter++;
+                                    }
+                                }
+                                book.CopiesCount = (int)model.CopiesCount;
+                                _context.SaveChanges();
+                            }
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
+        public IEnumerable<Book> LongestLoaned(int booksCount = 10)
+        {
+            try
+            {
+                var books = _context.Books.Include(b => b.BookAuthors).Include(b => b.Category).OrderBy(b => b.LoansCount).Take(booksCount);
+                if (books != null)
                 {
                     return books.ToList();
                 }

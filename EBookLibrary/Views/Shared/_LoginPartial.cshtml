@@ -11,10 +11,11 @@
             <li><a class="dropdown-item" asp-controller="AccountManage" asp-action="LoanHistory"><i class="fa fa-history"></i> Historia wyporzyczeń</a></li>
             <li><a class="dropdown-item" asp-controller="AccountManage" asp-action="InQueue"><i class="fa fa-spinner"></i> Oczekujące</a></li>
             <li><a class="dropdown-item" asp-controller="AccountManage" asp-action="Loaned"><i class="fa fa-book-open"></i> Wyporzyczone</a></li>
+            <li><a class="dropdown-item" asp-controller="AccountManage" asp-action="AccountManage"><i class="fa fa-cog"></i> Ustawienia</a></li>
             @if (User.IsInRole("Admin"))
             {
                 <li class="dropdown-divider"></li>
-                <li><a class="dropdown-item" asp-controller="LibraryManage" asp-action="Books"><i class="fa fa-cog"></i> Zarzadzaj książkami</a></li>
+                <li><a class="dropdown-item" asp-controller="LibraryManage" asp-action="Books"><i class="fa fa-cog"></i> Zarzadzaj biblioteką</a></li>
             }
             <li class="dropdown-divider"></li>
             <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout"><i class="fa fa-power-off"></i> Wyloguj</a></li>

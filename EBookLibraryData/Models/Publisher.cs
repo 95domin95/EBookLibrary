@@ -11,6 +11,9 @@ namespace EBookLibraryData.Models
         public int PublisherId { get; set; }
         public string Name { get; set; }
         public string City { get; set; }
+        //public int CountrId { get; set; }
+        //[ForeignKey("CountryId")]
+        public Country Country { get; set; }
         public IEnumerable<Book> Books { get; set; }
     }
 }

@@ -1,14 +1,14 @@
 ﻿@model EBookLibraryData.Models.ViewModels.Home.IndexViewModel
-<div class="row">
-    @if (Model.LoggedOut)
-    {
-        <div class="col-xs-12">
-            <div class="alert alert-success" role="alert">
-                Zostałeś wylogowany
-            </div>
+@if (Model.LoggedOut)
+{
+    <div class="col-xs-12">
+        <div class="alert alert-success" role="alert">
+            Zostałeś wylogowany
         </div>
-        Model.LoggedOut = false;
-    }
+    </div>
+    Model.LoggedOut = false;
+}
+<div class="row">
     <div class="col-sm-12 col-md-6">
         <h4>Najnowsze</h4>
         <div id="most-recent-indicators" class="carousel slide carousel-index" data-ride="carousel">
@@ -161,6 +161,5 @@
             </a>
         </div>
     </div>
-
+    <script src="~/js/index.js"></script>
 </div>
-<script src="~/js/index.js"></script>

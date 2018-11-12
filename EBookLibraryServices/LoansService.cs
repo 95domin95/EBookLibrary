@@ -4,6 +4,7 @@ using EBookLibraryData.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace EBookLibraryServices
 {
@@ -41,6 +42,25 @@ namespace EBookLibraryServices
             try
             {
                 var loans = _context.Loans.Take(take);
+                if (loans.Any())
+                {
+                    return loans.ToList();
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+
+        public IEnumerable<Loan> GetLoansByBook(Book book)
+        {
+            try
+            {
+                var loans = _context.Loans.Where(l => l.Copy.BookId.Equals(book.BookId))
+                    .Include(l => l.Copy).ThenInclude(l => l.Book);
                 if (loans.Any())
                 {
                     return loans.ToList();

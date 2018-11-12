@@ -1,5 +1,6 @@
 ﻿using EBookLibraryData;
 using EBookLibraryData.Models;
+using EBookLibraryData.Models.ViewModels.AccountManage;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
@@ -11,10 +12,12 @@ namespace EBookLibraryServices
 {
     public class UserManageService : IUserManage
     {
+        private readonly UserManager<ApplicationUser> _userManager;
         private Context _context;
-        public UserManageService(Context context)
+        public UserManageService(Context context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
         public IEnumerable<ApplicationUser> GetMany(int take=1000)
         {
@@ -126,6 +129,57 @@ namespace EBookLibraryServices
             {
                 Console.WriteLine(e.Message);
                 return null;
+            }
+        }
+
+        public bool SetPassword(ApplicationUser user, string oldPassword, string newPassword)
+        {
+            try
+            {
+                if(user != null)
+                {
+                    var changePasswordresult = _userManager
+                        .ChangePasswordAsync(user, oldPassword, newPassword);
+
+                    if(changePasswordresult.IsCompletedSuccessfully)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
+        public bool SetLoginAndEmail(ApplicationUser user, string email, string userName)
+        {
+            try
+            {
+                if (user != null)
+                {
+                    if(email != null)
+                    {
+                        user.Email = email;
+                        _context.SaveChanges();
+                    }
+
+                    if(userName != null)
+                    {
+                        user.UserName = userName;
+                        _context.SaveChanges();
+                    }
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
             }
         }
     }

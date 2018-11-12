@@ -65,7 +65,7 @@ namespace EBookLibraryServices
                 if (user != null && book != null)
                 {
                     var loanHistory = _context.LoanHistories
-                        .Where(lh => lh.UserId.Equals(user.Id) && lh.BookId.Equals(book.BookId));
+                        .Where(lh => lh.UserId.Equals(user.Id) && lh.BookId.Equals(book.BookId)).OrderByDescending(l => l.LoanDate);
                     if(loanHistory != null)
                     {
                         return loanHistory.FirstOrDefault();

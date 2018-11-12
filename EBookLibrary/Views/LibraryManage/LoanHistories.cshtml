@@ -4,9 +4,16 @@
     Layout = "_ManageLibraryLayout";
 }
 
-<h3>
+<h3 class="pb-2">
     @ViewData["Title"]
+    <span style="display: inline-block; float: right">
+        <span style="display: inline-block">
+            <!-- Button trigger modal -->
+            <button class="btn btn-primary" id="export-modal"><span class="fa fa-file-pdf"></span></button>
+        </span>
+    </span>
 </h3>
+
 @if (Model.RemovedSuccessfully)
 {
     <div class="alert alert-success" role="alert">
@@ -36,42 +43,42 @@ else if (Model.RemoveError)
             @foreach (var loanHistory in Model.LoanHistories)
             {
                 counter = counter + 1;
-            <tr>
-                <td>@counter</td>
-                <td>@loanHistory.LoanHistoryId</td>
-                <td>@loanHistory.UserId</td>
-                <td>@loanHistory.BookId</td>
-                <td>@loanHistory.LoanDate</td>
-                <td>@loanHistory.ReturnDate</td>
-                <td>
-                    <div class="float-left pl-1 pb-3">
-                        <!-- Button trigger modal -->
-                        <button class="btn btn-danger" data-toggle="modal" data-target="#remove-modal-@loanHistory.LoanHistoryId"><span class="fa fa-times"></span></button>
+                <tr>
+                    <td>@counter</td>
+                    <td>@loanHistory.LoanHistoryId</td>
+                    <td>@loanHistory.UserId</td>
+                    <td>@loanHistory.BookId</td>
+                    <td>@loanHistory.LoanDate</td>
+                    <td>@loanHistory.ReturnDate</td>
+                    <td>
+                        <div class="float-left pl-1 pb-3">
+                            <!-- Button trigger modal -->
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#remove-modal-@loanHistory.LoanHistoryId"><span class="fa fa-times"></span></button>
 
-                        <!-- Modal -->
-                        <div class="modal fade" id="remove-modal-@loanHistory.LoanHistoryId" tabindex="-1" role="dialog" aria-labelledby="remove-modal-@loanHistory.LoanHistoryId-label" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="remove-modal-@loanHistory.LoanHistoryId-label">Usuwanie historii wyporzyczenia</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form asp-controller="LibraryManage" asp-action="LoanHistories" method="post" id="remove-author-form-@loanHistory.LoanHistoryId"></form>
-                                        Czy na pewno chcesz usunąć tą historię wyporzyczenia?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-                                        <button class="btn btn-danger" name="AuthorId" value="@loanHistory.LoanHistoryId" form="remove-author-form-@loanHistory.LoanHistoryId">Usuń</button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="remove-modal-@loanHistory.LoanHistoryId" tabindex="-1" role="dialog" aria-labelledby="remove-modal-@loanHistory.LoanHistoryId-label" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="remove-modal-@loanHistory.LoanHistoryId-label">Usuwanie historii wyporzyczenia</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form asp-controller="LibraryManage" asp-action="LoanHistories" method="post" id="remove-author-form-@loanHistory.LoanHistoryId"></form>
+                                            Czy na pewno chcesz usunąć tą historię wyporzyczenia?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                                            <button class="btn btn-danger" name="LoanHistoryId" value="@loanHistory.LoanHistoryId" form="remove-author-form-@loanHistory.LoanHistoryId">Usuń</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </td>
-            </tr>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
@@ -82,3 +89,25 @@ else
         Brak elementów do wyświetlenia.
     </div>
 }
+<script>
+var btn = document.getElementById('export-modal');
+btn.addEventListener('click', () => {
+    var doc = new jsPDF('p', 'pt');
+    var elem = document.getElementById("table");
+    var res = doc.autoTableHtmlToJson(elem);
+
+    doc.addFont('Abha.ttf', 'Abha', 'normal', 'Identity-H');
+    doc.setFont('Abha');
+    doc.autoTable(res.columns, res.data, {
+        styles: { fillColor: [100, 255, 255] },
+        columnStyles: {
+            id: { fillColor: 255 }
+        },
+        margin: { top: 60 },
+        addPageContent: function (data) {
+            doc.text("@ViewData["Title"]", 40, 30);
+        }
+    });
+    doc.save("table.pdf");
+}, false);
+</script>
