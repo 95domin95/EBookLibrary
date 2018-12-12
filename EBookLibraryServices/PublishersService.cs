@@ -37,7 +37,7 @@ namespace EBookLibraryServices
             }
         }
 
-        public bool Add(string name, string city)
+        public bool Add(string name)
         {
 
             try
@@ -48,7 +48,6 @@ namespace EBookLibraryServices
                     {
                         Name = name
                     };
-                    if (city != null) publisher.City = city;
                     _context.Publishers.Add(publisher);
                     _context.SaveChanges();
                     return true;

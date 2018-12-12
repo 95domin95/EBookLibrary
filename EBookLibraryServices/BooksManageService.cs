@@ -71,7 +71,7 @@ namespace EBookLibraryServices
                 }
                 else
                 {
-                    bookToAdd.Publisher = AddPublisher(publisher, "");
+                    bookToAdd.Publisher = AddPublisher(publisher);
                 }
 
                 if(categoryResult != default(Category))
@@ -308,7 +308,7 @@ namespace EBookLibraryServices
             }
         }
 
-        public Publisher AddPublisher(string name, string city)
+        public Publisher AddPublisher(string name)
         {
             try
             {
@@ -319,10 +319,6 @@ namespace EBookLibraryServices
                     if (publisher == default(Publisher))
                     {
                         publisher = new Publisher { Name = name };
-                        if (city != "" && city != null)
-                        {
-                            publisher.City = city;
-                        }
                         _context.Publishers.Add(publisher);
                         _context.SaveChanges();
                         return publisher;
@@ -447,7 +443,7 @@ namespace EBookLibraryServices
                 return false;
             }
         }
-        public Loan AddLoan(ApplicationUser user, Copy copy, int loanDurationDays = 7)
+        public Loan AddLoan(ApplicationUser user, Copy copy, DateTime endDate/* int loanDurationDays = 7*/)
         {
             try
             {
@@ -456,7 +452,7 @@ namespace EBookLibraryServices
                     Copy = copy,
                     CopyId = copy.CopyId,
                     StartDate = DateTime.Now,
-                    LoanDurationDays = loanDurationDays,
+                    //LoanDurationDays = loanDurationDays,
                     User = user,
                     UserId = user.Id
                 };
@@ -719,7 +715,10 @@ namespace EBookLibraryServices
         {
             try
             {
-                var books = _context.Books.Include(b => b.BookAuthors).Include(b => b.Category).OrderBy(b => b.LoansCount).Take(booksCount);
+                var books = _context.Books.Include(b => b.BookAuthors)
+                    .Include(b => b.Category)
+                    .OrderBy(b => b.LoansCount)
+                    .Take(booksCount);
                 if (books != null)
                 {
                     return books.ToList();
@@ -737,7 +736,10 @@ namespace EBookLibraryServices
         {
             try
             {
-                var books = _context.Books.Include(b => b.BookAuthors).ThenInclude(ba => ba.Author).Take(take);
+                var books = _context.Books.Include(b => b.BookAuthors)
+                    .ThenInclude(ba => ba.Author)
+                    .Take(take);
+
                 if (books.Any())
                 {
                     return books.ToList();

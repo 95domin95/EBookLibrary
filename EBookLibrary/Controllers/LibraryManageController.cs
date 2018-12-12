@@ -284,7 +284,7 @@ namespace EBookLibrary.Controllers
             model.RemoveError = false;
             if (model.Name != null)
             {
-                if (_publisher.Add(model.Name, model.City))
+                if (_publisher.Add(model.Name))
                 {
                     model.AddedSuccessfully = true;
                 }
@@ -461,7 +461,7 @@ namespace EBookLibrary.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Users()
+        public IActionResult Users()
         {
             ViewData["Title"] = "Użytkownicy";
             ViewData["Options"] = menuOptions;

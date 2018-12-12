@@ -16,15 +16,12 @@ namespace EBookLibraryData.Models.ViewModels.LibraryManage
                     "#",
                     "Id",
                     "Nazwa",
-                    "Miasto",
                     "Operacje"
                 };
             }
         }
         [Display(Name = "Nazwa wydawcy")]
         public string Name { get; set; }
-        [Display(Name = "Miasto")]
-        public string City { get; set; }
         public bool AddedSuccessfully { get; set; } = false;
         public bool AddError { get; set; } = false;
         public string RemoveSuccess

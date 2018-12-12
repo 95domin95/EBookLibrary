@@ -115,9 +115,12 @@ else if (Model.RemoveError)
                                         <label asp-for="Publisher"></label>
                                         <select asp-for="Publisher" class="form-control" id="publisher">
                                             <option value=""></option>
-                                            @foreach (var i in Model.Publishers)
+                                            @if (Model.Publishers != null)
                                             {
-                                                <option value="@i.Name">@i.Name</option>
+                                                @foreach (var i in Model.Publishers)
+                                                {
+                                                    <option value="@i.Name">@i.Name</option>
+                                                }
                                             }
                                         </select>
                                         <span asp-validation-for="Publisher" class="text-danger"></span>
@@ -135,9 +138,12 @@ else if (Model.RemoveError)
                                         <label asp-for="Category"></label>
                                         <select asp-for="Category" class="form-control" id="category">
                                             <option value=""></option>
-                                            @foreach (var i in Model.Categories)
+                                            @if (Model.Categories != null)
                                             {
-                                                <option value="@i.Name">@i.Name</option>
+                                                @foreach (var i in Model.Categories)
+                                                {
+                                                    <option value="@i.Name">@i.Name</option>
+                                                }
                                             }
                                         </select>
                                         <span asp-validation-for="Category" class="text-danger"></span>

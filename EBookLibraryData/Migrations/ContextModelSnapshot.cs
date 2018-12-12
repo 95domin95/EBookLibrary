@@ -35,8 +35,6 @@ namespace EBookLibraryData.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<int?>("CountryId");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
@@ -68,8 +66,6 @@ namespace EBookLibraryData.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CountryId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -195,19 +191,6 @@ namespace EBookLibraryData.Migrations
                     b.ToTable("Copies");
                 });
 
-            modelBuilder.Entity("EBookLibraryData.Models.Country", b =>
-                {
-                    b.Property<int>("CountryId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("CountryId");
-
-                    b.ToTable("Countries");
-                });
-
             modelBuilder.Entity("EBookLibraryData.Models.Loan", b =>
                 {
                     b.Property<int>("LoanId")
@@ -215,6 +198,8 @@ namespace EBookLibraryData.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("CopyId");
+
+                    b.Property<DateTime>("EndDate");
 
                     b.Property<int>("LoanDurationDays");
 
@@ -259,8 +244,6 @@ namespace EBookLibraryData.Migrations
                     b.Property<int>("PublisherId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("City");
 
                     b.Property<string>("Name");
 
@@ -398,13 +381,6 @@ namespace EBookLibraryData.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("EBookLibraryData.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("EBookLibraryData.Models.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId");
                 });
 
             modelBuilder.Entity("EBookLibraryData.Models.Book", b =>

@@ -115,6 +115,11 @@ body > .container{
 }
 
 .carousel-book-image {
-    width: inherit;
-    height: inherit;
+    width: inherit !important;
+    height: inherit !important;
+}
+
+.carousel-item-customize {
+    width: 100% !important;
+    height: 100% !important;
 }

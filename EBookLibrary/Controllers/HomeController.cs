@@ -52,6 +52,7 @@ namespace EBookLibrary.Controllers
             });
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> LeaveQueue(BookPreviewViewModel model)
         {
@@ -88,6 +89,7 @@ namespace EBookLibrary.Controllers
             return RedirectToAction("BookPreview", bookPreviewModel);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> JoinQueue(BookPreviewViewModel model)
         {
@@ -112,6 +114,7 @@ namespace EBookLibrary.Controllers
             return RedirectToAction("BookPreview", bookPreviewModel);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> ReturnBook(LoanViewModel model)
         {
@@ -148,6 +151,7 @@ namespace EBookLibrary.Controllers
             return RedirectToAction("BookPreview", bookPreviewModel);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> LoanBook(LoanViewModel model)
         {
@@ -172,7 +176,6 @@ namespace EBookLibrary.Controllers
                 {
                     var loan = new Loan
                     {
-                        //ogranąć jak się robi doc commenty w C#
                         User = user,
                         UserId = user.Id,
                         Copy = copy,
@@ -281,6 +284,7 @@ namespace EBookLibrary.Controllers
             else return new NotFoundResult();
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult Reader(BookPreviewViewModel model)
         {
@@ -307,6 +311,8 @@ namespace EBookLibrary.Controllers
                 model.PagesMax, model.Publisher, model.Category);
 
             model.Categories = _manage.GetAllCategories();
+
+            #region pagination
 
             var elementsCount = 0;
 
@@ -337,6 +343,9 @@ namespace EBookLibrary.Controllers
             {
                 model.MoreThanOnePage = false;
             }
+
+            #endregion
+
             model.Authors = _manage.GetAllAuthors();
             return View(model);
         }

@@ -34,7 +34,7 @@ namespace EBookLibraryData.Models
         string GetTitle(int id);
         int? GetPages(int id);
         string GetPath(int id);
-        Publisher AddPublisher(string name, string city);
+        Publisher AddPublisher(string name);
         Loan GetLoanByCopy(Copy copy);
         IEnumerable<Book> GetAllUserLoanedBooks(ApplicationUser user);
         IEnumerable<Book> GetMostPopularBooks(int booksCount = 10);
