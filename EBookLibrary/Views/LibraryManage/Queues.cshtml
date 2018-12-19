@@ -32,12 +32,9 @@ else if (Model.RemoveError)
             </tr>
         </thead>
         <tbody>
-            @{ int counter = 0;}
             @foreach (var queue in Model.Queues)
             {
-                counter = counter + 1;
                 <tr>
-                    <td>@counter</td>
                     <td>@queue.QueueId</td>
                     <td>@queue.BookId</td>
                     <td>@queue.UserId</td>

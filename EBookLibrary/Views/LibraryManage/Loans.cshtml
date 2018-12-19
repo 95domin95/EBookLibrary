@@ -32,12 +32,9 @@ else if (Model.RemoveError)
             </tr>
         </thead>
         <tbody>
-            @{ int counter = 0;}
             @foreach (var loan in Model.Loans)
             {
-                counter = counter + 1;
                 <tr>
-                    <td>@counter</td>
                     <td>@loan.LoanId</td>
                     <td>@loan.UserId</td>
                     <td>@loan.CopyId</td>

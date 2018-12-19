@@ -15,7 +15,6 @@ namespace EBookLibraryData.Models.ViewModels.LibraryManage
             {
                 return new string[]
                 {
-                    "#",
                     "Okładka",
                     "Id",
                     "Tytuł",

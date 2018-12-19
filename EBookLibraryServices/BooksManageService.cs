@@ -496,7 +496,7 @@ namespace EBookLibraryServices
                     {
                         foreach (var loan in loans)
                         {
-                            if (loan.StartDate.AddDays(loan.LoanDurationDays) >= DateTime.Now)
+                            if (loan.EndDate >= DateTime.Now)
                             {
                                 allBookCopies.Add(loan.Copy);
                             }

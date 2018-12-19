@@ -180,7 +180,7 @@ namespace EBookLibrary.Controllers
                         UserId = user.Id,
                         Copy = copy,
                         CopyId = copy.CopyId,
-                        LoanDurationDays = model.LoanPeroidDays,
+                        EndDate = model.EndDate,
                         StartDate = DateTime.Now
                     };
                     if (_manage.AddLoan(loan))
@@ -236,7 +236,7 @@ namespace EBookLibrary.Controllers
                                     var loan = _manage.GetLoanByCopy(userCopy);
                                     if(loan != null)
                                     {
-                                        if(loan.StartDate.AddDays(loan.LoanDurationDays) <= DateTime.Today)
+                                        if(loan.EndDate <= DateTime.Today)
                                         {
                                             _manage.RemoveUserLoan(user, model.Book);
                                             model.BookRent = false;
@@ -263,7 +263,7 @@ namespace EBookLibrary.Controllers
                                         Copy = copies.FirstOrDefault(),
                                         User = user,
                                         StartDate = DateTime.Now,
-                                        LoanDurationDays = model.LoanPeroidDays
+                                        EndDate = model.EndDate
                                     }))
                                     {
                                         if (_queue.RemoveQueue(userQueue))
@@ -307,24 +307,20 @@ namespace EBookLibrary.Controllers
                     model.Category = firstCategory.Name;
                 }
             }
+            model.Categories = _manage.GetAllCategories();
+            model.Authors = _manage.GetAllAuthors();
             model.Books = _manage.GetBooks(model.Title, model.ISBN, model.Author, model.PagesMin,
                 model.PagesMax, model.Publisher, model.Category);
-
-            model.Categories = _manage.GetAllCategories();
 
             #region pagination
 
             var elementsCount = 0;
-
             if (!(model.Books is null))
             {
                 elementsCount = model.Books.Count();
             }
-
             var allPagesCount = elementsCount / model.ElementsOnPage;
-
             var elementsToTake = model.ElementsOnPage;
-
             if (elementsCount % model.ElementsOnPage !=0) allPagesCount++;
             if (model.Page < 1) model.Page = 1;
             if (model.Page > allPagesCount) model.Page = model.AllPagesCount;
@@ -346,7 +342,6 @@ namespace EBookLibrary.Controllers
 
             #endregion
 
-            model.Authors = _manage.GetAllAuthors();
             return View(model);
         }
 

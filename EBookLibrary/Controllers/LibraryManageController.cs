@@ -360,8 +360,8 @@ namespace EBookLibrary.Controllers
             ViewData["Selected"] = menuOptions[(int)Option.Queues][(int)Option.Name];
             return View(new QueuesManageViewModel
             {
-                Queues = _queue.GetMany(1000),
-                Take = 1000
+                Queues = _queue.GetMany(10000),
+                Take = 10000
             });
         }
 
@@ -382,7 +382,7 @@ namespace EBookLibrary.Controllers
                 }
                 else model.RemoveError = true;
             }
-            model.Take = 1000;
+            model.Take = 10000;
             model.Queues = _queue.GetMany(model.Take);
             model.QueueId = null;
             return View(model);

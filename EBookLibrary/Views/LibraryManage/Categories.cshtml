@@ -75,12 +75,9 @@ else if (Model.RemoveError)
             </tr>
         </thead>
         <tbody>
-            @{ int counter = 0;}
             @foreach (var category in Model.Categories)
             {
-                counter = counter + 1;
                 <tr>
-                    <td>@counter</td>
                     <td>@category.CategoryId</td>
                     <td>@category.Name</td>
                     <td>

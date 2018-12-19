@@ -12,7 +12,6 @@ namespace EBookLibraryData.Models.ViewModels.LibraryManage
             {
                 return new string[]
                 {
-                    "#",
                     "Id",
                     "Id uzytkownika",
                     "Id kopii",

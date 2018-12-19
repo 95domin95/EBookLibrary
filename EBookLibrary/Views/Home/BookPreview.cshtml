@@ -1,6 +1,8 @@
 ﻿@model EBookLibraryData.Models.ViewModels.Home.BookPreviewViewModel
 @inject Microsoft.AspNetCore.Identity.SignInManager<ApplicationUser> SignInManager
 
+
+<script src="~/js/bookPreview.js"></script>
 <div class="card">
     <div class="row">
         <div class="col-xs-12 col-sm-6">
@@ -76,7 +78,7 @@
                                 <div class="alert alert-info mr-4" role="alert">
                                     <text>@Model.BookNotAvailableMessage</text>
                                 </div>
-                                <form asp-controller="Home" asp-action="JoinQueue" method="post" class="mb-2">
+                                @*<form asp-controller="Home" asp-action="JoinQueue" method="post" class="mb-2">
                                     <div class="form-row">
                                         <div class="col-xs-2">
                                             <div style="line-height: 35px">
@@ -97,24 +99,42 @@
                                             </button>
                                         </div>
                                     </div>
-                                </form>
+                                </form>*@
                             }
                             else
                             {
                                 <form asp-controller="Home" asp-action="LoanBook" method="post" class="mb-2">
+                                    @*<div class="form-row">
+            <div class="col-xs-2">
+                <div style="line-height: 35px">
+                    <label asp-for="LoanPeroidDays"></label>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <input asp-for="LoanPeroidDays" class="form-control" style="width: 96px" max="7" />
+                    <span asp-validation-for="LoanPeroidDays" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <button class="btn btn-success" asp-controller="Home" asp-action="LoanBook" name="BookId" value="@Model.BookId">
+                    Wyporzycz
+                    <span class="fa fa-book-open">
+                    </span>
+                </button>
+            </div>
+        </div>*@
                                     <div class="form-row">
-                                        <div class="col-xs-2">
-                                            <div style="line-height: 35px">
-                                                <label asp-for="LoanPeroidDays"></label>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-6">
+                                        <div class="col-xs-12">
                                             <div class="form-group">
-                                                <input asp-for="LoanPeroidDays" class="form-control" style="width: 96px" max="7" />
-                                                <span asp-validation-for="LoanPeroidDays" class="text-danger"></span>
+                                                <label asp-for="EndDate"></label>
+                                                <input asp-format="{0:yyyy-MM-ddThh:mm}" asp-for="EndDate" class="form-control" id="date-time-picker"/>
+                                                <span asp-validation-for="EndDate" class="text-danger"></span>
                                             </div>
                                         </div>
-                                        <div class="col-xs-4">
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-xs-12">
                                             <button class="btn btn-success" asp-controller="Home" asp-action="LoanBook" name="BookId" value="@Model.BookId">
                                                 Wyporzycz
                                                 <span class="fa fa-book-open">

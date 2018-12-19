@@ -75,12 +75,9 @@ else if (Model.RemoveError)
             </tr>
         </thead>
         <tbody>
-            @{ int counter = 0;}
             @foreach (var author in Model.Authors)
             {
-                counter = counter + 1;
                 <tr>
-                    <td>@counter</td>
                     <td>@author.AuthorId</td>
                     <td>@author.Name</td>
                     <td>
