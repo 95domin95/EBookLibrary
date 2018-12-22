@@ -697,7 +697,12 @@ namespace EBookLibraryServices
         {
             try
             {
-                var books = _context.Books.Include(b => b.BookAuthors).Include(b => b.Category).OrderBy(b => b.AddDate).Take(booksCount);
+                var books = _context.Books.Include(b => b.BookAuthors)
+                    .ThenInclude(b => b.Author)
+                    .Include(b => b.Category)
+                    .OrderBy(b => b.AddDate)
+                    .Take(booksCount);
+
                 if(books != null)
                 {
                     return books.ToList();
@@ -716,6 +721,7 @@ namespace EBookLibraryServices
             try
             {
                 var books = _context.Books.Include(b => b.BookAuthors)
+                    .ThenInclude(b => b.Author)
                     .Include(b => b.Category)
                     .OrderBy(b => b.LoansCount)
                     .Take(booksCount);
