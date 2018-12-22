@@ -40,9 +40,9 @@ namespace EBookLibraryServices
                 foreach(var author in authors)
                 {
                     var authorResult = _context.Authors.Where(a => a.Name.ToLower().Contains(author.ToLower()));
-                    if(authorResult.Any())
+                    if (authorResult.Any())
                     {
-                        dbAuthors.Append(authorResult.FirstOrDefault());
+                        dbAuthors.Add(authorResult.FirstOrDefault());
                     }
                     else
                     {
