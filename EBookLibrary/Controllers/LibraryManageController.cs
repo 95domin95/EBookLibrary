@@ -495,6 +495,7 @@ namespace EBookLibrary.Controllers
             model.Users = _users.GetMany(model.Take);
             model.UserId = null;
             model.RoleChoosed = null;
+            model.Roles = _users.GetAllRoles();
             return View(model);
         }
 
