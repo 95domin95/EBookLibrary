@@ -785,6 +785,7 @@ namespace EBookLibraryServices
                         }
                         if (model.CopiesCount != null)
                         {
+                            //sprawdź czy zmniejszyła się ilość kopii książki
                             if(book.CopiesCount < model.CopiesCount)
                             {
                                 for (int i=0; i< (model.CopiesCount - book.CopiesCount); i++)
@@ -799,6 +800,7 @@ namespace EBookLibraryServices
                                 book.CopiesCount = (int)model.CopiesCount;
                                 _context.SaveChanges();
                             }
+                            //sprawdź czy zminiejszyła się ilość kopii książki
                             else if(book.CopiesCount > model.CopiesCount)
                             {
                                 int toRemove = book.CopiesCount - (int)model.CopiesCount;

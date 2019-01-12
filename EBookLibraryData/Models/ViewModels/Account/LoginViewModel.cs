@@ -8,7 +8,7 @@ namespace EBookLibraryData.Models.ViewModels.Account
     public class LoginViewModel
     {
         [Required]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "Niepoprawny adres e-mail.")]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
