@@ -10,7 +10,7 @@ namespace EBookLibraryData.Models.ViewModels.Home
         private DateTime _endDate = DateTime.Now.AddDays(7);
         public int? UserId { get; set; } = null;
         public int? BookId { get; set; } = null;
-        public string LoanSuccessMessage { get; } = "Wyporzyczyłeś e-booka!";
+        public string LoanSuccessMessage { get; } = "Wypożyczyłeś e-booka!";
         public string LoanErrorMessage { get; } = "Wystąpił problem przy realizacji zlecenia.";
         public string BookNotAvailableMessage { get; set; } = "Książka aktualnie niedostępna.";
         [Display(Name = "Data zwrotu:")]

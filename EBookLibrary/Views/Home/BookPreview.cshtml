@@ -33,7 +33,7 @@
                 {
                     @if (Model.BookRent)
                     {
-                        <a class="btn btn-success mb-2" href="~/lib/pdfjs-1.9.426-dist/web/viewer.html?file=/images/Book/@Model.Book.Path">
+                        <a class="btn btn-success mb-2" href="~/lib/pdfjs-1.9.426-dist/web/viewer.html?file=/Home/GetBook/@Model.Book.Path">
                             Czytaj
                             <span class="fa fa-book-reader">
                             </span>
@@ -79,14 +79,14 @@
                                     <text>@Model.BookNotAvailableMessage</text><br /><br />
                                     <form asp-controller="Home" asp-action="JoinQueue" method="post" class="mb-2">
                                         @*<div class="form-row">
-                                            <div class="col-xs-12">
-                                                <div class="form-group">
-                                                    <span style="color: black"><label asp-for="EndDate"></label></span>
-                                                    <input asp-format="{0:yyyy-MM-ddThh:mm}" asp-for="EndDate" class="form-control" id="date-time-picker" />
-                                                    <span asp-validation-for="EndDate" class="text-danger"></span>
-                                                </div>
-                                            </div>
-                                        </div>*@
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <span style="color: black"><label asp-for="EndDate"></label></span>
+                                            <input asp-format="{0:yyyy-MM-ddThh:mm}" asp-for="EndDate" class="form-control" id="date-time-picker" />
+                                            <span asp-validation-for="EndDate" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>*@
                                         <div class="form-row">
                                             <div class="col-xs-12">
                                                 <button class="btn btn-success" asp-controller="Home" asp-action="JoinQueue" name="BookId" value="@Model.BookId">
@@ -99,27 +99,27 @@
                                     </form>
                                 </div>
                                 @*<form asp-controller="Home" asp-action="JoinQueue" method="post" class="mb-2">
-                                    <div class="form-row">
-                                        <div class="col-xs-2">
-                                            <div style="line-height: 35px">
-                                                <label asp-for="LoanPeroidDays"></label>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-6">
-                                            <div class="form-group">
-                                                <input asp-for="LoanPeroidDays" class="form-control" style="width: 96px" max="7" />
-                                                <span asp-validation-for="LoanPeroidDays" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-4">
-                                            <button class="btn btn-success" asp-controller="Home" asp-action="JoinQueue" name="BookId" value="@Model.BookId">
-                                                Do kolejki
-                                                <span class="fa fa-book-open">
-                                                </span>
-                                            </button>
-                                        </div>
+                            <div class="form-row">
+                                <div class="col-xs-2">
+                                    <div style="line-height: 35px">
+                                        <label asp-for="LoanPeroidDays"></label>
                                     </div>
-                                </form>*@
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <input asp-for="LoanPeroidDays" class="form-control" style="width: 96px" max="7" />
+                                        <span asp-validation-for="LoanPeroidDays" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <button class="btn btn-success" asp-controller="Home" asp-action="JoinQueue" name="BookId" value="@Model.BookId">
+                                        Do kolejki
+                                        <span class="fa fa-book-open">
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>*@
                             }
                             else
                             {
@@ -138,7 +138,7 @@
                                 </div>
                                 <div class="col-xs-4">
                                     <button class="btn btn-success" asp-controller="Home" asp-action="LoanBook" name="BookId" value="@Model.BookId">
-                                        Wyporzycz
+                                        Wypożycz
                                         <span class="fa fa-book-open">
                                         </span>
                                     </button>
@@ -156,7 +156,7 @@
                                     <div class="form-row">
                                         <div class="col-xs-12">
                                             <button class="btn btn-success" asp-controller="Home" asp-action="LoanBook" name="BookId" value="@Model.BookId">
-                                                Wyporzycz
+                                                Wypożycz
                                                 <span class="fa fa-book-open">
                                                 </span>
                                             </button>
@@ -172,7 +172,7 @@
                     <a class="btn btn-link" href="~/Account/Login">
                         <span class="fa fa-sign-in-alt">
                         </span>
-                        Zaloguj się by wyporzyczyć
+                        Zaloguj się by wypożyczyć
                     </a>
                 }
             </div>

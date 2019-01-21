@@ -60,7 +60,7 @@ namespace EBookLibraryServices
             try
             {
                 var loans = _context.Loans.Where(l => l.Copy.BookId.Equals(book.BookId))
-                    .Include(l => l.Copy).ThenInclude(l => l.Book);
+                    .Include(l => l.Copy).ThenInclude(l => l.Book).Include(b => b.User);
                 if (loans.Any())
                 {
                     return loans.ToList();

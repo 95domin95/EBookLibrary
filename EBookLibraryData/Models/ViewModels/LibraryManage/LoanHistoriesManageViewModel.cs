@@ -15,7 +15,7 @@ namespace EBookLibraryData.Models.ViewModels.LibraryManage
                     "Id",
                     "Id użytkownika",
                     "Id książki",
-                    "Data wyporzyczenia",
+                    "Data wypożyczenia",
                     "Data zwrotu",
                     "Operacje"
                 };
@@ -28,14 +28,14 @@ namespace EBookLibraryData.Models.ViewModels.LibraryManage
         {
             get
             {
-                return "Usunięto historię wyporzczyczeń";
+                return "Usunięto historię wypożczyczeń";
             }
         }
         public string RemoveFailed
         {
             get
             {
-                return "Nie udało się usunąć historii wyporzyczeń";
+                return "Nie udało się usunąć historii wypożyczeń";
             }
         }
         public int Take { get; set; }

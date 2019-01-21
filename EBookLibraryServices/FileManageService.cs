@@ -20,7 +20,7 @@ namespace EBookLibraryServices
             else
             {
                 var directory = Path.Combine(
-                Directory.GetCurrentDirectory(), "wwwroot\\images",
+                Directory.GetCurrentDirectory(), "library_assets", //wwwroot\\images
                 file.Name);
 
                 var path = directory +"\\" + fileName;

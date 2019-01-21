@@ -48,14 +48,14 @@ else if (Model.RemoveError)
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="remove-modal-@loan.LoanId-label">Usuwanie wyporzyczenia</h5>
+                                            <h5 class="modal-title" id="remove-modal-@loan.LoanId-label">Usuwanie wypożyczenia</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
                                         <div class="modal-body">
                                             <form asp-controller="LibraryManage" asp-action="Loans" method="post" id="remove-author-form-@loan.LoanId"></form>
-                                            Czy na pewno chcesz usunąć te wyporzyczenie?
+                                            Czy na pewno chcesz usunąć te wypożyczenie?
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>

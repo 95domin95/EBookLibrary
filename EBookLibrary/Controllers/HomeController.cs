@@ -9,6 +9,7 @@ using EBookLibraryServices;
 using EBookLibraryData.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using System.IO;
 
 namespace EBookLibrary.Controllers
 {
@@ -18,15 +19,18 @@ namespace EBookLibrary.Controllers
         private readonly IBooksManage _manage;
         private readonly IQueue _queue;
         private readonly ILoanHistory _loanHistory;
+        private readonly ILoans _loans;
         public HomeController(IBooksManage manage,
             UserManager<ApplicationUser> userManager,
             IQueue queue,
-            ILoanHistory loanHistory)
+            ILoanHistory loanHistory,
+            ILoans loans)
         {
             _manage = manage;
             _userManager = userManager;
             _queue = queue;
             _loanHistory = loanHistory;
+            _loans = loans;
         }
 
         public IActionResult Index()
@@ -50,6 +54,43 @@ namespace EBookLibrary.Controllers
             {
                 Categories = _manage.GetAllCategories()
             });
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("Home/GetBook/{file}")]
+        public async Task<IActionResult> GetBook(string file)
+        {
+            if(file != null)
+            {
+                var book = _manage.GetBookByPath(file);
+                if (book != null)
+                {
+                    var loans = _loans.GetLoansByBook(book);
+                    if (loans != null)
+                    {
+                        var user = await _userManager.GetUserAsync(HttpContext.User);
+                        foreach (var loan in loans)
+                        {
+                            if (loan.UserId.Equals(user.Id))
+                            {
+                                var path = Path.Combine(
+                                               Directory.GetCurrentDirectory(),
+                                               "library_assets//Book", file);
+
+                                var memory = new MemoryStream();
+                                using (var stream = new FileStream(path, FileMode.Open))
+                                {
+                                    await stream.CopyToAsync(memory);
+                                }
+                                memory.Position = 0;
+                                return File(memory, "application/pdf", Path.GetFileName(path));
+                            }
+                        }
+                    }
+                }
+            }
+            return new NotFoundResult();
         }
 
         [Authorize]

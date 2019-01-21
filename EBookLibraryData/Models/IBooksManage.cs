@@ -13,6 +13,7 @@ namespace EBookLibraryData.Models
             int? pagesMax, string publisher, string category, int take=1000);
         IEnumerable<Category> GetAllCategories();
         Book GetById(int id);
+        Book GetBookByPath(string path);
         Publisher GetPublisher(string name);
         Task<bool> Add(string title, int? ISBN, int? pages,
             string[] author, string publisher, string category,

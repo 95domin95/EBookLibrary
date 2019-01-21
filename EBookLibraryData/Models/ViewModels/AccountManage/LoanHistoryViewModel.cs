@@ -16,7 +16,7 @@ namespace EBookLibraryData.Models.ViewModels.AccountManage
                     "#",
                     "Książka",
                     "Tytuł",
-                    "Data wyporzyczenia",
+                    "Data wypożyczenia",
                     "Data zwrotu",
                     "Szczegóły"
                 };

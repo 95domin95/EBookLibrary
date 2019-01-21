@@ -22,7 +22,7 @@ namespace EBookLibraryServices
         public IEnumerable<ApplicationUser> GetMany(int take=1000)
         {
             try
-            {
+            {               
                 var users = _context.ApplicationUsers.Take(take);
                 if(users != null)
                 {

@@ -18,7 +18,7 @@ namespace EBookLibraryData.Models.ViewModels.LibraryManage
                     "Okładka",
                     "Id",
                     "Tytuł",
-                    "Ilość wyporzyczeń",
+                    "Ilość wypożyczeń",
                     "Ilość kopii",
                     "Opcje"
                 };

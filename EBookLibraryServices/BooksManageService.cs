@@ -468,11 +468,11 @@ namespace EBookLibraryServices
         }
 
         ///<summary>
-        ///Funkcja do pobierania wszystkich egzemplarzy książki które nie są wyporzyczone
+        ///Funkcja do pobierania wszystkich egzemplarzy książki które nie są wypożyczone
         ///</summary>
         ///<remarks>
         ///Jeśli nie znaleziono żadnej dostępnej kopii książki to wyszukiwana jest kopia, 
-        ///która może zostać zwolniona(czas wyporzyczenia dobiegł końca, lecz nie została
+        ///która może zostać zwolniona(czas wypożyczenia dobiegł końca, lecz nie została
         ///jeszcze uwzględniona jako wolna w systemie).
         ///</remarks>
         public IEnumerable<Copy> GetAvailableBookCopies(Book book)
@@ -855,6 +855,19 @@ namespace EBookLibraryServices
                     return books.ToList();
                 }
                 return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+
+        public Book GetBookByPath(string path)
+        {
+            try
+            {
+                return _context.Books.Where(b => b.Path.Equals(path)).FirstOrDefault();
             }
             catch (Exception e)
             {

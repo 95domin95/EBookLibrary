@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="EBookLibraryData.Models.ApplicationUser">
+    <Position X="0.5" Y="2.25" Width="2" />
+    <AssociationLine Name="Queues" Type="EBookLibraryData.Models.Queue">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-0.961" Y="0.225" Height="0.182" Width="2.288" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAIIAAAAAAAQAgAAAAAAAAAkAAAAAA=</HashCode>
+      <FileName>Models\ApplicationUser.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Queues" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="EBookLibraryData.Models.Author">
+    <Position X="2.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAQAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Models\Author.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EBookLibraryData.Models.Book">
+    <Position X="5" Y="1.75" Width="3" />
+    <AssociationLine Name="Copies" Type="EBookLibraryData.Models.Copy" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6.5" Y="1.75" />
+        <Point X="6.5" Y="0.5" />
+        <Point X="9.625" Y="0.5" />
+        <Point X="9.625" Y="0.75" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.758" Y="-0.005" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAACEAAAQhAAkIgCAAAAAABQQQAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>Models\Book.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Copies" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="EBookLibraryData.Models.BookAuthor">
+    <Position X="2.75" Y="4" Width="1.75" />
+    <AssociationLine Name="Book" Type="EBookLibraryData.Models.Book" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="4.062" Y="4" />
+        <Point X="4.062" Y="3.75" />
+        <Point X="4.75" Y="3.75" />
+        <Point X="4.75" Y="3.875" />
+        <Point X="5" Y="3.875" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.245" Y="0.195" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAABAgAAAAAAAAAAAAAAAABAAAAAAABA=</HashCode>
+      <FileName>Models\BookAuthor.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Author" />
+      <Property Name="Book" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="EBookLibraryData.Models.Category">
+    <Position X="4" Y="6.5" Width="1.5" />
+    <AssociationLine Name="Books" Type="EBookLibraryData.Models.Book">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-1.036" Y="0.633" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAQAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Category.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Books" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="EBookLibraryData.Models.Copy">
+    <Position X="9" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAQABAAAAAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Models\Copy.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Book" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="EBookLibraryData.Models.Queue">
+    <Position X="0.5" Y="6" Width="1.75" />
+    <AssociationLine Name="Book" Type="EBookLibraryData.Models.Book" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="2.25" Y="6.523" />
+        <Point X="3.021" Y="6.523" />
+        <Point X="3.021" Y="5.958" />
+        <Point X="5.188" Y="5.958" />
+        <Point X="5.188" Y="5.546" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.56" Y="0.173" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAARCAAAAAAAAARAAAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Queue.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Book" />
+      <Property Name="User" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="EBookLibraryData.Models.Publisher">
+    <Position X="8.25" Y="6.75" Width="1.5" />
+    <AssociationLine Name="Books" Type="EBookLibraryData.Models.Book" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.594" Y="6.75" />
+        <Point X="8.594" Y="5.25" />
+        <Point X="8" Y="5.25" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAgQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Publisher.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Books" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="EBookLibraryData.Models.LoanHistory">
+    <Position X="6" Y="6.5" Width="2" />
+    <AssociationLine Name="Book" Type="EBookLibraryData.Models.Book" FixedFromPoint="true">
+      <Path>
+        <Point X="7.083" Y="6.5" />
+        <Point X="7.083" Y="5.546" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>BAABCAAAAAAAAABAAAAAAAggQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\LoanHistory.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Book" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="EBookLibraryData.Models.Loan">
+    <Position X="8.5" Y="3" Width="1.75" />
+    <AssociationLine Name="User" Type="EBookLibraryData.Models.ApplicationUser" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="10.25" Y="3.812" />
+        <Point X="10.656" Y="3.812" />
+        <Point X="10.656" Y="0.281" />
+        <Point X="1" Y="0.281" />
+        <Point X="1" Y="2.25" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAQAAAAAAAAAggAgAAAAAAAABAAEAAAAA=</HashCode>
+      <FileName>Models\Loan.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Copy" />
+      <Property Name="User" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Microsoft.AspNetCore.Identity.IdentityUser" Collapsed="true">
+    <Position X="1.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Microsoft.AspNetCore.Identity.IdentityUser&lt;TKey&gt;" Collapsed="true">
+    <Position X="3.25" Y="0.75" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

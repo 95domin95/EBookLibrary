@@ -7,6 +7,324 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="library_assets\BookCovering\1014_covering.png" />
+    <None Remove="library_assets\BookCovering\1017_covering.jpg" />
+    <None Remove="library_assets\BookCovering\1018_covering.jpg" />
+    <None Remove="library_assets\BookCovering\1019_covering.jpg" />
+    <None Remove="library_assets\BookCovering\1022_covering.jpg" />
+    <None Remove="library_assets\BookCovering\1023_covering.jpg" />
+    <None Remove="library_assets\BookCovering\10_covering.jpg" />
+    <None Remove="library_assets\BookCovering\11_covering.jpg" />
+    <None Remove="library_assets\BookCovering\13_covering.jpg" />
+    <None Remove="library_assets\BookCovering\14_covering.jpg" />
+    <None Remove="library_assets\BookCovering\18_covering.jpg" />
+    <None Remove="library_assets\BookCovering\19_covering.jpg" />
+    <None Remove="library_assets\BookCovering\1_covering.jpg" />
+    <None Remove="library_assets\BookCovering\2023_covering.jpg" />
+    <None Remove="library_assets\BookCovering\2024_covering.jpg" />
+    <None Remove="library_assets\BookCovering\2025_covering.jpg" />
+    <None Remove="library_assets\BookCovering\2026_covering.jpg" />
+    <None Remove="library_assets\BookCovering\2027_covering.png" />
+    <None Remove="library_assets\BookCovering\20_covering.jpg" />
+    <None Remove="library_assets\BookCovering\21_covering.jpg" />
+    <None Remove="library_assets\BookCovering\2_covering.jpg" />
+    <None Remove="library_assets\BookCovering\3_covering.jpg" />
+    <None Remove="library_assets\BookCovering\4_covering.jpg" />
+    <None Remove="library_assets\BookCovering\54_covering.jpg" />
+    <None Remove="library_assets\BookCovering\55_covering.jpg" />
+    <None Remove="library_assets\BookCovering\56_covering.jpg" />
+    <None Remove="library_assets\BookCovering\57_covering.jpg" />
+    <None Remove="library_assets\BookCovering\58_covering.jpg" />
+    <None Remove="library_assets\BookCovering\59_covering.jpg" />
+    <None Remove="library_assets\BookCovering\5_covering.jpg" />
+    <None Remove="library_assets\BookCovering\60_covering.jpg" />
+    <None Remove="library_assets\BookCovering\61_covering.jpg" />
+    <None Remove="library_assets\BookCovering\62_covering.jpg" />
+    <None Remove="library_assets\BookCovering\63_covering.jpg" />
+    <None Remove="library_assets\BookCovering\64_covering.jpg" />
+    <None Remove="library_assets\BookCovering\65_covering.jpg" />
+    <None Remove="library_assets\BookCovering\66_covering.jpg" />
+    <None Remove="library_assets\BookCovering\6_covering.jpg" />
+    <None Remove="library_assets\BookCovering\7_covering.jpg" />
+    <None Remove="library_assets\BookCovering\8_covering.jpg" />
+    <None Remove="library_assets\BookCovering\9_covering.jpg" />
+    <None Remove="library_assets\Book\1014_book.pdf" />
+    <None Remove="library_assets\Book\1017_book.pdf" />
+    <None Remove="library_assets\Book\1018_book.pdf" />
+    <None Remove="library_assets\Book\1019_book.pdf" />
+    <None Remove="library_assets\Book\1022_book.pdf" />
+    <None Remove="library_assets\Book\1023_book.pdf" />
+    <None Remove="library_assets\Book\10_book.pdf" />
+    <None Remove="library_assets\Book\11_book.pdf" />
+    <None Remove="library_assets\Book\13_book.pdf" />
+    <None Remove="library_assets\Book\14_book.pdf" />
+    <None Remove="library_assets\Book\1_book.pdf" />
+    <None Remove="library_assets\Book\2023_book.pdf" />
+    <None Remove="library_assets\Book\2024_book.pdf" />
+    <None Remove="library_assets\Book\2025_book.pdf" />
+    <None Remove="library_assets\Book\2026_book.pdf" />
+    <None Remove="library_assets\Book\2027_book.pdf" />
+    <None Remove="library_assets\Book\2_book.pdf" />
+    <None Remove="library_assets\Book\3_book.pdf" />
+    <None Remove="library_assets\Book\4_book.pdf" />
+    <None Remove="library_assets\Book\54_book.pdf" />
+    <None Remove="library_assets\Book\55_book.pdf" />
+    <None Remove="library_assets\Book\56_book.pdf" />
+    <None Remove="library_assets\Book\57_book.pdf" />
+    <None Remove="library_assets\Book\58_book.pdf" />
+    <None Remove="library_assets\Book\59_book.pdf" />
+    <None Remove="library_assets\Book\5_book.pdf" />
+    <None Remove="library_assets\Book\60_book.pdf" />
+    <None Remove="library_assets\Book\61_book.pdf" />
+    <None Remove="library_assets\Book\62_book.pdf" />
+    <None Remove="library_assets\Book\63_book.pdf" />
+    <None Remove="library_assets\Book\64_book.pdf" />
+    <None Remove="library_assets\Book\65_book.pdf" />
+    <None Remove="library_assets\Book\66_book.pdf" />
+    <None Remove="library_assets\Book\6_book.pdf" />
+    <None Remove="library_assets\Book\7_book.pdf" />
+    <None Remove="library_assets\Book\8_book.pdf" />
+    <None Remove="library_assets\Book\9_book.pdf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="library_assets\BookCovering\1014_covering.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\1017_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\1018_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\1019_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\1022_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\1023_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\10_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\11_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\13_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\14_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\18_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\19_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\1_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\2023_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\2024_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\2025_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\2026_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\2027_covering.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\20_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\21_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\2_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\3_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\4_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\54_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\55_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\56_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\57_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\58_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\59_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\5_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\60_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\61_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\62_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\63_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\64_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\65_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\66_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\6_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\7_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\8_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\BookCovering\9_covering.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\1014_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\1017_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\1018_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\1019_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\1022_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\1023_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\10_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\11_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\13_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\14_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\1_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\2023_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\2024_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\2025_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\2026_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\2027_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\2_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\3_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\4_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\54_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\55_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\56_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\57_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\58_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\59_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\5_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\60_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\61_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\62_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\63_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\64_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\65_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\66_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\6_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\7_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\8_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="library_assets\Book\9_book.pdf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\images\Icons-master\LICENSE" />
     <None Include="wwwroot\images\Icons-master\picol_latest_prerelease_svg\accept.svg" />
     <None Include="wwwroot\images\Icons-master\picol_latest_prerelease_svg\adressbook.svg" />

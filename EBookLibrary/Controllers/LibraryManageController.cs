@@ -25,6 +25,7 @@ namespace EBookLibrary.Controllers
         private readonly ICategory _category;
         private readonly ILoans _loans;
         private readonly IUserManage _users;
+        private const int NumberToTake = 1000;
 
         public LibraryManageController(IBooksManage manage,
             IQueue queue,
@@ -76,7 +77,7 @@ namespace EBookLibrary.Controllers
             },
             new string[]{
                 "Loans",
-                "Wyporzyczenia",
+                "Wypożyczenia",
             },
             new string[]{
                 "Queues",
@@ -88,7 +89,7 @@ namespace EBookLibrary.Controllers
             },
             new string[]{
                 "LoanHistories",
-                "Historie wyporzyczeń"
+                "Historie wypożyczeń"
             }
         };
         enum Option
@@ -121,8 +122,8 @@ namespace EBookLibrary.Controllers
             return View(new BooksManageViewModel {
                 Categories = _manage.GetAllCategories(),
                 Authors = _manage.GetAllAuthors(),
-                Publishers = _publisher.GetMany(1000),
-                Books = _manage.GetMany(1000),
+                Publishers = _publisher.GetMany(NumberToTake),
+                Books = _manage.GetMany(NumberToTake),
                 
             });
         }
@@ -146,11 +147,11 @@ namespace EBookLibrary.Controllers
                 model.AddedSuccessfully = true;
             }
 
-            model.Take = 1000;
+            model.Take = NumberToTake;
             model.Authors = _author.GetMany(model.Take);
             model.Categories = _manage.GetAllCategories();
-            model.Publishers = _publisher.GetMany(1000);
-            model.Books = _manage.GetMany(1000);
+            model.Publishers = _publisher.GetMany(NumberToTake);
+            model.Books = _manage.GetMany(NumberToTake);
             return RedirectToAction("Books", model);
         }
 
@@ -172,11 +173,11 @@ namespace EBookLibrary.Controllers
                 model.RemovedSuccessfully = true;
             }
 
-            model.Take = 1000;
+            model.Take = NumberToTake;
             model.Authors = _author.GetMany(model.Take);
             model.Categories = _manage.GetAllCategories();
-            model.Publishers = _publisher.GetMany(1000);
-            model.Books = _manage.GetMany(1000);
+            model.Publishers = _publisher.GetMany(NumberToTake);
+            model.Books = _manage.GetMany(NumberToTake);
             return RedirectToAction("Books", model);
         }
 
@@ -205,11 +206,11 @@ namespace EBookLibrary.Controllers
                 model.ISBN = null;
             }
 
-            model.Take = 1000;
+            model.Take = NumberToTake;
             model.Authors = _author.GetMany(model.Take);
             model.Categories = _manage.GetAllCategories();
-            model.Publishers = _publisher.GetMany(1000);
-            model.Books = _manage.GetMany(1000);
+            model.Publishers = _publisher.GetMany(NumberToTake);
+            model.Books = _manage.GetMany(NumberToTake);
             return RedirectToAction("Books", model);
         }
 
@@ -221,8 +222,8 @@ namespace EBookLibrary.Controllers
             ViewData["Selected"] = menuOptions[(int)Option.Authors][(int)Option.Name];
             return View(new AuthorsManageViewModel
             {
-                Authors = _author.GetMany(1000),
-                Take = 1000
+                Authors = _author.GetMany(NumberToTake),
+                Take = NumberToTake
             });
         }
 
@@ -252,7 +253,7 @@ namespace EBookLibrary.Controllers
                 }
                 else model.RemoveError = true;
             }
-            model.Take = 1000;
+            model.Take = NumberToTake;
             model.Authors = _author.GetMany(model.Take);
             model.AuthorId = null;
             model.Name = null;
@@ -267,8 +268,8 @@ namespace EBookLibrary.Controllers
             ViewData["Selected"] = menuOptions[(int)Option.Publishers][(int)Option.Name];
             return View(new PublisherManageViewModel
             {
-                Publishers = _publisher.GetMany(),
-                Take = 1000
+                Publishers = _publisher.GetMany(NumberToTake),
+                Take = NumberToTake
             });
         }
 
@@ -298,7 +299,7 @@ namespace EBookLibrary.Controllers
                 }
                 else model.RemoveError = true;
             }
-            model.Take = 1000;
+            model.Take = NumberToTake;
             model.Publishers = _publisher.GetMany(model.Take);
             model.PublisherId = null;
             model.Name = null;
@@ -313,8 +314,8 @@ namespace EBookLibrary.Controllers
             ViewData["Selected"] = menuOptions[(int)Option.Categories][(int)Option.Name];
             return View(new CategoriesManageViewModel
             {
-                Categories = _category.GetMany(1000),
-                Take = 1000
+                Categories = _category.GetMany(NumberToTake),
+                Take = NumberToTake
             });
         }
 
@@ -345,7 +346,7 @@ namespace EBookLibrary.Controllers
                 }
                 else model.RemoveError = true;
             }
-            model.Take = 1000;
+            model.Take = NumberToTake;
             model.Categories = _category.GetMany(model.Take);
             model.CategoryId = null;
             model.Name = null;
@@ -360,8 +361,8 @@ namespace EBookLibrary.Controllers
             ViewData["Selected"] = menuOptions[(int)Option.Queues][(int)Option.Name];
             return View(new QueuesManageViewModel
             {
-                Queues = _queue.GetMany(10000),
-                Take = 10000
+                Queues = _queue.GetMany(NumberToTake),
+                Take = NumberToTake
             });
         }
 
@@ -382,7 +383,7 @@ namespace EBookLibrary.Controllers
                 }
                 else model.RemoveError = true;
             }
-            model.Take = 10000;
+            model.Take = NumberToTake;
             model.Queues = _queue.GetMany(model.Take);
             model.QueueId = null;
             return View(model);
@@ -391,20 +392,20 @@ namespace EBookLibrary.Controllers
         [HttpGet]
         public IActionResult LoanHistories()
         {
-            ViewData["Title"] = "Historie wyporzyczeń";
+            ViewData["Title"] = "Historie wypożyczeń";
             ViewData["Options"] = menuOptions;
             ViewData["Selected"] = menuOptions[(int)Option.LoanHistories][(int)Option.Name];
             return View(new LoanHistoriesManageViewModel
             {
-                LoanHistories = _loanHistory.GetMany(1000),
-                Take = 1000
+                LoanHistories = _loanHistory.GetMany(NumberToTake),
+                Take = NumberToTake
             });
         }
 
         [HttpPost]
         public IActionResult LoanHistories(LoanHistoriesManageViewModel model)
         {
-            ViewData["Title"] = "Historie wyporzyczeń";
+            ViewData["Title"] = "Historie wypożyczeń";
             ViewData["Options"] = menuOptions;
             ViewData["Selected"] = menuOptions[(int)Option.LoanHistories][(int)Option.Name];
             model.RemovedSuccessfully = false;
@@ -418,7 +419,7 @@ namespace EBookLibrary.Controllers
                 }
                 else model.RemoveError = true;
             }
-            model.Take = 1000;
+            model.Take = NumberToTake;
             model.LoanHistories = _loanHistory.GetMany(model.Take);
             model.LoanHistoryId = null;
             return View(model);
@@ -427,20 +428,20 @@ namespace EBookLibrary.Controllers
         [HttpGet]
         public IActionResult Loans()
         {
-            ViewData["Title"] = "Wyporzyczenia";
+            ViewData["Title"] = "Wypożyczenia";
             ViewData["Options"] = menuOptions;
             ViewData["Selected"] = menuOptions[(int)Option.Loans][(int)Option.Name];
             return View(new LoansManageViewModel
             {
-                Loans = _loans.GetMany(1000),
-                Take = 1000
+                Loans = _loans.GetMany(NumberToTake),
+                Take = NumberToTake
             });
         }
 
         [HttpPost]
         public IActionResult Loans(LoansManageViewModel model)
         {
-            ViewData["Title"] = "Wyporzyczenia";
+            ViewData["Title"] = "Wypożyczenia";
             ViewData["Options"] = menuOptions;
             ViewData["Selected"] = menuOptions[(int)Option.Loans][(int)Option.Name];
             model.RemovedSuccessfully = false;
@@ -454,7 +455,7 @@ namespace EBookLibrary.Controllers
                 }
                 else model.RemoveError = true;
             }
-            model.Take = 1000;
+            model.Take = NumberToTake;
             model.Loans = _loans.GetMany(model.Take);
             model.LoanId = null;
             return View(model);
@@ -469,8 +470,8 @@ namespace EBookLibrary.Controllers
             return View(new UsersManageViewModel
             {
                 Roles = _users.GetAllRoles(),
-                Users = _users.GetMany(1000),
-                Take = 1000
+                Users = _users.GetMany(NumberToTake),
+                Take = NumberToTake
             });
         }
 
@@ -491,7 +492,7 @@ namespace EBookLibrary.Controllers
                 }
                 else model.RemoveError = true;
             }
-            model.Take = 1000;
+            model.Take = NumberToTake;
             model.Users = _users.GetMany(model.Take);
             model.UserId = null;
             model.RoleChoosed = null;

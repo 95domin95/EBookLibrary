@@ -26,14 +26,14 @@ namespace EBookLibraryData.Models.ViewModels.LibraryManage
         {
             get
             {
-                return "Usunięto wyporzyczenie";
+                return "Usunięto wypożyczenie";
             }
         }
         public string RemoveFailed
         {
             get
             {
-                return "Nie udało się usunąć wyporzyczenia";
+                return "Nie udało się usunąć wypożyczenia";
             }
         }
         public int Take { get; set; }

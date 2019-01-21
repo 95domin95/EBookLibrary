@@ -23,7 +23,7 @@ namespace EBookLibrary.Controllers
         private readonly List<string[]> menuOptions = new List<string[]>() {
             new string[]{
                 "LoanHistory",
-                "Historia Wyporzyczeń",
+                "Historia Wypożyczeń",
             },
             new string[]{
                 "InQueue",
@@ -31,7 +31,7 @@ namespace EBookLibrary.Controllers
             },
             new string[]{
                 "Loaned",
-                "Wyporzyczone"
+                "Wypożyczone"
             },
             new string[]{
                 "AccountManage",
@@ -68,7 +68,7 @@ namespace EBookLibrary.Controllers
         }
         public async Task<IActionResult> LoanHistory()
         {
-            ViewData["Title"] = "Historia wyporzyczeń";
+            ViewData["Title"] = "Historia wypożyczeń";
             ViewData["Options"] = menuOptions;
             ViewData["Selected"] = menuOptions[(int)Option.LoanHistory][(int)Option.Name];
             var user = await _userManager.GetUserAsync(HttpContext.User);
@@ -90,7 +90,7 @@ namespace EBookLibrary.Controllers
 
         public async Task<IActionResult> Loaned()
         {
-            ViewData["Title"] = "Wyporzyczone";
+            ViewData["Title"] = "Wypożyczone";
             ViewData["Options"] = menuOptions;
             ViewData["Selected"] = menuOptions[(int)Option.Loaned][(int)Option.Name];
             var user = await _userManager.GetUserAsync(HttpContext.User);
