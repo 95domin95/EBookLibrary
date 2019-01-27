@@ -8,6 +8,6 @@ namespace EBookLibraryData.Models
 {
     public interface IFileManage
     {
-        Task<bool> UploadFile(IFormFile file, string fileName);
+        Task<bool> UploadFile(IFormFile file, string fileName, string filePath);
     }
 }

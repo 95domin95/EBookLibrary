@@ -27,9 +27,11 @@
                 <td>@loanHistory.LoanDate</td>
                 <td>@loanHistory.ReturnDate</td>
                 <td>
-                    <form asp-controller="Home" asp-action="BookPreview" method="post">
-                        <Button type="submit" class="btn btn-primary" name="BookId" value="@loanHistory.Book.BookId"><span class="fa fa-info"></span></Button>
-                    </form>
+<form asp-controller="Home" asp-action="BookPreview" method="post">
+    <Button type="submit" class="btn btn-primary" name="BookId" value="@loanHistory.Book.BookId">
+        <span class="fa fa-info"></span>
+    </Button>
+</form>
                 </td>
             </tr>
             }

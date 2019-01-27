@@ -20,13 +20,14 @@ namespace EBookLibraryServices
             {
                 if (id > 0)
                 {
-                    var publisher = _context.Publishers.Where(a => a.PublisherId.Equals(id));
-                    if (publisher.Any())
-                    {
-                        _context.Remove(publisher.FirstOrDefault());
-                        _context.SaveChanges();
-                        return true;
-                    }
+var publisher = _context.Publishers
+                        .Where(a => a.PublisherId.Equals(id));
+if (publisher.Any())
+{
+    _context.Remove(publisher.FirstOrDefault());
+    _context.SaveChanges();
+    return true;
+}
                 }
                 return false;
             }

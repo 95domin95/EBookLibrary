@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using EBookLibraryData;
 using EBookLibraryData.Models;
-using EBookLibraryData.Models.JsonBinding;
 using EBookLibraryData.Models.ViewModels.LibraryManage;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -129,9 +128,18 @@ namespace EBookLibrary.Controllers
         }
 
         [HttpPost]
+        public IActionResult Books(BooksManageViewModel model)
+        {
+            ViewData["Title"] = "Książki";
+            ViewData["Options"] = menuOptions;
+            ViewData["Selected"] = menuOptions[(int)Option.Books][(int)Option.Name];
+            return View(model);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> AddBook(BooksManageViewModel model)
         {
-            ViewData["Title"] = "Autorzy";
+            ViewData["Title"] = "Książki";
             ViewData["Options"] = menuOptions;
             ViewData["Selected"] = menuOptions[(int)Option.Books][(int)Option.Name];
             model.RemovedSuccessfully = false;
@@ -141,24 +149,25 @@ namespace EBookLibrary.Controllers
             model.ModifiedSuccessfully = false;
             model.ModifiedError = false;
 
-            if(await _manage.Add(model.Title, model.ISBN, model.Pages, model.Author, model.Publisher,
-                model.Category, model.Book, model.BookCovering, (int)model.CopiesCount))
+            if (await _manage.Add(model.Title, model.ISBN, model.Pages, model.Author, model.Publisher,
+                model.Category, model.Book, model.BookCovering, model.CopiesCount))
             {
                 model.AddedSuccessfully = true;
             }
+            else model.AddError = true;
 
             model.Take = NumberToTake;
             model.Authors = _author.GetMany(model.Take);
             model.Categories = _manage.GetAllCategories();
             model.Publishers = _publisher.GetMany(NumberToTake);
             model.Books = _manage.GetMany(NumberToTake);
-            return RedirectToAction("Books", model);
+            return View("Books", model);
         }
 
         [HttpPost]
         public IActionResult RemoveBook(BooksManageViewModel model)
         {
-            ViewData["Title"] = "Autorzy";
+            ViewData["Title"] = "Książki";
             ViewData["Options"] = menuOptions;
             ViewData["Selected"] = menuOptions[(int)Option.Books][(int)Option.Name];
             model.RemovedSuccessfully = false;
@@ -172,6 +181,7 @@ namespace EBookLibrary.Controllers
             {
                 model.RemovedSuccessfully = true;
             }
+            else model.RemoveError = true;
 
             model.Take = NumberToTake;
             model.Authors = _author.GetMany(model.Take);
@@ -184,7 +194,7 @@ namespace EBookLibrary.Controllers
         [HttpPost]
         public IActionResult ModifyBook(BooksManageViewModel model)
         {
-            ViewData["Title"] = "Autorzy";
+            ViewData["Title"] = "Książki";
             ViewData["Options"] = menuOptions;
             ViewData["Selected"] = menuOptions[(int)Option.Books][(int)Option.Name];
             model.RemovedSuccessfully = false;
@@ -194,7 +204,7 @@ namespace EBookLibrary.Controllers
             model.ModifiedSuccessfully = false;
             model.ModifiedError = false;
 
-            if(_manage.Modify(model))
+            if (_manage.Modify(model))
             {
                 model.ModifiedSuccessfully = true;
                 model.Title = null;
@@ -205,6 +215,7 @@ namespace EBookLibrary.Controllers
                 model.Publisher = null;
                 model.ISBN = null;
             }
+            else model.ModifiedError = true;
 
             model.Take = NumberToTake;
             model.Authors = _author.GetMany(model.Take);

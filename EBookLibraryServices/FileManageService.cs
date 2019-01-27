@@ -11,7 +11,7 @@ namespace EBookLibraryServices
 {
     public class FileManageService : IFileManage
     {
-        public async Task<bool> UploadFile(IFormFile file, string fileName)
+        public async Task<bool> UploadFile(IFormFile file, string fileName, string filePath)
         {
             if (file == null || file.Length.Equals(0))
             {
@@ -20,7 +20,7 @@ namespace EBookLibraryServices
             else
             {
                 var directory = Path.Combine(
-                Directory.GetCurrentDirectory(), "library_assets", //wwwroot\\images
+                Directory.GetCurrentDirectory(), filePath,//"library_assets", wwwroot\\images
                 file.Name);
 
                 var path = directory +"\\" + fileName;

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace EBookLibraryData.Models.ViewModels.AccountManage
 {
@@ -27,6 +24,7 @@ namespace EBookLibraryData.Models.ViewModels.AccountManage
 
         [Display(Name = "Nazwa użytkownika")]
         public string Username { get; set; }
+
         [EmailAddress(ErrorMessage = "Niepoprawny adres email")]
         [Display(Name = "Adress e-mail")]
         public string Email { get; set; }

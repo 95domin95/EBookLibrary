@@ -17,7 +17,7 @@ namespace EBookLibraryData.Models
         Publisher GetPublisher(string name);
         Task<bool> Add(string title, int? ISBN, int? pages,
             string[] author, string publisher, string category,
-            IFormFile book, IFormFile bookCovering, int copiesCount);
+            IFormFile book, IFormFile bookCovering, int? copiesCount);
         IEnumerable<Copy> GetBookCopies(Book book);
         IEnumerable<Copy> GetAvailableBookCopies(Book book);
         IEnumerable<Copy> GetUserLoanCopies(ApplicationUser user);

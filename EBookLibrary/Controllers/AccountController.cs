@@ -97,10 +97,8 @@ namespace EBookLibrary.Controllers
                 {
                     return RedirectToLocal(returnUrl);
                 }
-                else
-                {
-                    return View(model);
-                }
+                ModelState.AddModelError("", "Nieprawidłowy e-mail lub hasło.");
+                return View(model);
             }
             return View(model);
         }

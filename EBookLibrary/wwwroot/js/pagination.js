@@ -1,14 +1,9 @@
 ﻿window.addEventListener("load", () => {
-
     var page = document.getElementById("page-input");
-
     if (page !== null) {
         var form = document.getElementById("browse-books-form");
-
         var prev = document.getElementById("prev-btn");
-
         var next = document.getElementById("next-btn");
-
         var maxPage = document.getElementById("max-page");
 
         prev.addEventListener("click", () => {

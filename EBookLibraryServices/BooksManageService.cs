@@ -18,6 +18,8 @@ namespace EBookLibraryServices
         private Context _context;
         private IFileManage _file;
         private ILoans _loans;
+        private const string _BookCoveringPath = "wwwroot\\images";
+        private const string _BookPath = "library_assets";
         public BooksManageService(Context context, IFileManage file, ILoans loans)
         {
             _context = context;
@@ -26,46 +28,53 @@ namespace EBookLibraryServices
         }
         public async Task<bool> Add(string title, int? ISBN, int? pages,
             string[] authors, string publisher, string category,
-            IFormFile book, IFormFile bookCovering, int copiesCount=1)
+            IFormFile book, IFormFile bookCovering, int? copiesCount=1)
         {
             if (title != "" && title != null && category != "" && category != null && book != default(IFormFile))
             {
-                if (publisher == null) publisher = string.Empty;
-                var publisherResult = _context.Publishers.Where(p => p.Name.Contains(publisher)).FirstOrDefault();
+                Publisher publisherResult = null;
+                if (publisher == null)
+                {
+                    publisherResult = _context.Publishers.Where(p => p.Name.Contains(publisher)).FirstOrDefault();
+                }
 
                 var categoryResult = _context.Categories.Where(c => c.Name.Contains(category)).FirstOrDefault();
 
-                List<Author> dbAuthors = new List<Author>();
+                List<Author> dbAuthors = null;
 
-                foreach(var author in authors)
+                if(authors != null)
                 {
-                    var authorResult = _context.Authors.Where(a => a.Name.ToLower().Contains(author.ToLower()));
-                    if (authorResult.Any())
+                    dbAuthors = new List<Author>();
+                    foreach (var author in authors)
                     {
-                        dbAuthors.Add(authorResult.FirstOrDefault());
-                    }
-                    else
-                    {
-                        var dbAuthor = new Author
+                        var authorResult = _context.Authors.Where(a => a.Name.ToLower().Contains(author.ToLower()));
+                        if (authorResult.Any())
                         {
-                            Name = author
-                        };
-                        _context.Authors.Add(dbAuthor);
-                        _context.SaveChanges();
-                        dbAuthors.Append(dbAuthor);
+                            dbAuthors.Add(authorResult.FirstOrDefault());
+                        }
+                        else
+                        {
+                            var dbAuthor = new Author
+                            {
+                                Name = author
+                            };
+                            _context.Authors.Add(dbAuthor);
+                            _context.SaveChanges();
+                            dbAuthors.Append(dbAuthor);
+                        }
                     }
+                    _context.SaveChanges();
                 }
-                _context.SaveChanges();
 
                 var bookToAdd = new Book
                 {
                     Title = title,
                     ISBN = ISBN,
                     Pages = pages,
-                    CopiesCount = copiesCount
+                    CopiesCount = copiesCount != null ? (int)copiesCount : 0
                 };
 
-                if(publisherResult != default(Publisher))
+                if(publisherResult != null)
                 {
                     bookToAdd.Publisher = publisherResult;
                 }
@@ -74,7 +83,7 @@ namespace EBookLibraryServices
                     bookToAdd.Publisher = AddPublisher(publisher);
                 }
 
-                if(categoryResult != default(Category))
+                if(categoryResult != null)
                 {
                     bookToAdd.Category = categoryResult;
                 }
@@ -82,21 +91,24 @@ namespace EBookLibraryServices
                 _context.Books.Add(bookToAdd);
                 _context.SaveChanges();
 
-                foreach(var dbAuthor in dbAuthors)
+                if(dbAuthors != null)
                 {
-                    _context.BookAuthors.Add(new BookAuthor
+                    foreach (var dbAuthor in dbAuthors)
                     {
-                        Author = dbAuthor,
-                        Book = bookToAdd
-                    });
+                        _context.BookAuthors.Add(new BookAuthor
+                        {
+                            Author = dbAuthor,
+                            Book = bookToAdd
+                        });
+                    }
+                    _context.SaveChanges();
                 }
-                _context.SaveChanges();
 
                 for(int i=0; i<copiesCount; i++)//zoptymalizować zrobic dodawanie wszystkich za jednym zamachem
                 {
                    AddCopy(bookToAdd, false, i==copiesCount-1);
                 }
-
+                
                 var bookId = bookToAdd.BookId;
 
                 var bookFileName = bookId.ToString() + "_book" + Path.GetExtension(book.GetFilename());
@@ -110,7 +122,8 @@ namespace EBookLibraryServices
 
                 _context.SaveChanges();
 
-                if (!(await _file.UploadFile(book, bookFileName) && await _file.UploadFile(bookCovering, bookCoveringFileName)))
+                if (!(await _file.UploadFile(book, bookFileName, _BookPath) 
+                    && await _file.UploadFile(bookCovering, bookCoveringFileName, _BookCoveringPath)))
                 {
                     var bookToDelete = _context.Books.Where(b => b.BookId.Equals(bookId)).FirstOrDefault();
 
@@ -161,9 +174,16 @@ namespace EBookLibraryServices
 
                 if (count > 0)
                 {
-                    var copies = _context.Copies.Where(c => c.BookId.Equals(id));
-                    var loans = _context.Loans.Where(l => l.Copy.BookId.Equals(id)).Include(l => l.Copy).ThenInclude(l => l.Book);
-                    var loanHistories = _context.LoanHistories.Where(lh => lh.BookId.Equals(id));
+                    var copies = _context.Copies
+                                .Where(c => c.BookId.Equals(id));
+
+                    var loans = _context.Loans
+                                .Where(l => l.Copy.BookId.Equals(id))
+                                .Include(l => l.Copy)
+                                .ThenInclude(l => l.Book);
+
+                    var loanHistories = _context.LoanHistories
+                                .Where(lh => lh.BookId.Equals(id));
                     if(copies.Any())
                     {
                         _context.Copies.RemoveRange(copies);

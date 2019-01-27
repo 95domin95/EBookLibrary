@@ -28,14 +28,14 @@
                     <td>
                         <div class="float-left pl-1 pb-3">
                             <form asp-controller="Home" asp-action="BookPreview" method="post">
-                                <Button type="submit" class="btn btn-primary" name="BookId" value="@book.BookId"><span class="fa fa-info"></span></Button>
+                                <Button type="submit" class="btn btn-primary" name="BookId" value="@book.BookId">
+                                    <span class="fa fa-info"></span>
+                                </Button>
                             </form>
                         </div>
                         <div class="float-left pl-1 pb-3">
-                            <!-- Button trigger modal -->
                             <button class="btn btn-danger" data-toggle="modal" data-target="#remove-modal-@book.BookId"><span class="fa fa-times"></span></button>
 
-                            <!-- Modal -->
                             <div class="modal fade" id="remove-modal-@book.BookId" tabindex="-1" role="dialog" aria-labelledby="remove-modal-@book.BookId-label" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
@@ -45,14 +45,14 @@
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        <div class="modal-body">
-                                            <form asp-controller="Home" asp-action="ReturnBook" method="post" id="remove-book-form-@book.BookId"></form>
-                                            Czy na pewno chcesz zwrócić tę książkę?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-                                            <button class="btn btn-danger" name="BookId" value="@book.BookId" form="remove-book-form-@book.BookId">Zwróć</button>
-                                        </div>
+<div class="modal-body">
+    <form asp-controller="Home" asp-action="ReturnBook" method="post" id="remove-book-form-@book.BookId"></form>
+    Czy na pewno chcesz zwrócić tę książkę?
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+    <button class="btn btn-danger" name="BookId" value="@book.BookId" form="remove-book-form-@book.BookId">Zwróć</button>
+</div>
                                     </div>
                                 </div>
                             </div>

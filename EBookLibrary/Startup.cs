@@ -45,15 +45,15 @@ namespace EBookLibrary
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings.
-                options.Password.RequireDigit = false;
+                options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = false;
                 options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequiredLength = 3;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 6;
                 options.Password.RequiredUniqueChars = 1;
 
                 // Lockout settings.
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(1);
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(30);
                 options.Lockout.MaxFailedAccessAttempts = 50;
                 options.Lockout.AllowedForNewUsers = true;
 

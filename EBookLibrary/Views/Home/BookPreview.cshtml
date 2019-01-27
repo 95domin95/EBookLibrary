@@ -29,23 +29,24 @@
                 <p>Data dodania: @Model.Book.AddDate</p>
                 <p>Dostępnych egzemplarzy: @Model.Book.CopiesCount</p>
                 <p>ISBN: @Model.Book.ISBN</p>
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    @if (Model.BookRent)
-                    {
-                        <a class="btn btn-success mb-2" href="~/lib/pdfjs-1.9.426-dist/web/viewer.html?file=/Home/GetBook/@Model.Book.Path">
-                            Czytaj
-                            <span class="fa fa-book-reader">
-                            </span>
-                        </a>
-                        <form asp-controller="Home" asp-action="RemoveUserLoan" method="post" class="mb-2">
-                            <button class="btn btn-success" asp-controller="Home" asp-action="ReturnBook" name="BookId" value="@Model.BookId">
-                                Zwróć
-                                <span class="fa fa-book">
-                                </span>
-                            </button>
-                        </form>
-                    }
+@if (SignInManager.IsSignedIn(User))
+{
+    @if (Model.BookRent)
+    {
+        <a class="btn btn-success mb-2" target="_blank" rel="noopener noreferrer"
+           href="~/lib/pdfjs-1.9.426-dist/web/viewer.html?file=/Home/GetBook/@Model.Book.Path">
+            Czytaj
+            <span class="fa fa-book-reader">
+            </span>
+        </a>
+        <form asp-controller="Home" asp-action="RemoveUserLoan" method="post" class="mb-2">
+            <button class="btn btn-success" asp-controller="Home" asp-action="ReturnBook" name="BookId" value="@Model.BookId">
+                Zwróć
+                <span class="fa fa-book">
+                </span>
+            </button>
+        </form>
+    }
                     else
                     {
                         @if (Model.InQueue)

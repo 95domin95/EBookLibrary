@@ -31,7 +31,7 @@ namespace EBookLibraryData.Models.ViewModels.LibraryManage
         [RegularExpression("([0-9]+)")]
         public int? CopiesCount { get; set; } = null;
         [Display(Name = "Dostępne")]
-        public bool? Availability { get; set; } = false;
+        public bool? Availability { get; set; }
         [Display(Name = "ISBN")]
         [RegularExpression("([0-9]+)")]
         public int? ISBN { get; set; } = null;
@@ -53,7 +53,7 @@ namespace EBookLibraryData.Models.ViewModels.LibraryManage
         public IFormFile BookCovering { get; set; } = null;
         [Display(Name = "Elementów do wyświetlenia")]
         public int ElementsToshow { get; set; } = 1000;
-        public bool AddedSuccessfully { get; set; } = false;
+        public bool AddedSuccessfully { get; set; }
         public bool AddError { get; set; } = false;
         public string AddSuccess
         {
@@ -70,8 +70,8 @@ namespace EBookLibraryData.Models.ViewModels.LibraryManage
             }
         }
         public int? CategoryId { get; set; } = null;
-        public bool RemovedSuccessfully { get; set; } = false;
-        public bool RemoveError { get; set; } = false;
+        public bool RemovedSuccessfully { get; set; }
+        public bool RemoveError { get; set; }
         public string RemoveSuccess
         {
             get
@@ -87,8 +87,8 @@ namespace EBookLibraryData.Models.ViewModels.LibraryManage
             }
         }
 
-        public bool ModifiedSuccessfully { get; set; } = false;
-        public bool ModifiedError { get; set; } = false;
+        public bool ModifiedSuccessfully { get; set; }
+        public bool ModifiedError { get; set; }
         public string ModifiedSuccess
         {
             get
