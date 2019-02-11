@@ -500,9 +500,10 @@ namespace EBookLibraryServices
             try
             {
                 var allBookCopies = GetBookCopies(book).ToList();
-                if(allBookCopies.Where(c => c.IsRented.Equals(false)).Any())
+                var availableBookCopies = allBookCopies.Where(c => c.IsRented.Equals(false)).ToList();
+                if (availableBookCopies.Any())
                 {
-                    return allBookCopies;
+                    return availableBookCopies;
                 }
                 else
                 {
@@ -518,7 +519,7 @@ namespace EBookLibraryServices
                         {
                             if (loan.EndDate >= DateTime.Now)
                             {
-                                allBookCopies.Add(loan.Copy);
+                                availableBookCopies.Add(loan.Copy);
                             }
                             else
                             {
@@ -527,9 +528,9 @@ namespace EBookLibraryServices
                             }
                         }
                     }
-                    if(allBookCopies.Any())
+                    if(availableBookCopies.Any())
                     {
-                        return allBookCopies;
+                        return availableBookCopies;
                     }
                     return null;
                     //WAŻNE: PRZETESTOWAĆ
@@ -893,6 +894,38 @@ namespace EBookLibraryServices
             {
                 Console.WriteLine(e.Message);
                 return null;
+            }
+        }
+
+        public bool ChangeBookLoansNumberByOne(int id, Operation operation)
+        {
+            try
+            {
+                var books = _context.Books.Where(b => b.BookId.Equals(id));
+                if(books != null)
+                {
+                    var book = books.FirstOrDefault();
+                    switch(operation)
+                    {
+                        case Operation.Decrement:
+                            book.LoansCount -= 1;
+                            break;
+                        case Operation.Increment:
+                            book.LoansCount += 1;
+                            break;
+                        default:
+                            return false;
+                    }
+
+                    _context.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
             }
         }
     }

@@ -73,5 +73,28 @@ namespace EBookLibraryServices
                 return null;
             }
         }
+
+        public Loan GetById(int id = -1)
+        {
+            try
+            {
+                if(id > 0)
+                {
+                    var loan = _context.Loans.Where(l => l.LoanId.Equals(id))
+                        .Include(l => l.Copy).ThenInclude(l => l.Book);
+
+                    if(loan != null)
+                    {
+                        return loan.FirstOrDefault();
+                    }
+                }
+                return null;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
     }
 }

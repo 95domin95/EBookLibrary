@@ -10,6 +10,7 @@ using EBookLibraryData.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.IO;
+using static EBookLibraryServices.BooksManageService;
 
 namespace EBookLibrary.Controllers
 {
@@ -164,6 +165,7 @@ namespace EBookLibrary.Controllers
             if(_manage.RemoveUserLoan(user, _manage.GetById((int)model.BookId)))
             {
                 _manage.IncrementBookCopy(_manage.GetById((int)model.BookId));
+                _manage.ChangeBookLoansNumberByOne((int)model.BookId, Operation.Increment);
             }
             var bookPreviewModel = new BookPreviewViewModel
             {
@@ -230,6 +232,7 @@ namespace EBookLibrary.Controllers
                         {
                             _manage.ChangeCopyRentedStatus(copy);
                             _loanHistory.AddLoanHistory(loan, user, _manage.GetById((int)model.BookId));
+                            _manage.ChangeBookLoansNumberByOne(book.BookId, Operation.Decrement);
                             return RedirectToAction("BookPreview", new BookPreviewViewModel
                             {
                                 BookId = model.BookId,

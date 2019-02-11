@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace EBookLibraryData.Models
 {
+    public enum Operation
+    {
+        Increment,
+        Decrement
+    };
     public interface IBooksManage
     {
         IEnumerable<Book> GetBooks(string title, int? ISBN, string[] author, int? pagesMin,
@@ -43,5 +48,6 @@ namespace EBookLibraryData.Models
         IEnumerable<Book> GetMany(int take = 1000);
         IEnumerable<Book> LongestLoaned(int booksCount = 10);
         bool Modify(BooksManageViewModel model);
+        bool ChangeBookLoansNumberByOne(int id, Operation operation);
     }
 }

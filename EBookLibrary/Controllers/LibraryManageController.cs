@@ -462,7 +462,15 @@ namespace EBookLibrary.Controllers
             {
                 if (_loans.Remove((int)model.LoanId))
                 {
-                    model.RemovedSuccessfully = true;
+                    var loan = _loans.GetById((int)model.LoanId);
+                    if(loan != null)
+                    {
+                        if(_manage.ChangeBookLoansNumberByOne(loan.Copy.BookId, Operation.Decrement))
+                        {
+                            model.RemovedSuccessfully = true;
+                        }
+                        model.RemoveError = true;
+                    }
                 }
                 else model.RemoveError = true;
             }
