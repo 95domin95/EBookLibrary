@@ -59,7 +59,7 @@ namespace EBookLibraryData.Models.ViewModels.LibraryManage
         {
             get
             {
-                return "Dodano książkię";
+                return "Dodano książkę";
             }
         }
         public string AddFailed
